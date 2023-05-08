@@ -1,0 +1,5 @@
+Will contain all the middlewares for API.
+
+For security to auth user.
+For validation of the requests
+For handling error

@@ -1,0 +1,1 @@
+This folder will contain the connection to rabbitmq to send audios to flask

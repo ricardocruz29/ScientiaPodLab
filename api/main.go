@@ -2,24 +2,30 @@ package main
 
 import (
 	"log"
-
-	"github.com/joho/godotenv"
-	"github.com/ricardocruz29/ScientiaPodLab/api/database"
+	"scipodlab_api/config"
+	"scipodlab_api/database"
 )
 
 // Watch this video to setup better: https://www.youtube.com/watch?v=jFfo23yIWac
 
 func main(){
     //Load .env
-    err := godotenv.Load()
-    if err != nil {
-        log.Fatal("Error loading .env file")
-    }
-  
+    cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("error loading config: %s", err)
+	}
+
     //Connect to db
-	db, err := database.Connect()
+    db, err := database.Connect(
+        cfg.DbUser,
+        cfg.DbPassword,
+        cfg.DbHost,
+        cfg.DbPort,
+        cfg.DbName,
+    )
     if err != nil {
         panic(err)
     }
     defer db.Close()
 }
+

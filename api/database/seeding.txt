@@ -1,0 +1,1 @@
+File will be used as a script to perform the seeding of the API using GROM
