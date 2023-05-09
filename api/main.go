@@ -4,9 +4,9 @@ import (
 	"log"
 	"scipodlab_api/config"
 	"scipodlab_api/database"
-)
 
-// Watch this video to setup better: https://www.youtube.com/watch?v=jFfo23yIWac
+	"github.com/gin-gonic/gin"
+)
 
 func main(){
     //Load .env
@@ -23,5 +23,11 @@ func main(){
         cfg.DbPort,
         cfg.DbName,
     )
+
+    //Execute HTTP Server
+    r := gin.Default()
+
+
+    r.Run(":4000")
 }
 
