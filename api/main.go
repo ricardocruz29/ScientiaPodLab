@@ -16,16 +16,12 @@ func main(){
 	}
 
     //Connect to db
-    db, err := database.Connect(
+    database.Connect(
         cfg.DbUser,
         cfg.DbPassword,
         cfg.DbHost,
         cfg.DbPort,
         cfg.DbName,
     )
-    if err != nil {
-        panic(err)
-    }
-    defer db.Close()
 }
 
