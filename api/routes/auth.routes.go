@@ -14,6 +14,7 @@ func SetupAuthRoutes(r *gin.Engine, manager *manage.Manager){
 	authRouter := r.Group("/")
     {
         authRouter.POST("/login", func(c *gin.Context) { ac.Login(c, manager)	})
-        authRouter.POST("/register", ac.Register)
+        authRouter.POST("/register",func(c *gin.Context) { ac.Register(c, manager)	})
+        authRouter.POST("/refresh",func(c *gin.Context) { ac.RefreshToken(c, manager)	})
     }
 }

@@ -28,9 +28,21 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 				return
 			}
 
+			refreshToken, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
+				ClientID:     client.GetID(),
+				UserID:       username,
+				AccessTokenExp: 3600*24*7, //1 week
+			})
+
+			if err != nil {
+				return 
+		}
+
 			token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
 				ClientID:     client.GetID(),
 				UserID:       username,
+				AccessTokenExp: 3600*2, //2 hours
+				Refresh: refreshToken.GetAccess(),
 			})
 
 			if err != nil {
@@ -38,9 +50,11 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 			}
 
 			// Define access token as cookie
-			c.SetCookie("access_token", token.GetAccess(), 3600, "/", "", false, true)
+			c.SetCookie("access_token", token.GetAccess(), 3600, "/", "", false, true) //not sure what to define as max age
+			c.SetCookie("refresh_token", token.GetRefresh(), 3600, "/", "", false, true) //not sure what to define as max age
 			c.JSON(http.StatusOK, gin.H{
 					"access_token": token.GetAccess(),
+					"refresh_token": refreshToken.GetAccess(),
 					"expires_in":   token.GetAccessExpiresIn(),
 			})
 
@@ -52,6 +66,31 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 	}
 }
 
-func (ac *AuthController) Register(c *gin.Context) {
+func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager) {
     //Similar to login, but instead of verifying existing user credentials, new ones are created.
+}
+
+func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager) {
+	refreshToken := c.PostForm("refresh_token")
+
+	//Verify the expires in of refresh token.
+	//Verify if refresh is associated with a certain user -> store this attribute in bd
+
+
+	// Generate new access token
+	newToken, err := manager.RefreshAccessToken(context.Background(), &oauth2.TokenGenerateRequest{
+		AccessTokenExp: 3600*2,
+		Refresh: refreshToken,
+	})
+
+	if err != nil {
+		return
+	}
+
+	// Define new access token
+	c.SetCookie("access_token", newToken.GetAccess(), 3600, "/", "", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"access_token": newToken.GetAccess(),
+		"expires_in":   newToken.GetAccessExpiresIn(),
+	})
 }
