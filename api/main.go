@@ -4,8 +4,14 @@ import (
 	"log"
 	"scipodlab_api/config"
 	"scipodlab_api/database"
+	"scipodlab_api/routes"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-oauth2/oauth2/v4/errors"
+	"github.com/go-oauth2/oauth2/v4/manage"
+	"github.com/go-oauth2/oauth2/v4/models"
+	"github.com/go-oauth2/oauth2/v4/server"
+	"github.com/go-oauth2/oauth2/v4/store"
 )
 
 func main(){
@@ -24,10 +30,43 @@ func main(){
         cfg.DbName,
     )
 
+    //oauth2
+    manager := manage.NewDefaultManager()
+    manager.MustTokenStorage(store.NewMemoryTokenStore())
+
+    clientStore := store.NewClientStore()
+    clientStore.Set(cfg.ClientId, &models.Client{
+        ID: cfg.ClientId,
+        Secret: cfg.ClientSecret,
+        Domain: "http://localhost:9094",
+    })
+
+    manager.MapClientStorage(clientStore)
+
+    srv := server.NewServer(server.NewConfig(), manager)
+    srv.SetAllowGetAccessRequest(true)
+    srv.SetClientInfoHandler(server.ClientFormHandler)
+
+    srv.SetInternalErrorHandler(func(err error) (re *errors.Response) {
+        log.Println("Internal Error:", err.Error())
+        return
+    }) 
+
+    srv.SetResponseErrorHandler(func(re *errors.Response) {
+        log.Println("Response Error:", re.Error.Error())
+    })
+
+
     //Execute HTTP Server
     r := gin.Default()
+
+    routes.SetupAuthRoutes(r, manager)
+    routes.SetupUserRoutes(r)
+    routes.SetupPodcastRoutes(r)
+    routes.SetupEpisodeRoutes(r)
 
 
     r.Run(":4000")
 }
+
 
