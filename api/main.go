@@ -60,11 +60,7 @@ func main(){
     //Execute HTTP Server
     r := gin.Default()
 
-    routes.SetupAuthRoutes(r, manager)
-    routes.SetupUserRoutes(r)
-    routes.SetupPodcastRoutes(r)
-    routes.SetupEpisodeRoutes(r)
-
+    routes.SetupRoutes(r, manager)
 
     r.Run(":4000")
 }
