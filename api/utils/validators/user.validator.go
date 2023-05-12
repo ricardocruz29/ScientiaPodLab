@@ -1,4 +1,4 @@
-package validatorsStructs
+package validators
 
 type LoginValidator struct {
 	Username string `json:"username" validate:"required"`
