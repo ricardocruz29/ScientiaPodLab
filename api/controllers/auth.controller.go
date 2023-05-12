@@ -3,6 +3,8 @@ package controllers
 import (
 	"context"
 	"net/http"
+	"scipodlab_api/utils"
+	"scipodlab_api/utils/validators"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -17,12 +19,27 @@ func NewAuthController() *AuthController {
 }
 
 func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	
+	payload, exists := c.Get("payload")
+	if !exists {
+		c.JSON(http.StatusBadRequest, "Username and password required!")
+		return
+	}
+	
+	info, ok := payload.(*validators.LoginValidator)
+	if !ok {
+		c.JSON(http.StatusBadRequest, "Username and password required!")
+		return
+	}
 
+	username := info.Username
+	password := info.Password
+
+	//TODO Get User from DB based on username
+	hashPassword := "test" //this password will come from db
 
 	// Verify User Credentials
-	if username == "usuarioteste" && password == "senhateste" {
+	if utils.CompareHashSaltPwd(hashPassword, password) {
 			//Get current client
 			client, err := manager.GetClient(context.Background() ,"client_id")
 
@@ -70,7 +87,9 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 }
 
 func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager) {
-    //Similar to login, but instead of verifying existing user credentials, new ones are created.
+    //TODO Similar to login, but instead of verifying existing user credentials, new ones are created.
+
+		//Call function hashSaltPwd to hash and salt user password and store it in db
 }
 
 func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager) {
