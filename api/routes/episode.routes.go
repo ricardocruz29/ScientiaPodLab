@@ -16,9 +16,9 @@ func SetupEpisodeRoutes(r *gin.Engine, manager *manage.Manager){
 	episodeRouter := r.Group("/users")
     {
         episodeRouter.GET("/",  middleware.AuthMiddleware(manager), ec.GetEpisodes)
-        episodeRouter.GET("/:id",  middleware.AuthMiddleware(manager), ec.GetEpisode)
-        episodeRouter.POST("/",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(&validators.CreateEpisodeValidator{}), ec.CreateEpisode)
-        episodeRouter.PUT("/:id",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(&validators.UpdateEpisodeValidator{}), ec.UpdateEpisode)
-        episodeRouter.DELETE("/:id",  middleware.AuthMiddleware(manager), ec.DeleteEpisode)
+        episodeRouter.GET("/:id",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, &validators.IDParamsValidator{}), ec.GetEpisode)
+        episodeRouter.POST("/",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(&validators.CreateEpisodeValidator{}, nil), ec.CreateEpisode)
+        episodeRouter.PUT("/:id",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(&validators.UpdateEpisodeValidator{}, &validators.IDParamsValidator{}), ec.UpdateEpisode)
+        episodeRouter.DELETE("/:id",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, &validators.IDParamsValidator{}), ec.DeleteEpisode)
     }
 }

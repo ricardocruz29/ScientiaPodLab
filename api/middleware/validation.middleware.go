@@ -9,31 +9,63 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidationMiddleware(validationStruct interface{}) gin.HandlerFunc {
+func ValidationMiddleware(bodyValidationStruct interface{}, paramsValidationStruct interface{}) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		dataType := reflect.TypeOf(validationStruct) //define the dataType as the one passed in the validation middleware argument
-		newData := reflect.New(dataType).Interface() //create the variable with the dataType passed
-		
-		//Parse the info from json to struct
-		if err := c.ShouldBindJSON(newData); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+
+		if bodyValidationStruct != nil {
+			if err := validateRequestBody(c, bodyValidationStruct); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
 		}
 
-		//validate data passed
-		if err := validateData(newData); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+		if paramsValidationStruct != nil {
+			if err := validateUriParams(c, paramsValidationStruct); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
 		}
-		
-		//Set the payload
-		c.Set("payload", newData)
 
 		c.Next()
 	}
 }
 
+//auxiliary function to bindJSON and then send data to function validateData 
+func validateRequestBody(c *gin.Context, validationStruct interface{}) error {
+	dataType := reflect.TypeOf(validationStruct)
+	newData := reflect.New(dataType).Interface()
 
+	if err := c.ShouldBindJSON(newData); err != nil {
+		return err
+	}
+
+	if err := validateData(newData); err != nil {
+		return err
+	}
+
+	c.Set("payload", newData)
+	return nil
+}
+
+//auxiliary function to bindUri and then send data to function validateData 
+func validateUriParams(c *gin.Context, validationStruct interface{}) error {
+	dataType := reflect.TypeOf(validationStruct)
+	newData := reflect.New(dataType).Interface()
+
+	if err := c.ShouldBindUri(newData); err != nil {
+		return err
+	}
+
+	if err := validateData(newData); err != nil {
+		return err
+	}
+
+	c.Set("params", newData)
+	return nil
+}
+
+
+//auxiliary function to validate the structure using the package validator v10
 func validateData(data interface{}) error {
 	validate := validator.New()
 	if err := validate.Struct(data); err != nil {
@@ -45,3 +77,5 @@ func validateData(data interface{}) error {
 	}
 	return nil
 }
+
+
