@@ -20,6 +20,7 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
+
 	// Verify User Credentials
 	if username == "usuarioteste" && password == "senhateste" {
 			//Get current client
