@@ -1,0 +1,5 @@
+To do seeding:
+
+1. Execute clean.go to clear data from all tables
+2. Execute migrate.go to update the tables
+3. Execute seeding.go to seed the data
