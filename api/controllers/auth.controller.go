@@ -21,7 +21,6 @@ func NewAuthController() *AuthController {
 }
 
 func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
-	
 	//Get the info from payload
 	payload, exists := c.Get("payload")
 	if !exists {
@@ -77,7 +76,7 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager, db *gor
 
 			// Define access token as cookie
 			c.SetCookie("access_token", token.GetAccess(), 3600*2, "/", "", false, true) //not sure what to define as max age
-			c.SetCookie("refresh_token", token.GetRefresh(), 3600*24*7, "/", "", false, true) //not sure what to define as max age
+			c.SetCookie("refresh_token", refreshToken.GetAccess(), 3600*24*7, "/", "", false, true) //not sure what to define as max age
 			c.JSON(http.StatusOK, gin.H{
 					"access_token": token.GetAccess(),
 					"refresh_token": refreshToken.GetAccess(),
@@ -93,9 +92,66 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager, db *gor
 }
 
 func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
-    //TODO Similar to login, but instead of verifying existing user credentials, new ones are created.
+		//Get the info from payload
+		payload, exists := c.Get("payload")
+		if !exists {
+			c.JSON(http.StatusBadRequest, "Username, email and password required!")
+			return
+		}
+		
+		info, ok := payload.(*validators.RegisterValidator)
+		if !ok {
+			c.JSON(http.StatusBadRequest, "Username, email and password required!")
+			return
+		}
 
-		//Call function hashSaltPwd to hash and salt user password and store it in db
+		user := models.User{Email: info.Password, Password: utils.HashSaltPwd(info.Password), Username: info.Username}
+		result := db.Create(&user)
+
+		if result.Error != nil {
+			c.JSON(http.StatusInternalServerError, "Error creating user")
+		}
+
+		//Get current client
+		client, err := manager.GetClient(context.Background() ,"client_id")
+
+		if err != nil {
+			return
+		}
+
+		refreshToken, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
+			ClientID:     client.GetID(),
+			UserID:       user.Username,
+			AccessTokenExp: 7 * 24 * time.Hour, //1 week
+		})
+
+		if err != nil {
+			return 
+		}
+
+		user.RefreshToken = refreshToken.GetAccess()
+
+		token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
+			ClientID:     client.GetID(),
+			UserID:       user.Username,
+			AccessTokenExp: 2 * time.Hour, //2 hours
+		})
+
+		if err != nil {
+				return 
+		}
+
+		// Define access token as cookie
+		c.SetCookie("access_token", token.GetAccess(), 3600*2, "/", "", false, true) //not sure what to define as max age
+		c.SetCookie("refresh_token", refreshToken.GetAccess(), 3600*24*7, "/", "", false, true) //not sure what to define as max age
+		c.JSON(http.StatusOK, gin.H{
+				"access_token": token.GetAccess(),
+				"refresh_token": refreshToken.GetAccess(),
+				"expires_in":   token.GetAccessExpiresIn(),
+		})
+
+
+
 }
 
 func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
