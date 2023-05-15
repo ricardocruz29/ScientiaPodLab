@@ -63,6 +63,7 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager, db *gor
 			}
 
 			user.RefreshToken = refreshToken.GetAccess()
+			db.Save(&user)
 
 			token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
 				ClientID:     client.GetID(),
@@ -130,6 +131,7 @@ func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager, db *
 		}
 
 		user.RefreshToken = refreshToken.GetAccess()
+		db.Save(&user)
 
 		token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
 			ClientID:     client.GetID(),
@@ -155,31 +157,73 @@ func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager, db *
 }
 
 func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
-	refreshToken := c.PostForm("refresh_token")
+	//Get the info from payload
+	payload, exists := c.Get("payload")
+	if !exists {
+		c.JSON(http.StatusBadRequest, "Refresh Token required!")
+		return
+	}
+	
+	info, ok := payload.(*validators.RefreshTokenValidator)
+	if !ok {
+		c.JSON(http.StatusBadRequest, "Refresh Token required!")
+		return
+	}
+
+	refreshToken := info.RefreshToken
 
 	//TODO Verify the expires in of refresh token.
 	//If is expired, send info for client and the user has to be redirected to login so a new refresh token is generated.
 
-	//TODO Verify if refresh is associated with a certain user 
-	//(Ideally, refresh Token attribute should be indexed so the search is faster)
-	//If refresh token corresponds to a user, generate a access token for that user.
-	//(Optional) Update the expiration date of the refresh token or generate a new one.
 
+	//Get user stored in db trough refresh token
+	var user models.User
+	var err error
+
+	err = db.Where("refreshToken = ?", refreshToken).First(&user).Error
 	
-	// Generate new access token
-	newToken, err := manager.RefreshAccessToken(context.Background(), &oauth2.TokenGenerateRequest{
-		AccessTokenExp: 3600*2,
-		Refresh: refreshToken,
-	})
+	//If no user is associated, refresh token not valid
+	if err != nil && err == gorm.ErrRecordNotFound {
+		c.JSON(http.StatusUnauthorized, "Refresh token not valid!")
+		return
+	}
+
+	//Get current client
+	client, err := manager.GetClient(context.Background() ,"client_id")
 
 	if err != nil {
 		return
 	}
 
-	// Define new access token
-	c.SetCookie("access_token", newToken.GetAccess(), 3600, "/", "", false, true)
+	newRefreshToken, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
+		ClientID:     client.GetID(),
+		UserID:       user.Username,
+		AccessTokenExp: 7 * 24 * time.Hour, //1 week
+	})
+
+	if err != nil {
+		return 
+	}
+
+	user.RefreshToken = newRefreshToken.GetAccess()
+	db.Save(&user)
+
+	token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
+		ClientID:     client.GetID(),
+		UserID:       user.Username,
+		AccessTokenExp: 2 * time.Hour, //2 hours
+	})
+
+	if err != nil {
+			return 
+	}
+
+	// Define access token as cookie
+	c.SetCookie("access_token", token.GetAccess(), 3600*2, "/", "", false, true) //not sure what to define as max age
+	c.SetCookie("refresh_token", newRefreshToken.GetAccess(), 3600*24*7, "/", "", false, true) //not sure what to define as max age
 	c.JSON(http.StatusOK, gin.H{
-		"access_token": newToken.GetAccess(),
-		"expires_in":   newToken.GetAccessExpiresIn(),
+			"access_token": token.GetAccess(),
+			"refresh_token": newRefreshToken.GetAccess(),
+			"expires_in":   token.GetAccessExpiresIn(),
 	})
 }

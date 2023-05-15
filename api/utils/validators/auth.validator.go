@@ -10,3 +10,7 @@ type RegisterValidator struct {
 	Password string `json:"password" validate:"required"`
 	Email string `json:"email" validate:"required, email"`
 }
+
+type RefreshTokenValidator struct {
+	RefreshToken string `json:"refreshToken" validate:"required"`
+}

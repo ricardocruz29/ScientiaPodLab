@@ -15,9 +15,8 @@ type User struct {
 	CreatedAt 		time.Time	`json:"createdAt"`
 	UpdatedAt 		time.Time	`json:"updatedAt"`
 	Podcasts			[]Podcast	`json:"podcasts"`
-	RefreshToken	string		`json:"refreshToken"`
+	RefreshToken	string		`gorm:"index" json:"refreshToken"`
 }
-
 
 func UserModel(db *gorm.DB) {
 	db.AutoMigrate(&User{})
