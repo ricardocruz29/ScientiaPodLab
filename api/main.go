@@ -22,13 +22,17 @@ func main(){
 	}
 
     //Connect to db
-    database.Connect(
+    db, err := database.Connect(
         cfg.DbUser,
         cfg.DbPassword,
         cfg.DbHost,
         cfg.DbPort,
         cfg.DbName,
     )
+
+    if err != nil {
+        log.Fatal("Error connecting database")
+    }
 
     //oauth2
     manager := manage.NewDefaultManager()
@@ -60,7 +64,7 @@ func main(){
     //Execute HTTP Server
     r := gin.Default()
 
-    routes.SetupRoutes(r, manager)
+    routes.SetupRoutes(r, manager, db )
 
     r.Run(":4000")
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"net/http"
+	"scipodlab_api/models"
 	"scipodlab_api/utils"
 	"scipodlab_api/utils/validators"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-oauth2/oauth2/v4"
 	"github.com/go-oauth2/oauth2/v4/manage"
+	"gorm.io/gorm"
 )
 
 type AuthController struct {}
@@ -18,8 +20,9 @@ func NewAuthController() *AuthController {
 	return &AuthController{}
 }
 
-func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
+func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
 	
+	//Get the info from payload
 	payload, exists := c.Get("payload")
 	if !exists {
 		c.JSON(http.StatusBadRequest, "Username and password required!")
@@ -35,8 +38,11 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 	username := info.Username
 	password := info.Password
 
-	//TODO Get User from DB based on username
-	hashPassword := "test" //this password will come from db
+	//Get user stored in db trough username
+	var user models.User
+	db.Where("username = ?", username).First(&user)
+
+	hashPassword := user.Password 
 
 	// Verify User Credentials
 	if utils.CompareHashSaltPwd(hashPassword, password) {
@@ -55,9 +61,9 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 
 			if err != nil {
 				return 
-		}
+			}
 
-		//TODO Save refresh token on user table on db
+			user.RefreshToken = refreshToken.GetAccess()
 
 			token, err := manager.GenerateAccessToken(context.Background(), oauth2.PasswordCredentials, &oauth2.TokenGenerateRequest{
 				ClientID:     client.GetID(),
@@ -86,13 +92,13 @@ func (ac *AuthController) Login(c *gin.Context, manager *manage.Manager) {
 	}
 }
 
-func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager) {
+func (ac *AuthController) Register(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
     //TODO Similar to login, but instead of verifying existing user credentials, new ones are created.
 
 		//Call function hashSaltPwd to hash and salt user password and store it in db
 }
 
-func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager) {
+func (ac *AuthController) RefreshToken(c *gin.Context, manager *manage.Manager, db *gorm.DB) {
 	refreshToken := c.PostForm("refresh_token")
 
 	//TODO Verify the expires in of refresh token.
