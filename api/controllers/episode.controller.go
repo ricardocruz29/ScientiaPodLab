@@ -18,6 +18,8 @@ func NewEpisodeController() *EpisodeController {
 }
 
 func (uc *EpisodeController) CreateEpisode(c *gin.Context, db *gorm.DB) {
+	//TODO Create Episode will be sending all the segments to rabbitmq. This code will go to CreateSegment in controller
+
 	// Parse form data and setup the limit as 1gb
 	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error processing form"})

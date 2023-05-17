@@ -14,7 +14,7 @@ import (
 func SetupEpisodeRoutes(r *gin.Engine, manager *manage.Manager, db *gorm.DB){
     ec := controllers.NewEpisodeController()
 
-	episodeRouter := r.Group("/users")
+	episodeRouter := r.Group("/episodes")
     {
         episodeRouter.GET("/",  middleware.AuthMiddleware(manager), func(c *gin.Context) { ec.GetEpisodes(c, db)})
         episodeRouter.GET("/:id",  middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, &validators.IDParamsValidator{}), func(c *gin.Context) { ec.GetEpisode(c, db)})

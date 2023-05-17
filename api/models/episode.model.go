@@ -6,7 +6,7 @@ type Episode struct {
 	gorm.Model
 	ID				uint				`gorm:"primaryKey" json:"id"` 
 	Url				string			`json:"url"`
-	Segments	[]Segment		`json:"segments"`
+	Segments	[]*Segment		`gorm:"many2many:episode_segments;" json:"episode_segments"`
 	PodcastID	uint				`gorm:"foreignKey" json:"podcastId"`
 }
 

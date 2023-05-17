@@ -14,7 +14,7 @@ import (
 func SetupPodcastRoutes(r *gin.Engine, manager *manage.Manager, db *gorm.DB){
     pc := controllers.NewPodcastController()
 
-	podcastRouter := r.Group("/users")
+	podcastRouter := r.Group("/podcasts")
     {
         podcastRouter.GET("/", middleware.AuthMiddleware(manager),  func(c *gin.Context) {pc.GetPodcasts(c, db)})
         podcastRouter.GET("/:id", middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, &validators.IDParamsValidator{}), func(c *gin.Context) {pc.GetPodcast(c, db)})
