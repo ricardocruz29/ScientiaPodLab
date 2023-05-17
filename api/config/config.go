@@ -16,7 +16,8 @@ type Config struct {
 	DbName     			string
 	ClientId	 			string
 	ClientSecret		string
-	CdnPath					string
+	CdnLocalPath		string
+	CdnUrlPath			string
 }
 
 // AppConfig is a global access variable
@@ -39,7 +40,8 @@ func LoadConfig() error {
 		DbName:     		os.Getenv("DB_NAME"),
 		ClientId: 			os.Getenv("CLIENT_ID"),
 		ClientSecret: 	os.Getenv("CLIENT_SECRET"),
-		CdnPath:				os.Getenv("CDN_PATH"),
+		CdnLocalPath:				os.Getenv("CDN_LOCAL_PATH"),
+		CdnUrlPath:				os.Getenv("CDN_URL_PATH"),
 	}
 
 	//Store the config on global variable
