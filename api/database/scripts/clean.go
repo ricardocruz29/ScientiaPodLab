@@ -9,18 +9,18 @@ import (
 
 func ClearAllTables() {
 	//Load .env
-	cfg, err := config.LoadConfig()
+	err := config.LoadConfig()
 	if err != nil {
 		log.Fatalf("error loading config: %s", err)
 	}
 
 	//Connect to db
 	db, err := database.Connect(
-			cfg.DbUser,
-			cfg.DbPassword,
-			cfg.DbHost,
-			cfg.DbPort,
-			cfg.DbName,
+			config.AppConfig.DbUser,
+			config.AppConfig.DbPassword,
+			config.AppConfig.DbHost,
+			config.AppConfig.DbPort,
+			config.AppConfig.DbName,
 	)
 
 	if err != nil {
