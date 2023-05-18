@@ -9,15 +9,19 @@ import (
 
 // Config struct holds the configuration variables for the application
 type Config struct {
-	DbUser     			string
-	DbPassword 			string
-	DbHost     			string
-	DbPort     			string
-	DbName     			string
-	ClientId	 			string
-	ClientSecret		string
-	CdnLocalPath		string
-	CdnUrlPath			string
+	DbUser     				string
+	DbPassword 				string
+	DbHost     				string
+	DbPort     				string
+	DbName     				string
+	ClientId	 				string
+	ClientSecret			string
+	CdnLocalPath			string
+	CdnUrlPath				string
+	RabbitMQUser			string
+	RabbitMQPassword	string
+	RabbitMQHost			string
+	RabbitMQPort			string
 }
 
 // AppConfig is a global access variable

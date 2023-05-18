@@ -4,6 +4,7 @@ import (
 	"log"
 	"scipodlab_api/config"
 	"scipodlab_api/database"
+	"scipodlab_api/events"
 	"scipodlab_api/routes"
 
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,15 @@ func main(){
     if err != nil {
         log.Fatal("Error connecting database")
     }
+
+    // TODO Delete this comment later:
+    //docker run -d --name scipodlab_rabbitmq -p 5672:5672 rabbitmq:3-management
+    // create a new RabbitMQ connection
+    rabbitmqErr := events.ConnectRabbitmq()
+    if rabbitmqErr != nil {
+		log.Fatalf("Error connecting to rabbitmq: %s", err)
+	}
+	
 
     //oauth2
     manager := manage.NewDefaultManager()

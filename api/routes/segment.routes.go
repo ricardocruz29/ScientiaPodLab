@@ -12,7 +12,7 @@ import (
 
 
 func SetupSegmentRoutes(r *gin.Engine, manager *manage.Manager, db *gorm.DB){
-    sc := controllers.NewSegmentController()
+  sc := controllers.NewSegmentController()
 
 	segmentRouter := r.Group("/segments")
     {
