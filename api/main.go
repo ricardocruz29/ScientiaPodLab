@@ -36,7 +36,7 @@ func main(){
     }
 
     // TODO Delete this comment later:
-    //docker run -d --name scipodlab_rabbitmq -p 5672:5672 rabbitmq:3-management
+    //docker run -d --name scipodlab_rabbitmq -p 5672:5672 -e RABBITMQ_DEFAULT_USER=root -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
     // create a new RabbitMQ connection
     rabbitmqErr := events.ConnectRabbitmq()
     if rabbitmqErr != nil {
