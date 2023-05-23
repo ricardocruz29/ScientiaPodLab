@@ -1,12 +1,13 @@
 #Tutorial to start with API
 https://code.visualstudio.com/docs/python/tutorial-flask
 
+#TTS and STT - REST API
+https://codelabs.developers.google.com/codelabs/cloud-text-speech-python3#0
+https://codelabs.developers.google.com/codelabs/cloud-speech-text-python3#0
+
+#Noise Cancellation and ffmpeg to concat audios will be done using rabbitmq, with one queue for each 
 #Tutorial for noise cancellation
 https://picovoice.ai/blog/suppress-noise-in-3-lines-of-python/
 
 #FFMPEG python docs
 https://kkroening.github.io/ffmpeg-python/
-
-#TTS and STT
-https://codelabs.developers.google.com/codelabs/cloud-text-speech-python3#0
-https://codelabs.developers.google.com/codelabs/cloud-speech-text-python3#0
