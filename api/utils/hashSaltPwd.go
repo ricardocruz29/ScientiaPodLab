@@ -26,6 +26,6 @@ func CompareHashSaltPwd(hashPwd string, plainPwd string) bool {
         log.Println(err)
         return false
     }
-    
+
     return true
 }

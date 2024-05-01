@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -35,9 +36,13 @@ func validateRequestBody(c *gin.Context, validationStruct interface{}) error {
 	dataType := reflect.TypeOf(validationStruct)
 	newData := reflect.New(dataType).Interface()
 
-	if err := c.ShouldBindJSON(newData); err != nil {
+	if err := c.ShouldBindJSON(newData); err != nil {		
 		return err
 	}
+
+	//! Print the data
+	printData, _ := json.Marshal(newData)
+	fmt.Println("Received data: ", string(printData))
 
 	if err := validateData(newData); err != nil {
 		return err

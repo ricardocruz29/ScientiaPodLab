@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"scipodlab_api/config"
+	"os"
 	"scipodlab_api/models"
 	"strconv"
 
@@ -52,14 +52,14 @@ func (uc *EpisodeController) CreateEpisode(c *gin.Context, db *gorm.DB) {
 	}
 
 	// Save file
-	err = c.SaveUploadedFile(episodeAudio, fmt.Sprintf("%s/audios", config.AppConfig.CdnLocalPath))
+	err = c.SaveUploadedFile(episodeAudio, fmt.Sprintf("%s/audios", os.Getenv("CdnLocalPath")))
 	if err != nil {
 			c.JSON(http.StatusInternalServerError, "Error storing file")
 			return
 	}
 
 	//Create episode in db
-	episode := models.Episode{PodcastID: uint(podcastId), Url: fmt.Sprintf("%s/audios/%s", config.AppConfig.CdnUrlPath, episodeAudio.Filename)}
+	episode := models.Episode{PodcastID: uint(podcastId), Url: fmt.Sprintf("%s/audios/%s", os.Getenv("CdnUrlPath"), episodeAudio.Filename)}
 	result := db.Create(&episode)
 
 	if result.Error != nil {

@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"scipodlab_api/config"
+	"os"
 	"scipodlab_api/models"
 	"strconv"
 
@@ -50,7 +50,7 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 	}
 
 	// Save file
-	err = c.SaveUploadedFile(episodeSegment, fmt.Sprintf("%s/audios/segments/recorded", config.AppConfig.CdnLocalPath))
+	err = c.SaveUploadedFile(episodeSegment, fmt.Sprintf("%s/audios/segments/recorded", os.Getenv("CdnLocalPath")))
 	if err != nil {
 			c.JSON(http.StatusInternalServerError, "Error storing file")
 			return
@@ -75,7 +75,7 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 
 
 	//Create segment in db
-	segment := models.Segment{Position: position, Path: fmt.Sprintf("%s/audios/segments/recorded/%s", config.AppConfig.CdnLocalPath, episodeSegment.Filename), Origin: "recorded"}
+	segment := models.Segment{Position: position, Path: fmt.Sprintf("%s/audios/segments/recorded/%s", os.Getenv("CdnLocalPath"), episodeSegment.Filename), Origin: "recorded"}
 	db.Create(&segment)
 
 	//Create the entry on the association table between episodes and segments
