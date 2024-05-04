@@ -14,10 +14,7 @@ func SetupAuthRoutes(r *gin.Engine){
 
 	authRouter := r.Group("/")
     {
-        // authRouter.POST("/login", middleware.ValidationMiddleware(&validators.LoginValidator{}, nil), func(c *gin.Context) { ac.Login(c, manager, db)	})
         authRouter.POST("/login", middleware.ValidationMiddleware(validators.LoginValidator{}, nil), func(c *gin.Context) { ac.Login(c)	})
         authRouter.POST("/register", middleware.ValidationMiddleware(validators.RegisterValidator{}, nil), func(c *gin.Context) { ac.Register(c)	})
-        // authRouter.POST("/register", middleware.ValidationMiddleware(&validators.LoginValidator{}, nil), func(c *gin.Context) { ac.Register(c, manager, db)	})
-        // authRouter.POST("/refresh",func(c *gin.Context) { ac.RefreshToken(c, manager, db)	})
     }
 }

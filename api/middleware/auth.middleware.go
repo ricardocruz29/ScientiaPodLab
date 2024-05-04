@@ -1,43 +1,37 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
+	"scipodlab_api/database"
+	"scipodlab_api/models"
+	"scipodlab_api/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-oauth2/oauth2/v4/manage"
 )
 
-func AuthMiddleware(manager *manage.Manager) gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-			accessToken := c.GetHeader("Authorization")
+			token, err := c.Cookie("Authorization")
 
 			//Verify is there is a token
-			if accessToken == "" {
-				c.AbortWithStatus(http.StatusUnauthorized)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "No token received"})
 				return
 			}
 
-			// Verify the validity of access token
-			token, err := manager.LoadAccessToken(context.Background(), accessToken)
-			if err != nil || token == nil {
-				c.AbortWithStatus(http.StatusUnauthorized)
+			// Verify the validity of token
+			id, err := utils.VerifyJWTToken(token)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 				return
 			}
 
-			//TODO Verify the expires In
-			//Interceptor on client will be request to route /refresh to generate a new access Token
-			if token.GetAccessExpiresIn() < 1 {
-				c.AbortWithStatus(http.StatusUnauthorized)
-				return
-			}
-
-			userId := token.GetUserID()
-			//TODO Get user stored in bd by the UserID
-			user := userId
-			//TODO When actually have the user, change == "" to == nil
-			if user == "" {
-				c.AbortWithStatus(http.StatusUnauthorized)
+			// Get the user by the id
+			var user models.User
+			dbErr := database.DB.First(&user, id).Error
+			
+			if dbErr != nil || user.ID == 0 {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": dbErr.Error()})
 				return
 			}
 

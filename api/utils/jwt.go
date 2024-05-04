@@ -29,18 +29,30 @@ func CreateJWTToken(id uint, username string) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyJWTToken(tokenString string) error {
+func VerifyJWTToken(tokenString string) (interface {}, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		 return os.Getenv("JWT_SECRET"), nil
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %s", token.Header)
+		}
+
+		 return []byte(os.Getenv("JWT_SECRET")), nil
 	})
- 
+
 	if err != nil {
-		 return err
+		return 0, err
 	}
- 
-	if !token.Valid {
-		 return fmt.Errorf("invalid token")
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if float64(time.Now().Unix()) > claims["exp"].(float64) {
+			return 0, fmt.Errorf("your token has expired");
+		} else {
+
+			log.Println("claims['id']: ", claims["id"]);
+			log.Println("claims['id']: ", claims["id"]);
+			 
+			return claims["id"], nil;
+		}
+	} else {
+		return 0, fmt.Errorf("your token is not valid");
 	}
- 
-	return nil
 }
