@@ -4,13 +4,39 @@ import "gorm.io/gorm"
 
 type Segment struct {
 	gorm.Model
-	ID					uint				`gorm:"primaryKey" json:"id"`
-	Path				string			`json:"path"`
-	Position		int					`json:"position"`
-	Origin			string			`json:"origin"` //jingle, separator, recorded, etc
-	Episodes		[]*Episode	`gorm:"many2many:episode_segments;" json:"episode_segments"`
+	Position				int							`gorm:"not null; default = 0" json:"position"`
+	EpisodeID				uint						`gorm:"foreignKey" json:"episodeId"`
+	TemplateID			uint						`gorm:"foreignKey" json:"templateId"`
+	ContentSegment	ContentSegment 	
+	TTSSegment			TTSSegment 			
+	ResourceSegment	ResourceSegment 	
+}
+
+type ContentSegment struct {
+	gorm.Model
+	Name				string	`json:"name"`
+	Url 				string	`json:"url"`
+	SegmentId 	uint		`gorm:"foreignKey" json:"segmentID"`	
+}
+
+type TTSSegment struct {
+	gorm.Model
+	Name				string	`json:"name"`
+	Url 				string	`json:"url"`
+	Text 				string	`json:"text"`
+	SegmentId 	uint		`gorm:"foreignKey" json:"userId"`	
+}
+
+type ResourceSegment struct {
+	gorm.Model
+	Name				string	`json:"name"`
+	Url 				string	`json:"url"`
+	SegmentId 	uint		`gorm:"foreignKey" json:"userId"`	
 }
 
 func SegmentModel(db *gorm.DB)  {
 	db.AutoMigrate(&Segment{})
+	db.AutoMigrate(&ContentSegment{})
+	db.AutoMigrate(&TTSSegment{})
+	db.AutoMigrate(&ResourceSegment{})
 }

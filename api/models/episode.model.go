@@ -4,10 +4,15 @@ import "gorm.io/gorm"
 
 type Episode struct {
 	gorm.Model
-	ID				uint				`gorm:"primaryKey" json:"id"` 
-	Url				string			`json:"url"`
-	Segments	[]*Segment		`gorm:"many2many:episode_segments;" json:"episode_segments"`
-	PodcastID	uint				`gorm:"foreignKey" json:"podcastId"`
+	Name 					string			`gorm:"not null" json:"name"`
+	Image					string			`gorm:"not null" json:"image"`
+	Description		string			`gorm:"not null" json:"description"`
+	Url						string			`json:"url"`
+	Duration			float64			`json:"duration"`
+	IsPublished		bool				`gorm:"not null; default:false" json:"isPublished"`
+	Segments			[]Segment		`json:"segments"`
+	PodcastID			uint				`gorm:"foreignKey" json:"podcastId"`
+	TemplateID 		uint				`gorm:"foreignKey" json:"templateId"`
 }
 
 func EpisodeModel(db *gorm.DB)  {

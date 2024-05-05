@@ -41,8 +41,7 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 
 	//Check if podcast exists
 	var episode models.Episode
-	var episodeErr error
-	episodeErr = db.First(&episode, episodeId).Error
+	episodeErr := db.First(&episode, episodeId).Error
 	
 	if episodeErr != nil && err == gorm.ErrRecordNotFound {
 		c.JSON(http.StatusBadRequest, "Episode does not exist!")
@@ -57,8 +56,7 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 	}
 
 	//TODO Get the last position for the last segment of this episode
-	
-	var position int
+	// var position int
 	var highestPositionSegment models.Segment
 	result := db.Table("episode_segments").Where("episode_id = ?", episodeId).Order("position DESC").Last(&highestPositionSegment)
 
@@ -67,19 +65,19 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 			return
 	} else if result.RowsAffected == 0 {
 			//No segments for this episode
-			position = 0
+			// position = 0
 	} else {
 			//Get last segment position and +1 for the new segment
-			position = highestPositionSegment.Position + 1
+			// position = highestPositionSegment.Position + 1
 	}
 
 
 	//Create segment in db
-	segment := models.Segment{Position: position, Path: fmt.Sprintf("%s/audios/segments/recorded/%s", os.Getenv("CdnLocalPath"), episodeSegment.Filename), Origin: "recorded"}
-	db.Create(&segment)
+	// segment := models.Segment{Position: position, Path: fmt.Sprintf("%s/audios/segments/recorded/%s", os.Getenv("CdnLocalPath"), episodeSegment.Filename), Type: "recorded"}
+	// db.Create(&segment)
 
 	//Create the entry on the association table between episodes and segments
-	episode.Segments = append(episode.Segments, &segment)
+	// episode.Segments = append(episode.Segments, &segment)
 	db.Save(&episode)	
 }
 

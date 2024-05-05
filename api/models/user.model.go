@@ -6,13 +6,15 @@ import (
 
 type User struct {
 	gorm.Model
-	ID 						uint			`gorm:"primaryKey" json:"id"` 
-	Username			string		`gorm:"unique" json:"username"`
-	Email					string		`gorm:"unique" json:"email"`
-	Password			string		`json:"password"`
-	Podcasts			[]Podcast	`json:"podcasts"`
+	Username			string			`gorm:"unique; not null" json:"username"`
+	Email					string			`gorm:"unique; not null" json:"email"`
+	Password			string			`gorm:"not null" json:"password"`
+	Podcasts			[]Podcast		`json:"podcasts"`
+	Resources 		[]Resource	`json:"resources"`
+	Templates			[]Template  `json:"templates"`
 }
 
 func UserModel(db *gorm.DB) {
 	db.AutoMigrate(&User{})
 }
+

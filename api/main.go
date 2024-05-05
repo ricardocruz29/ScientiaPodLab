@@ -12,6 +12,7 @@ import (
 func init() {
     initializers.LoadEnvVariables()
     initializers.ConnectToDB()
+    database.ClearAllTables() //TODO: Remove this
     initializers.SyncDatabase()
 
     //! To run with seeding: go run . seed
@@ -30,34 +31,6 @@ func main(){
 	// 	log.Fatalf("Error connecting to rabbitmq: %s", err)
 	// }
 	
-
-    //oauth2
-    // manager := manage.NewDefaultManager()
-    // manager.MustTokenStorage(store.NewMemoryTokenStore())
-
-    // clientStore := store.NewClientStore()
-    // clientStore.Set(config.AppConfig.ClientId, &models.Client{
-    //     ID: config.AppConfig.ClientId,
-    //     Secret: config.AppConfig.ClientSecret,
-    //     Domain: "http://localhost:9094",
-    // })
-
-    // manager.MapClientStorage(clientStore)
-
-    // srv := server.NewServer(server.NewConfig(), manager)
-    // srv.SetAllowGetAccessRequest(true)
-    // srv.SetClientInfoHandler(server.ClientFormHandler)
-
-    // srv.SetInternalErrorHandler(func(err error) (re *errors.Response) {
-    //     log.Println("Internal Error:", err.Error())
-    //     return
-    // }) 
-
-    // srv.SetResponseErrorHandler(func(re *errors.Response) {
-    //     log.Println("Response Error:", re.Error.Error())
-    // })
-
-
     //Execute HTTP Server
     r := gin.Default()
     routes.SetupRoutes(r)

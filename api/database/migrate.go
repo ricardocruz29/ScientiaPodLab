@@ -10,8 +10,14 @@ func MigrateAllTables() {
 	// Models to be migrated
 	models := []interface{}{
 		&models.User{},
+		&models.Resource{},
+		&models.Template{},
 		&models.Podcast{},
 		&models.Episode{},
+		&models.Segment{},
+		&models.ContentSegment{},
+		&models.TTSSegment{},
+		&models.ResourceSegment{},
 	}
 
 	// Iterate models and migrate them
