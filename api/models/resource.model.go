@@ -4,8 +4,9 @@ import "gorm.io/gorm"
 
 type Resource struct {
 	gorm.Model
+	Name			string			`gorm:"not null" json:"name"`
 	Url				string			`gorm:"not null" json:"url"`
-	Type			string			`gorm:"not null" json:"type"` //Either Platform or Custom
+	Type			string			`gorm:"not null; default:'Platform'" json:"type"` //Either Platform or Custom
 	UserID		uint				`gorm:"foreignKey" json:"userId"`
 }
 

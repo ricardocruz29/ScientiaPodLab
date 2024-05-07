@@ -12,5 +12,5 @@ func SetupRoutes(r *gin.Engine){
 	SetupUserRoutes(r)
 	SetupPodcastRoutes(r)
 	SetupEpisodeRoutes(r)
-	
+	SetupResourceRoutes(r)
 }

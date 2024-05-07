@@ -12,8 +12,9 @@ import (
 func init() {
     initializers.LoadEnvVariables()
     initializers.ConnectToDB()
-    database.ClearAllTables() //TODO: Remove this
+    // database.ClearAllTables()
     initializers.SyncDatabase()
+
 
     //! To run with seeding: go run . seed
     if (len(os.Args) > 1 && os.Args[1] == "seed") {
