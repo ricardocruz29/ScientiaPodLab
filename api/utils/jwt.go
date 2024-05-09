@@ -46,10 +46,6 @@ func VerifyJWTToken(tokenString string) (interface {}, error) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			return 0, fmt.Errorf("your token has expired");
 		} else {
-
-			log.Println("claims['id']: ", claims["id"]);
-			log.Println("claims['id']: ", claims["id"]);
-			 
 			return claims["id"], nil;
 		}
 	} else {

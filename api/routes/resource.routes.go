@@ -15,7 +15,7 @@ func SetupResourceRoutes(r *gin.Engine){
 	resourceRouter := r.Group("/resources")
     {
 			resourceRouter.GET("/", middleware.AuthMiddleware(),  func(c *gin.Context) { rc.GetResources(c)})
-			resourceRouter.POST("/", middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.CreatePodcastValidator{}, nil), func(c *gin.Context) {rc.CreateResource(c)})
+			resourceRouter.POST("/", middleware.AuthMiddleware(), func(c *gin.Context) {rc.CreateResource(c)})
 			resourceRouter.DELETE("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {rc.DeleteResource(c)})
     }
 }

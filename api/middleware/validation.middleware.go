@@ -15,14 +15,14 @@ func ValidationMiddleware(bodyValidationStruct interface{}, paramsValidationStru
 
 		if bodyValidationStruct != nil {
 			if err := validateRequestBody(c, bodyValidationStruct); err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
 			}
 		}
 
 		if paramsValidationStruct != nil {
 			if err := validateUriParams(c, paramsValidationStruct); err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
 			}
 		}

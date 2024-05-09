@@ -1,16 +1,18 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"scipodlab_api/database"
 	"scipodlab_api/models"
+	"scipodlab_api/utils"
+
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type ResourceController struct {}
@@ -38,8 +40,10 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	user := userGin.(models.User)
 
 	// Parse form data and setup the limit as 1gb
+	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
 	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error processing form"})
+		log.Print("error" , err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid File, 1gb limit")
 		return
 	}
 
@@ -51,14 +55,23 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	}
 
 	// Save file
-	err = c.SaveUploadedFile(resourceAudio, fmt.Sprintf("%s/audios/resources", os.Getenv("CDN_LOCAL_PATH")))
+	fileExtension := filepath.Ext(resourceAudio.Filename)
+	if (utils.Contains(utils.AUDIO_EXTENSIONS, fileExtension)) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid file type")
+		return
+	}
+
+	fileName := uuid.New().String() + fileExtension
+	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", fileName)
+	err = c.SaveUploadedFile(resourceAudio, filePath)
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, "Error storing file")
 			return
 	}
 
 	//Create episode in db
-	resource := models.Resource{Name: resourceAudio.Filename, Url: fmt.Sprintf("%s/audios/resources/%s", os.Getenv("CDN_URL_PATH"), resourceAudio.Filename),  Type: "Custom", UserID: user.ID}
+	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+	resource := models.Resource{NameCDN: fileName, Name: resourceAudio.Filename, Url: cdnFilePath,  Type: "Custom", UserID: user.ID}
 	result := database.DB.Create(&resource)
 
 	if result.Error != nil {
@@ -94,7 +107,7 @@ func (uc *ResourceController) DeleteResource(c *gin.Context) {
 	}
 
 	// Remove file
-	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", resource.Name)
+	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", resource.NameCDN)
 	err = os.Remove(filePath)
 	if err != nil {
 			log.Println("Error: ", err.Error())
