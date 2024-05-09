@@ -85,10 +85,10 @@ func seedUsers() {
 
 func seedResources() {
 	resources := []models.Resource{
-		{Name: "teste1.mp3", Url: fmt.Sprintf("%s/audios/resources/teste1.mp3", os.Getenv("CDN_URL_PATH")), UserID: 42},
-		{Name: "teste2.mp3", Url: fmt.Sprintf("%s/audios/resources/teste2.mp3", os.Getenv("CDN_URL_PATH")), UserID: 42},
-		{Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), UserID: 42},
-		{Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), Type: "Custom", UserID: 42},
+		{Name: "teste1.mp3", Url: fmt.Sprintf("%s/audios/resources/teste1.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
+		{Name: "teste2.mp3", Url: fmt.Sprintf("%s/audios/resources/teste2.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
+		{Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
+		{Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), Type: "Custom", UserID: 51},
 	}
 
 	// Insert in db

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"scipodlab_api/database"
 	"scipodlab_api/models"
 	"strconv"
@@ -93,8 +94,8 @@ func (uc *ResourceController) DeleteResource(c *gin.Context) {
 	}
 
 	// Remove file
-	//TODO: This is givin an error no such file or directory
-	err = os.Remove(fmt.Sprintf("%s/audios/resources/%s", os.Getenv("CDN_LOCAL_PATH"), resource.Name))
+	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", resource.Name)
+	err = os.Remove(filePath)
 	if err != nil {
 			log.Println("Error: ", err.Error())
 			c.AbortWithStatusJSON(http.StatusInternalServerError, "Error deleting file")

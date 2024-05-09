@@ -8,7 +8,8 @@ import (
 func ClearAllTables() {
 	// Get all models defined
 	tables := []string{
-			"users", "podcasts", "episodes", "resources",
+			// "users", "podcasts", "episodes", "resources",
+			"podcasts", "episodes", "resources",
 	}
 
 	// Disable Foreign Keys constraints only to be able to delete
