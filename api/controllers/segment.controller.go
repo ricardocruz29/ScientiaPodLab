@@ -57,7 +57,7 @@ func (sc *SegmentController) CreateSegment(c *gin.Context, db *gorm.DB) {
 
 	//TODO Get the last position for the last segment of this episode
 	// var position int
-	var highestPositionSegment models.Segment
+	var highestPositionSegment models.EpisodeSegment
 	result := db.Table("episode_segments").Where("episode_id = ?", episodeId).Order("position DESC").Last(&highestPositionSegment)
 
 	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {

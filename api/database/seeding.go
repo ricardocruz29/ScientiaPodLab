@@ -21,9 +21,9 @@ func SeedAllTables() {
 	// seedPodcasts()
 	// seedEpisodes()
 	seedResources()
+	seedTemplates()
 
 	log.Println("Seeding done!")
-
 }
 
 func seedUsers() {
@@ -96,6 +96,42 @@ func seedResources() {
 		err := DB.Create(&resource).Error
 		if err != nil {
 			log.Printf("Error seeding resources: %s", err)
+		}
+	}
+}
+
+func seedTemplates() {
+	templates := []models.Template{
+		{
+			Name:      "Interview Template",
+			Duration:  "30-45min",
+			Genre:     "Interview",
+			Segments: []models.TemplateSegment{
+				{Position: 1, Type: "Content"},
+				{Position: 2, Type: "Intro"},
+				{Position: 3, Type: "Outro"},
+			},
+			UserID: 51,
+		},
+		{
+			Name:      "90 Seconds Template",
+			Duration:  "1min30s",
+			Genre:     "Monologue",
+			Segments: []models.TemplateSegment{
+				{Position: 1, Type: "Content"},
+				{Position: 2, Type: "Intro"},
+				{Position: 3, Type: "Outro"},
+			},
+			UserID: 51,
+		},
+	}
+	
+
+	// Insert in db
+	for _, template := range templates {
+		err := DB.Create(&template).Error
+		if err != nil {
+			log.Printf("Error seeding templates: %s", err)
 		}
 	}
 }
