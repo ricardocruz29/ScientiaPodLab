@@ -30,7 +30,9 @@ func (ac *AuthController) Login(c *gin.Context) {
 
 	if err != nil {
     // Handle the error, such as returning an error response
-    c.JSON(http.StatusUnauthorized, "Invalid Credentials")
+    c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Invalid Credentials",
+		})
     return
 }
 
@@ -71,16 +73,13 @@ func (ac *AuthController) Register(c *gin.Context) {
 	result := database.DB.Create(&user)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, "Error creating user")
+		c.JSON(http.StatusInternalServerError, gin.H{"error":"Error creating user"})
 		return
 	}
 
 	//Generate JWT
 	token, err := utils.CreateJWTToken(user.ID, user.Username)
 	if err != nil {
-		// c.JSON(http.StatusInternalServerError, gin.H{
-		// 	"error": "Error generating token",
-		// })
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})

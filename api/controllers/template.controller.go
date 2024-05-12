@@ -26,7 +26,8 @@ func (uc *TemplateController) GetTemplates(c *gin.Context) {
 	// Retrieve templates with Type = "Platform" or UserID = userID
 	err := database.DB.Preload("Segments").Where("type = ? OR user_id = ?", "Platform", user.ID).Find(&templates).Error
 	if err != nil {
-			c.JSON(http.StatusInternalServerError, "Error getting templates")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting templates"})
+			return
 	}
 
 	c.JSON(http.StatusOK, templates)
@@ -43,7 +44,7 @@ func (uc *TemplateController) CreateTemplate(c *gin.Context) {
 	result := database.DB.Create(&template)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, "Error creating template")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating template"})
 		return
 	}
 
@@ -58,13 +59,13 @@ func (uc *TemplateController) UpdateTemplate(c *gin.Context) {
 	// Retrieve the template by its ID
 	err := database.DB.First(&template, id).Error
 	if err != nil {
-			c.AbortWithStatusJSON(http.StatusNotFound, "Template not found")
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Template not found"})
 			return
 	}
 
 	// Check if the template is of type "Platform"
 	if template.Type == "Platform" {
-		c.AbortWithStatusJSON(http.StatusNotFound, "Cannot update template of type Platform")
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Cannot update template of type Platform"})
 		return
 	}
 
@@ -81,7 +82,7 @@ func (uc *TemplateController) UpdateTemplate(c *gin.Context) {
 		// Delete existing segments before updating
 		err := database.DB.Delete(&models.TemplateSegment{}, "template_id = ?", template.ID).Error
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, "Error updating template")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating template"})
 			return
 		}
 
@@ -94,7 +95,7 @@ func (uc *TemplateController) UpdateTemplate(c *gin.Context) {
 	// Update the template
 	err = database.DB.Save(&template).Error
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, "Error updating template")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating template"})
 		return
 	}
 
@@ -110,22 +111,22 @@ func (uc *TemplateController) DeleteTemplate(c *gin.Context) {
 	// Retrieve the template by its ID
 	err := database.DB.First(&template, id).Error
 	if err != nil {
-			c.AbortWithStatusJSON(http.StatusNotFound, "Template not found")
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Template not found"})
 			return
 	}
 
 	// Check if the template is of type "Platform"
 	if template.Type == "Platform" {
-		c.AbortWithStatusJSON(http.StatusNotFound, "Cannot delete template of type Platform")
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Cannot delete template of type Platform"})
 		return
 	}
 
 	// Delete the template
 	err = database.DB.Select(clause.Associations).Delete(&template).Error
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, "Error deleting template")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting template"})
 		return
 	}
 
-	c.JSON(http.StatusOK, "Template deleted")
+	c.JSON(http.StatusOK, gin.H{"message": "Template deleted"})
 }

@@ -29,7 +29,7 @@ func (uc *ResourceController) GetResources(c *gin.Context) {
 	// Retrieve resources with Type = "Platform" or UserID = userID
 	err := database.DB.Where("type = ? OR user_id = ?", "Platform", user.ID).Find(&resources).Error
 	if err != nil {
-			c.JSON(http.StatusInternalServerError, "Error getting resources")
+			c.JSON(http.StatusInternalServerError, gin.H{"error":"Error getting resources"})
 	}
 
 	c.JSON(http.StatusOK, resources)
@@ -43,21 +43,21 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
 	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
 		log.Print("error" , err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid File, 1gb limit")
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid File, 1gb limit"})
 		return
 	}
 
 	//Get the resource file
 	resourceAudio, err := c.FormFile("resource_audio")
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "Error obtaining Resource Audio")
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"Error obtaining Resource Audio"})
 		return
 	}
 
 	// Save file
 	fileExtension := filepath.Ext(resourceAudio.Filename)
 	if (utils.Contains(utils.AUDIO_EXTENSIONS, fileExtension)) {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid file type")
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
 		return
 	}
 
@@ -65,7 +65,7 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", fileName)
 	err = c.SaveUploadedFile(resourceAudio, filePath)
 	if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, "Error storing file")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
 			return
 	}
 
@@ -75,7 +75,7 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	result := database.DB.Create(&resource)
 
 	if result.Error != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, "Error creating resource")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
 	}
 
 	c.JSON(http.StatusOK, resource)
@@ -89,20 +89,20 @@ func (uc *ResourceController) DeleteResource(c *gin.Context) {
 	// Retrieve the resource by its ID
 	err := database.DB.First(&resource, id).Error
 	if err != nil {
-			c.AbortWithStatusJSON(http.StatusNotFound, "Resource not found")
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
 			return
 	}
 
 	// Check if the resource is of type "Platform"
 	if resource.Type == "Platform" {
-		c.AbortWithStatusJSON(http.StatusNotFound, "Cannot delete resource of type Platform")
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Cannot delete resource of type Platform"})
 		return
 	}
 
 	// Delete the resource
 	err = database.DB.Delete(&resource).Error
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, "Error deleting resource")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting resource"})
 		return
 	}
 
@@ -111,9 +111,9 @@ func (uc *ResourceController) DeleteResource(c *gin.Context) {
 	err = os.Remove(filePath)
 	if err != nil {
 			log.Println("Error: ", err.Error())
-			c.AbortWithStatusJSON(http.StatusInternalServerError, "Error deleting file")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting file"})
 			return
 	}
 
-	c.JSON(http.StatusOK, "Resource deleted")
+	c.JSON(http.StatusOK, gin.H{"message": "Resource deleted"})
 }

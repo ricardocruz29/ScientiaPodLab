@@ -18,11 +18,3 @@ func (uc *UserController) GetUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, user);
 }
-
-// func (uc *UserController) UpdateUser(c *gin.Context, db *gorm.DB) {
-   
-// }
-
-// func (uc *UserController) DeleteUser(c *gin.Context, db *gorm.DB) {
-    
-// }
