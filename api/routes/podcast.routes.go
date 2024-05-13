@@ -1,19 +1,23 @@
 package routes
 
 import (
+	"scipodlab_api/controllers"
+	"scipodlab_api/middleware"
+	"scipodlab_api/utils/validators"
+
 	"github.com/gin-gonic/gin"
 )	
 
 
 func SetupPodcastRoutes(r *gin.Engine){
-    // pc := controllers.NewPodcastController()
+    pc := controllers.NewPodcastController()
 
-	// podcastRouter := r.Group("/podcasts")
-    // {
-    //     podcastRouter.GET("/", middleware.AuthMiddleware(manager),  func(c *gin.Context) {pc.GetPodcasts(c, db)})
-    //     podcastRouter.GET("/:id", middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.GetPodcast(c, db)})
-    //     podcastRouter.POST("/", middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(validators.CreatePodcastValidator{}, nil), func(c *gin.Context) {pc.CreatePodcast(c, db)})
-    //     podcastRouter.PUT("/:id", middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(validators.UpdateEpisodeValidator{}, &validators.IDParamsValidator{}), func(c *gin.Context) {pc.UpdatePodcast(c, db)})
-    //     podcastRouter.DELETE("/:id", middleware.AuthMiddleware(manager), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.DeletePodcast(c, db)})
-    // }
+	podcastRouter := r.Group("/podcasts")
+    {
+        podcastRouter.GET("/", middleware.AuthMiddleware(),  func(c *gin.Context) {pc.GetPodcasts(c)})
+        podcastRouter.GET("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.GetPodcast(c)})
+        podcastRouter.POST("/", middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.CreatePodcastValidator{}, nil), func(c *gin.Context) {pc.CreatePodcast(c)})
+        podcastRouter.PUT("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.UpdateEpisodeValidator{}, &validators.IDParamsValidator{}), func(c *gin.Context) {pc.UpdatePodcast(c)})
+        podcastRouter.DELETE("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.DeletePodcast(c)})
+    }
 }

@@ -121,7 +121,7 @@ func (uc *TemplateController) DeleteTemplate(c *gin.Context) {
 		return
 	}
 
-	// Delete the template
+	// Delete the template and its segments
 	err = database.DB.Select(clause.Associations).Delete(&template).Error
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting template"})
