@@ -91,7 +91,6 @@ func (uc *PodcastController) CreatePodcast(c *gin.Context) {
 		return
 	}
 
-	// TODO: Genre should be an array of strings
 	//Get the genre
 	genre := c.Request.FormValue("genre")
 	if genre == "" {
@@ -158,7 +157,6 @@ func (uc *PodcastController) UpdatePodcast(c *gin.Context) {
 	//Get the description
 	description := c.Request.FormValue("description")
 
-	// TODO: Genre should be an array of strings
 	//Get the genre
 	genre := c.Request.FormValue("genre")
 
