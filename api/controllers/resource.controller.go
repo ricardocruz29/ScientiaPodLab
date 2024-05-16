@@ -39,9 +39,11 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	userGin, _ := c.Get("user")
 	user := userGin.(models.User)
 
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
+
 	// Parse form data and setup the limit as 1gb
 	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
-	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
+	if err := c.Request.ParseMultipartForm(10 << 30); err != nil {
 		log.Print("error" , err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid File, 1gb limit"})
 		return

@@ -57,6 +57,10 @@ func validateUriParams(c *gin.Context, validationStruct interface{}) error {
 	dataType := reflect.TypeOf(validationStruct)
 	newData := reflect.New(dataType).Interface()
 
+	//! Print the data
+	printData, _ := json.Marshal(newData)
+	fmt.Println("Received data: ", string(printData))
+	
 	if err := c.ShouldBindUri(newData); err != nil {
 		return err
 	}

@@ -16,8 +16,8 @@ func SetupPodcastRoutes(r *gin.Engine){
     {
         podcastRouter.GET("/", middleware.AuthMiddleware(),  func(c *gin.Context) {pc.GetPodcasts(c)})
         podcastRouter.GET("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.GetPodcast(c)})
-        podcastRouter.POST("/", middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.CreatePodcastValidator{}, nil), func(c *gin.Context) {pc.CreatePodcast(c)})
-        podcastRouter.PUT("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.UpdateEpisodeValidator{}, &validators.IDParamsValidator{}), func(c *gin.Context) {pc.UpdatePodcast(c)})
+        podcastRouter.POST("/", middleware.AuthMiddleware(), func(c *gin.Context) {pc.CreatePodcast(c)})
+        podcastRouter.PUT("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.UpdatePodcast(c)})
         podcastRouter.DELETE("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {pc.DeletePodcast(c)})
     }
 }
