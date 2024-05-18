@@ -85,10 +85,10 @@ func seedUsers() {
 
 func seedResources() {
 	resources := []models.Resource{
-		{NameCDN: "teste1.mp3", Name: "teste1.mp3", Url: fmt.Sprintf("%s/audios/resources/teste1.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
-		{NameCDN: "teste2.mp3", Name: "teste2.mp3", Url: fmt.Sprintf("%s/audios/resources/teste2.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
-		{NameCDN: "teste3.mp3", Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), UserID: 51},
-		{NameCDN: "teste3.mp3",Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), Type: "Custom", UserID: 51},
+		{ Name: "teste1.mp3", Url: fmt.Sprintf("%s/audios/resources/teste1.mp3", os.Getenv("CDN_URL_PATH")), TypeSegment: "Content", UserID: 90},
+		{ Name: "teste2.mp3", Url: fmt.Sprintf("%s/audios/resources/teste2.mp3", os.Getenv("CDN_URL_PATH")), TypeSegment: "TTS", Text: "Teste de texto", UserID: 90},
+		{ Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), TypeSegment: "SoundEffect", UserID: 90},
+		{ Name: "teste3.mp3", Url: fmt.Sprintf("%s/audios/resources/teste3.mp3", os.Getenv("CDN_URL_PATH")), Type: "Custom", TypeSegment: "SoundEffect", UserID: 90},
 	}
 
 	// Insert in db

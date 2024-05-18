@@ -9,7 +9,7 @@ func ClearAllTables() {
 	// Get all models defined
 	tables := []string{
 			// "users", "podcasts", "episodes", "resources",
-			"podcasts", "episodes", "episode_segments", "resource_segments", "content_segments", "tts_segments", "template_segments", "resources",
+			"users", "podcasts", "episodes", "episode_segments", "resources",
 	}
 
 	// Disable Foreign Keys constraints only to be able to delete

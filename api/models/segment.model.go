@@ -9,41 +9,16 @@ type TemplateSegment struct {
 	TemplateID      uint           	`gorm:"foreignKey" json:"templateId"`
 }
 
+//!They will be created when the user creates a new episode -> a template will be used, and in the FE the structure of segments must be built as well and sent through the CreateEpisode information {name, image, ..., episodeSegments: []}
 type EpisodeSegment struct {
 	gorm.Model
 	Position				int							`gorm:"not null; default = 0" json:"position"`
-	ContentSegment	ContentSegment 	
-	TTSSegment			TTSSegment 			
-	ResourceSegment	ResourceSegment 	
+	Type						string					`gorm:"not null" json:"type"`
 	EpisodeID      	uint           	`gorm:"foreignKey" json:"episodeId"`
-}
-
-type ContentSegment struct {
-	gorm.Model
-	Name							string	`json:"name"`
-	Url 							string	`json:"url"`
-	EpisodeSegmentId 	*uint		`gorm:"foreignKey" json:"episodeSegmentId"`	
-}
-
-type TTSSegment struct {
-	gorm.Model
-	Name							string	`json:"name"`
-	Url 							string	`json:"url"`
-	Text 							string	`json:"text"`
-	EpisodeSegmentId 	*uint		`gorm:"foreignKey" json:"episodeSegmentId"`	
-}
-
-type ResourceSegment struct {
-	gorm.Model
-	Name							string	`json:"name"`
-	Url 							string	`json:"url"`
-	EpisodeSegmentId 	*uint		`gorm:"foreignKey" json:"episodeSegmentId"`	
+	ResourceID			*uint						`gorm:"foreignKey" json:"resourceId"`
 }
 
 func SegmentModel(db *gorm.DB)  {
 	db.AutoMigrate(&EpisodeSegment{})
 	db.AutoMigrate(&TemplateSegment{})
-	db.AutoMigrate(&ContentSegment{})
-	db.AutoMigrate(&TTSSegment{})
-	db.AutoMigrate(&ResourceSegment{})
 }

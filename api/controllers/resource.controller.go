@@ -8,6 +8,7 @@ import (
 	"scipodlab_api/database"
 	"scipodlab_api/models"
 	"scipodlab_api/utils"
+	"scipodlab_api/utils/validators"
 
 	"strconv"
 
@@ -26,8 +27,8 @@ func (uc *ResourceController) GetResources(c *gin.Context) {
 	user := userGin.(models.User)
 
 	var resources []models.Resource
-	// Retrieve resources with Type = "Platform" or UserID = userID
-	err := database.DB.Where("type = ? OR user_id = ?", "Platform", user.ID).Find(&resources).Error
+	// Retrieve resources with Type = "Platform" or UserID = userID and TypeSegment = "TTS" OR TypeSegment = "SoundEffect"
+	err := database.DB.Where("(type = ? OR user_id = ?) AND (type_segment = ? OR type_segment = ?)", "Platform", user.ID, "TTS", "SoundEffect").Find(&resources).Error
 	if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error":"Error getting resources"})
 	}
@@ -56,6 +57,20 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 		return
 	}
 
+	//Get the Type Segment
+	typeSegment := c.Request.FormValue("type_segment")
+	if typeSegment == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No type segment was sent"})
+		return
+	}
+
+	//Get the Name
+	name := c.Request.FormValue("name")
+	if name == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No name was sent"})
+		return
+	}
+
 	// Save file
 	fileExtension := filepath.Ext(resourceAudio.Filename)
 	if (utils.Contains(utils.AUDIO_EXTENSIONS, fileExtension)) {
@@ -73,7 +88,32 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 
 	//Create episode in db
 	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
-	resource := models.Resource{NameCDN: fileName, Name: resourceAudio.Filename, Url: cdnFilePath,  Type: "Custom", UserID: user.ID}
+	resource := models.Resource{NameCDN: fileName, Name: name, Url: cdnFilePath,  Type: "Custom", TypeSegment: typeSegment, UserID: user.ID}
+	result := database.DB.Create(&resource)
+
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
+	}
+
+	c.JSON(http.StatusOK, resource)
+}
+
+func (uc *ResourceController) CreateTTSResource(c *gin.Context) {
+	userGin, _ := c.Get("user")
+	user := userGin.(models.User)
+
+	//Get the info from payload
+	payload, _ := c.Get("payload")
+	info := payload.(*validators.CreateTTSValidator)
+
+	// TODO: Http Request to generate audio with info.Text (Text-to-Speech)
+	// TODO: In the TTS MS, store the file in the CDN
+	//! Will receive its fileName - Will be an uuid
+	fileName := "MOCK_FILENAME.mp3"
+	
+	//Create resource in db
+	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+	resource := models.Resource{NameCDN: fileName, Name: info.Name, Url: cdnFilePath,  Type: "Custom", TypeSegment: "TTS", UserID: user.ID}
 	result := database.DB.Create(&resource)
 
 	if result.Error != nil {

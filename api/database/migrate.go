@@ -16,9 +16,6 @@ func MigrateAllTables() {
 		&models.Episode{},
 		&models.TemplateSegment{},
 		&models.EpisodeSegment{},
-		&models.ContentSegment{},
-		&models.TTSSegment{},
-		&models.ResourceSegment{},
 	}
 
 	// Iterate models and migrate them
