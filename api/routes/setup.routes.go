@@ -9,9 +9,10 @@ import (
 func SetupRoutes(r *gin.Engine){
 
 	SetupAuthRoutes(r)
-	SetupUserRoutes(r)
-	SetupPodcastRoutes(r)
 	SetupEpisodeRoutes(r)
+	SetupPodcastRoutes(r)
 	SetupResourceRoutes(r)
+	SetupSegmentRoutes(r)
 	SetupTemplateRoutes(r)
+	SetupUserRoutes(r)
 }

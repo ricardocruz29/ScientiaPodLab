@@ -12,7 +12,6 @@ import (
 func init() {
     initializers.LoadEnvVariables()
     initializers.ConnectToDB()
-    // database.ClearAllTables()
     initializers.SyncDatabase()
 
 

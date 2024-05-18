@@ -1,14 +1,7 @@
 package controllers
 
 import (
-	"fmt"
-	"net/http"
-	"os"
-	"scipodlab_api/models"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type EpisodeController struct {}
@@ -32,68 +25,89 @@ func NewEpisodeController() *EpisodeController {
 
 //!To do either of this, the process seems similar. Use this package: "github.com/gorilla/feeds": https://pkg.go.dev/github.com/gorilla/feeds 
 
-func (uc *EpisodeController) CreateEpisode(c *gin.Context, db *gorm.DB) {
-	//TODO Create Episode will be sending all the segments to rabbitmq. This code will go to CreateSegment in controller
+func (uc *EpisodeController) GetEpisodes(c *gin.Context) {
+    //TODO: Get all the episodes of a certain podcast
+}
 
-	// Parse form data and setup the limit as 1gb
-	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error processing form"})
-		c.Abort()
-		return
-	}
+func (uc *EpisodeController) GetEpisode(c *gin.Context) {
+		//TODO: Get a certain episode
+}
 
-	//Get the episode file
-	episodeAudio, err := c.FormFile("episode_audio")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, "Error obtaining audio")
-		return
-	}
+func (uc *EpisodeController) CreateEpisode(c *gin.Context) {
+	//TODO: Create Episode will fill in the "details" of the episode and will create the base -> Similar to Podcast create: Name, Image, Description, PodcastID and TemplateID maybe
 
-	// Get the other info for episode
-	podcastId, err := strconv.ParseUint(c.PostForm("podcastId"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, "Error converting podcastId")
-		return
-	}
+	//! Old code -> Check if is usable
+	// // Parse form data and setup the limit as 1gb
+	// if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Error processing form"})
+	// 	c.Abort()
+	// 	return
+	// }
 
-	//Check if podcast exists
-	var podcast models.Podcast
-	var podcastErr error
-	podcastErr = db.First(&podcast, podcastId).Error
+	// //Get the episode file
+	// episodeAudio, err := c.FormFile("episode_audio")
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, "Error obtaining audio")
+	// 	return
+	// }
+
+	// // Get the other info for episode
+	// podcastId, err := strconv.ParseUint(c.PostForm("podcastId"), 10, 64)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, "Error converting podcastId")
+	// 	return
+	// }
+
+	// //Check if podcast exists
+	// var podcast models.Podcast
+	// var podcastErr error
+	// podcastErr = db.First(&podcast, podcastId).Error
 	
-	if podcastErr != nil && err == gorm.ErrRecordNotFound {
-		c.JSON(http.StatusBadRequest, "Podcast does not exist!")
-		return
-	}
+	// if podcastErr != nil && err == gorm.ErrRecordNotFound {
+	// 	c.JSON(http.StatusBadRequest, "Podcast does not exist!")
+	// 	return
+	// }
 
-	// Save file
-	err = c.SaveUploadedFile(episodeAudio, fmt.Sprintf("%s/audios", os.Getenv("CdnLocalPath")))
-	if err != nil {
-			c.JSON(http.StatusInternalServerError, "Error storing file")
-			return
-	}
+	// // Save file
+	// err = c.SaveUploadedFile(episodeAudio, fmt.Sprintf("%s/audios", os.Getenv("CdnLocalPath")))
+	// if err != nil {
+	// 		c.JSON(http.StatusInternalServerError, "Error storing file")
+	// 		return
+	// }
 
-	//Create episode in db
-	episode := models.Episode{PodcastID: uint(podcastId), Url: fmt.Sprintf("%s/audios/%s", os.Getenv("CdnUrlPath"), episodeAudio.Filename)}
-	result := db.Create(&episode)
+	// //Create episode in db
+	// episode := models.Episode{PodcastID: uint(podcastId), Url: fmt.Sprintf("%s/audios/%s", os.Getenv("CdnUrlPath"), episodeAudio.Filename)}
+	// result := db.Create(&episode)
 
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, "Error creating user")
-	}
+	// if result.Error != nil {
+	// 	c.JSON(http.StatusInternalServerError, "Error creating user")
+	// }
 }
 
-func (uc *EpisodeController) GetEpisodes(c *gin.Context, db *gorm.DB) {
-    
+
+func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
+   //TODO: Can Edit the name, description, image, etc -> This has not a screen yet
 }
 
-func (uc *EpisodeController) GetEpisode(c *gin.Context, db *gorm.DB) {
-    
+func (uc *EpisodeController) DeleteEpisode(c *gin.Context) {
+  //TODO: Delete an episode and its segments -> Access if this should be possible after the episode is published
 }
 
-func (uc *EpisodeController) UpdateEpisode(c *gin.Context, db *gorm.DB) {
-   
+func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
+	//TODO: Triggered when the users finishes the episode and clicks on render
+	//TODO: Also on update, have a function that checks if any segments were changed, and if so, call this endpoint to re-render the episode (Have a function in FE to check if any segments were changed to prevent an overload of unnecessary rerender)
+	
+	//TODO: Gather all the segments (and it's resources -> only gonna needs the name prob) and send them via rabbitmq to the audio render ms to generate the final audio (a bool flag of noise cancellation should be sent as well)
+	//! The Audio Render MS will then store the file and send back its uuid
+	//TODO: With the uuid sent back by the Audio Render MS, create the episode in the Database
+
+	//TODO: Get the Podcast of this Episode and check if it has an RSS Feed. 
+	//!If it hasn't, generate the RSS Feed.
 }
 
-func (uc *EpisodeController) DeleteEpisode(c *gin.Context, db *gorm.DB) {
-    
+func (uc *EpisodeController) PublishEpisode(c *gin.Context) {
+	//TODO: If the podcast already has one RSS Feed and at least one episode, we need to update the RSS Feed with a new episode (It goes for the first place in the metadata)
+	//TODO: If the podcast has one RSS Feed, but no episodes, add this as the first one.
+
+	//! Both processes will be similar, if there are 10 or 0 episodes, the new episode to be published will go into the first position of the RSS Feed.
 }
