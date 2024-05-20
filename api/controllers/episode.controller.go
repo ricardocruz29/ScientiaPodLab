@@ -8,6 +8,7 @@ import (
 	"scipodlab_api/database"
 	"scipodlab_api/models"
 	"scipodlab_api/utils"
+	"scipodlab_api/utils/validators"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -56,7 +57,7 @@ func (uc *EpisodeController) GetEpisode(c *gin.Context) {
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
-	err := database.DB.First(&episode, id).Error
+	err := database.DB.Preload("Segments").First(&episode, id).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
 			return
@@ -226,15 +227,50 @@ func (uc *EpisodeController) DeleteEpisode(c *gin.Context) {
 }
 
 func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
-	//TODO: Triggered when the users finishes the episode and clicks on render
-	//TODO: Also on update, have a function that checks if any segments were changed, and if so, call this endpoint to re-render the episode (Have a function in FE to check if any segments were changed to prevent an overload of unnecessary rerender)
+	//!: Triggered when the users finishes the episode and clicks on render
+	//!: Also on update, have a function that checks if any segments were changed, and if so, call this endpoint to re-render the episode (Have a function in FE to check if any segments were changed to prevent an overload of unnecessary rerender)
+	strId := c.Param("id")
+	episodeId, _ := strconv.Atoi(strId)
+
+	//Get the info from payload
+	payload, _ := c.Get("payload")
+	info, _ := payload.(*validators.RenderEpisodeValidator)
 	
-	//TODO: Gather all the segments (and it's resources -> only gonna needs the name prob) and send them via rabbitmq to the audio render ms to generate the final audio (a bool flag of noise cancellation should be sent as well)
+
+	var episode models.Episode
+	// Retrieve the Episode by its ID
+	err := database.DB.Preload("Segments.Resource").First(&episode, episodeId).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+
+	//TODO: Gather all the segments and the resource of each segment
+	//TODO: Send them via rabbitmq to the audio render ms to generate the final audio
+	//TODO: include the bool flag of noise cancellation
+	log.Println("include noise cancellation: ", info.NoiseCancellation);
+
 	//! The Audio Render MS will then store the file and send back its uuid and the duration
-	//TODO: With the uuid sent back by the Audio Render MS, create the episode in the Database
+	fileName := "MOCK_FINAL_FILENAME.mp3"
+	duration := 37.3 //in seconds
+	
+	episode.Url = filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+	episode.Duration = duration
+	// Update the episode in DB
+	err = database.DB.Save(&episode).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode"})
+		return
+	}
 
 	//TODO: Get the Podcast of this Episode and check if it has an RSS Feed. 
 	//!If it hasn't, generate the RSS Feed.
+
+	//! See in the chatgpt how. We are going to use gorilla feeds
+	//! Then we store the details of that RSS feed -> Check if it is worth to create a model for the RSS Feed
+	//! Then, for publishing a new episode, we are going to get that RSS Feed and create a "new" one but with the exact same information, like Link, Author, Title, Image etc
+	//! And we add the items to the RSS feed once again
 }
 
 func (uc *EpisodeController) PublishEpisode(c *gin.Context) {

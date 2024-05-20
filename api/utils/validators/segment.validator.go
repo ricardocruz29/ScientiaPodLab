@@ -3,11 +3,11 @@ package validators
 type CreateTemplateSegmentValidator struct {
 	Position 			int 										`json:"position" validate:"required"`
 	Type 					string 									`json:"type" validate:"required"`
-	TemplateID		uint										`json:"templateId" validate:"required"`
+	TemplateID		int										`json:"templateId" validate:"required"`
 }
 
 type CreateEpisodeSegmentValidator struct {
 	Position 			int 										`json:"position" validate:"required"`
 	Type 					string 									`json:"type" validate:"required"`
-	EpisodeID			uint										`json:"episodeId" validate:"required"`
+	EpisodeID			int										`json:"episodeId" validate:"required"`
 }

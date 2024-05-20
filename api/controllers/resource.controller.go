@@ -86,13 +86,33 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 			return
 	}
 
-	//Create episode in db
+	//Create resource in db
 	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
 	resource := models.Resource{NameCDN: fileName, Name: name, Url: cdnFilePath,  Type: "Custom", TypeSegment: typeSegment, UserID: user.ID}
 	result := database.DB.Create(&resource)
 
 	if result.Error != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
+	}
+
+	//Get the EpisodeSegmentID if sent
+	strEpisodeSegmentId := c.Request.FormValue("episode_segment_id")
+	var episodeSegmentId int;
+	if strEpisodeSegmentId != "" {
+		episodeSegmentId, _ = strconv.Atoi(strEpisodeSegmentId)
+
+		var episodeSegment models.EpisodeSegment
+		// Retrieve the episode segment by its ID
+		err := database.DB.First(&episodeSegment, episodeSegmentId).Error
+		if err != nil {
+				c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
+				return
+		}
+
+		// TODO: Test if the resourceID exists ... -> At this point, I am not sure if it already exists or if it only existes after the DB.Create
+		//Add the resourceId to the episodeSegment
+		resourceID := int(resource.ID)
+		episodeSegment.ResourceID = &resourceID;
 	}
 
 	c.JSON(http.StatusOK, resource)
@@ -118,6 +138,26 @@ func (uc *ResourceController) CreateTTSResource(c *gin.Context) {
 
 	if result.Error != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
+	}
+
+	//Get the EpisodeSegmentID if sent
+	strEpisodeSegmentId := c.Request.FormValue("episode_segment_id")
+	var episodeSegmentId int;
+	if strEpisodeSegmentId != "" {
+		episodeSegmentId, _ = strconv.Atoi(strEpisodeSegmentId)
+
+		var episodeSegment models.EpisodeSegment
+		// Retrieve the episode segment by its ID
+		err := database.DB.First(&episodeSegment, episodeSegmentId).Error
+		if err != nil {
+				c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
+				return
+		}
+
+		// TODO: Test if the resourceID exists ... -> At this point, I am not sure if it already exists or if it only existes after the DB.Create
+		//Add the resourceId to the episodeSegment
+		resourceID := int(resource.ID)
+		episodeSegment.ResourceID = &resourceID;
 	}
 
 	c.JSON(http.StatusOK, resource)
