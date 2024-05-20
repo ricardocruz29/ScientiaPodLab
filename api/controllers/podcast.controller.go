@@ -112,7 +112,7 @@ func (uc *PodcastController) CreatePodcast(c *gin.Context) {
 	}
 
 	//Create podcast in db
-	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
 
 	podcast := models.Podcast{Name: name, Image: cdnFilePath, Description: description, Genre: genre, UserID: user.ID}
 	result := database.DB.Create(&podcast)
@@ -175,7 +175,7 @@ func (uc *PodcastController) UpdatePodcast(c *gin.Context) {
 		}
 
 		//Create episode in db
-		cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+		cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
 		podcast.Image = cdnFilePath
 	}
 	
