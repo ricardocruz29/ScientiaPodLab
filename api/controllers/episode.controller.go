@@ -1,7 +1,17 @@
 package controllers
 
 import (
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+	"scipodlab_api/database"
+	"scipodlab_api/models"
+	"scipodlab_api/utils"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type EpisodeController struct {}
@@ -25,68 +35,190 @@ func NewEpisodeController() *EpisodeController {
 
 //!To do either of this, the process seems similar. Use this package: "github.com/gorilla/feeds": https://pkg.go.dev/github.com/gorilla/feeds 
 
-func (uc *EpisodeController) GetEpisodes(c *gin.Context) {
-    //TODO: Get all the episodes of a certain podcast
-}
+func (uc *EpisodeController) GetPodcastEpisodes(c *gin.Context) {
+		strId := c.Param("id")
+		podcastId, _ := strconv.Atoi(strId)
+	
+		var episodes []models.Episode
+		// Retrieve templates with Type = "Platform" or UserID = userID
+		err := database.DB.Preload("Segments").Where("podcast_id = ?", podcastId).Find(&episodes).Error
+		if err != nil {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting episodes"})
+				return
+		}
+	
+		c.JSON(http.StatusOK, episodes)
+	}
 
 func (uc *EpisodeController) GetEpisode(c *gin.Context) {
-		//TODO: Get a certain episode
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
+
+	var episode models.Episode
+	// Retrieve the Episode by its ID
+	err := database.DB.First(&episode, id).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+	c.JSON(http.StatusOK, episode)
 }
 
 func (uc *EpisodeController) CreateEpisode(c *gin.Context) {
-	//TODO: Create Episode will fill in the "details" of the episode and will create the base -> Similar to Podcast create: Name, Image, Description, PodcastID and TemplateID maybe
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
 
-	//! Old code -> Check if is usable
-	// // Parse form data and setup the limit as 1gb
-	// if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Error processing form"})
-	// 	c.Abort()
-	// 	return
-	// }
+	// Parse form data and setup the limit as 1gb
+	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
+	if err := c.Request.ParseMultipartForm(10 << 30); err != nil {
+		log.Print("error" , err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid File, 1gb limit"})
+		return
+	}
 
-	// //Get the episode file
-	// episodeAudio, err := c.FormFile("episode_audio")
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, "Error obtaining audio")
-	// 	return
-	// }
+	//Get the image file
+	image, err := c.FormFile("image")
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"Error obtaining Image"})
+		return
+	}
 
-	// // Get the other info for episode
-	// podcastId, err := strconv.ParseUint(c.PostForm("podcastId"), 10, 64)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, "Error converting podcastId")
-	// 	return
-	// }
-
-	// //Check if podcast exists
-	// var podcast models.Podcast
-	// var podcastErr error
-	// podcastErr = db.First(&podcast, podcastId).Error
+	//Get the name
+	name := c.Request.FormValue("name")
+	if name == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No name was sent"})
+		return
+	}
 	
-	// if podcastErr != nil && err == gorm.ErrRecordNotFound {
-	// 	c.JSON(http.StatusBadRequest, "Podcast does not exist!")
-	// 	return
-	// }
+	//Get the description
+	description := c.Request.FormValue("description")
+	if description == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No description was sent"})
+		return
+	}
 
-	// // Save file
-	// err = c.SaveUploadedFile(episodeAudio, fmt.Sprintf("%s/audios", os.Getenv("CdnLocalPath")))
-	// if err != nil {
-	// 		c.JSON(http.StatusInternalServerError, "Error storing file")
-	// 		return
-	// }
+	//Get the Template
+	strTemplateId := c.Request.FormValue("templateId")
+	if strTemplateId == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No templateId was sent"})
+		return
+	}
+	templateId, _ := strconv.Atoi(strTemplateId)
 
-	// //Create episode in db
-	// episode := models.Episode{PodcastID: uint(podcastId), Url: fmt.Sprintf("%s/audios/%s", os.Getenv("CdnUrlPath"), episodeAudio.Filename)}
-	// result := db.Create(&episode)
+	//Get the Podcast
+	strPodcastId := c.Request.FormValue("podcastId")
+	if strPodcastId == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No podcastId was sent"})
+		return
+	}
+	podcastId, _ := strconv.Atoi(strPodcastId)
 
-	// if result.Error != nil {
-	// 	c.JSON(http.StatusInternalServerError, "Error creating user")
-	// }
+	// Save file
+	fileExtension := filepath.Ext(image.Filename)
+	if (utils.Contains(utils.IMAGE_EXTENSIONS, fileExtension)) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
+		return
+	}
+
+	fileName := uuid.New().String() + fileExtension
+	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "images", fileName)
+	err = c.SaveUploadedFile(image, filePath)
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
+			return
+	}
+
+	//Create podcast in db
+	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
+
+	episode := models.Episode{Name: name, Image: cdnFilePath, Description: description, TemplateID: templateId, PodcastID: podcastId}
+	result := database.DB.Create(&episode)
+
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating episode"})
+	}
+
+	c.JSON(http.StatusOK, episode)
 }
 
-
 func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
-   //TODO: Can Edit the name, description, image, etc -> This has not a screen yet
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
+
+	var episode models.Episode
+	// Retrieve the episode by its ID
+	err := database.DB.First(&episode, id).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
+
+	// Parse form data and setup the limit as 1gb
+	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
+	if err := c.Request.ParseMultipartForm(10 << 30); err != nil {
+		log.Print("error" , err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid File, 1gb limit"})
+		return
+	}
+
+	//Get the image file
+	image, _ := c.FormFile("image")
+
+	//Get the name
+	name := c.Request.FormValue("name")
+	
+	//Get the description
+	description := c.Request.FormValue("description")
+
+	//Get the Template
+	strTemplateId := c.Request.FormValue("templateId")
+	var templateId int
+	if strTemplateId != "" {
+		templateId, _ = strconv.Atoi(strTemplateId)
+	}
+	
+	if (image != nil) {
+		// Save file
+		fileExtension := filepath.Ext(image.Filename)
+		if (utils.Contains(utils.IMAGE_EXTENSIONS, fileExtension)) {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
+			return
+		}
+
+		fileName := uuid.New().String() + fileExtension
+		filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "images", fileName)
+		err = c.SaveUploadedFile(image, filePath)
+		if err != nil {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
+				return
+		}
+
+		//Create episode in db
+		cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
+		episode.Image = cdnFilePath
+	}
+	
+	if name != "" {
+		episode.Name = name
+	}
+	if description != "" {
+		episode.Description = description
+	}
+
+	if strTemplateId != "" {
+		episode.TemplateID = templateId
+	}
+	
+	// Update the episode
+	err = database.DB.Save(&episode).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode"})
+		return
+	}
+
+	c.JSON(http.StatusOK, episode)
 }
 
 func (uc *EpisodeController) DeleteEpisode(c *gin.Context) {
@@ -98,7 +230,7 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 	//TODO: Also on update, have a function that checks if any segments were changed, and if so, call this endpoint to re-render the episode (Have a function in FE to check if any segments were changed to prevent an overload of unnecessary rerender)
 	
 	//TODO: Gather all the segments (and it's resources -> only gonna needs the name prob) and send them via rabbitmq to the audio render ms to generate the final audio (a bool flag of noise cancellation should be sent as well)
-	//! The Audio Render MS will then store the file and send back its uuid
+	//! The Audio Render MS will then store the file and send back its uuid and the duration
 	//TODO: With the uuid sent back by the Audio Render MS, create the episode in the Database
 
 	//TODO: Get the Podcast of this Episode and check if it has an RSS Feed. 

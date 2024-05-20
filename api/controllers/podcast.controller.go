@@ -26,7 +26,7 @@ func (uc *PodcastController) GetPodcasts(c *gin.Context) {
 	user := userGin.(models.User)
 
 	var podcasts []models.Podcast
-	// Retrieve templates with Type = "Platform" or UserID = userID
+	// Retrieve podcasts with UserID = userID
 	err := database.DB.Preload("Episodes").Where("user_id = ?", user.ID).Find(&podcasts).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting podcasts"})
@@ -44,7 +44,7 @@ func (uc *PodcastController) GetPodcast(c *gin.Context) {
 	user := userGin.(models.User)
 
 	var podcast []models.Podcast
-	// Retrieve templates with Type = "Platform" or UserID = userID
+	// Retrieve podcasts with UserID = userID
 	err := database.DB.Preload("Episodes").Where("user_id = ? AND ID = ?", user.ID, id).First(&podcast).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
@@ -57,8 +57,6 @@ func (uc *PodcastController) GetPodcast(c *gin.Context) {
 func (uc *PodcastController) CreatePodcast(c *gin.Context) {
 	userGin, _ := c.Get("user")
 	user := userGin.(models.User)
-
-	log.Println("Im here")
 
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
 
@@ -113,7 +111,7 @@ func (uc *PodcastController) CreatePodcast(c *gin.Context) {
 			return
 	}
 
-	//Create episode in db
+	//Create podcast in db
 	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
 
 	podcast := models.Podcast{Name: name, Image: cdnFilePath, Description: description, Genre: genre, UserID: user.ID}
@@ -131,7 +129,7 @@ func (uc *PodcastController) UpdatePodcast(c *gin.Context) {
 	id, _ := strconv.Atoi(strId)
 
 	var podcast models.Podcast
-	// Retrieve the template by its ID
+	// Retrieve the podcast by its ID
 	err := database.DB.First(&podcast, id).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
@@ -206,14 +204,14 @@ func (uc *PodcastController) DeletePodcast(c *gin.Context) {
 	id, _ := strconv.Atoi(strId)
 
 	var podcast models.Podcast
-	// Retrieve the template by its ID
+	// Retrieve the podcast by its ID
 	err := database.DB.First(&podcast, id).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
 			return
 	}
 
-	// Delete the template
+	// Delete the podcast
 	err = database.DB.Select(clause.Associations).Delete(&podcast).Error
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting podcast"})

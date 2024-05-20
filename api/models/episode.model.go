@@ -11,8 +11,8 @@ type Episode struct {
 	Duration			float64							`json:"duration"`
 	IsPublished		bool								`gorm:"not null; default:false" json:"isPublished"`
 	Segments			[]EpisodeSegment		`json:"segments"`
-	PodcastID			uint								`gorm:"foreignKey" json:"podcastId"`
-	TemplateID 		uint								`gorm:"foreignKey" json:"templateId"`
+	PodcastID			int								`gorm:"foreignKey" json:"podcastId"`
+	TemplateID 		int								`gorm:"foreignKey" json:"templateId"`
 }
 
 func EpisodeModel(db *gorm.DB)  {
