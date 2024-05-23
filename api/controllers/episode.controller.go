@@ -10,6 +10,7 @@ import (
 	"scipodlab_api/utils"
 	"scipodlab_api/utils/validators"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -20,21 +21,6 @@ type EpisodeController struct {}
 func NewEpisodeController() *EpisodeController {
 	return &EpisodeController{}
 }
-
-//! RSS Feed Generation
-//! After the publish of an episode, we need to check if it is the first episode: TODO: This means we need to create a publish episode endpoint
-//! If that's the case, we need to generate a new RSS Feed for that specific episode. More information about RSS Feeds below
-		// 	RSS feed generation is a critical aspect of podcast hosting platforms. The RSS feed serves as a standardized format for distributing information about podcast episodes to podcast directories and subscribers. Here's a more detailed breakdown of how RSS feed generation works:
-		//     1. Podcast Metadata: When a user uploads a new episode to the hosting platform, the platform collects metadata about the episode. This metadata typically includes information such as the episode title, description, publication date, duration, and audio file URL.
-		//     2. XML Formatting: RSS feeds are typically formatted using XML (Extensible Markup Language). The hosting platform needs to convert the metadata for each episode into XML format according to the specifications outlined in the RSS 2.0 or Atom syndication formats, which are commonly used for podcasts.
-		//     3. Enclosures: One of the essential components of an RSS feed for a podcast is the enclosure element. This element contains information about the audio file associated with each episode, including its URL, file type, and file size. The hosting platform must include this enclosure element in the XML for each episode.
-		//     4. Episode Listing: The RSS feed should include a listing of all the episodes available for the podcast, typically in reverse chronological order (with the most recent episode listed first). Each episode entry in the RSS feed contains metadata about the episode, as well as the enclosure element pointing to the audio file.
-		//     5. RSS Feed URL: Once the hosting platform has generated the RSS feed XML for a podcast, it assigns a URL to the feed. This URL serves as the address where podcast directories and subscribers can access the RSS feed to retrieve information about the podcast's episodes.
-		//     6. Updating the Feed: Whenever a new episode is uploaded or existing episode metadata is modified, the hosting platform needs to update the RSS feed accordingly. This ensures that podcast directories and subscribers always have access to the latest information about the podcast's episodes.
-		// Overall, RSS feed generation is a crucial component of podcast hosting platforms, as it enables podcast creators to distribute their content to a wide audience through podcast directories and subscription platforms.
-//! If the podcast already has one RSS Feed and at least one episode, we need to update the RSS Feed with a new episode (It goes for the first place in the metadata)
-
-//!To do either of this, the process seems similar. Use this package: "github.com/gorilla/feeds": https://pkg.go.dev/github.com/gorilla/feeds 
 
 func (uc *EpisodeController) GetPodcastEpisodes(c *gin.Context) {
 		strId := c.Param("id")
@@ -264,18 +250,52 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 		return
 	}
 
-	//TODO: Get the Podcast of this Episode and check if it has an RSS Feed. 
-	//!If it hasn't, generate the RSS Feed.
+	//!If Podcast doesn't have any episodes, generate an RSS Feed Link
+	var podcast models.Podcast
+	// Retrieve podcasts with UserID = userID
+	podcastErr := database.DB.Preload("Episodes").Where("ID = ?", episode.PodcastID).First(&podcast).Error
+	if podcastErr != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
+			return
+	}
 
-	//! See in the chatgpt how. We are going to use gorilla feeds
-	//! Then we store the details of that RSS feed -> Check if it is worth to create a model for the RSS Feed
-	//! Then, for publishing a new episode, we are going to get that RSS Feed and create a "new" one but with the exact same information, like Link, Author, Title, Image etc
-	//! And we add the items to the RSS feed once again
+	var podcastCreateRSSFeedErr error
+	if (len(podcast.Episodes) == 0) {
+		linkId := strings.ReplaceAll(uuid.New().String(), "-", "")
+		podcast.RSSFeed = filepath.Join(os.Getenv("RSS_URL_PATH"), linkId)
+
+		// Update the podcast with a new RSS Feed link
+		podcastCreateRSSFeedErr = database.DB.Save(&podcast).Error
+	}
+
+	// We don't need to send anything to the user because this will be async -> The user will not await for the response
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Successfully rendered episode", 
+		"error": podcastCreateRSSFeedErr,
+	})
 }
 
 func (uc *EpisodeController) PublishEpisode(c *gin.Context) {
-	//TODO: If the podcast already has one RSS Feed and at least one episode, we need to update the RSS Feed with a new episode (It goes for the first place in the metadata)
-	//TODO: If the podcast has one RSS Feed, but no episodes, add this as the first one.
+	//! This endpoint doesnt need to create an RSS Feed -> it just needs to set a flag isPublished on the episode
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
 
-	//! Both processes will be similar, if there are 10 or 0 episodes, the new episode to be published will go into the first position of the RSS Feed.
+	var episode models.Episode
+	// Retrieve the Episode by its ID
+	err := database.DB.Preload("Segments").First(&episode, id).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+	episode.IsPublished = true;
+
+	// Update the episode
+	err = database.DB.Save(&episode).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error publishing episode"})
+		return
+	}
+
+	c.JSON(http.StatusOK, episode)
 }
