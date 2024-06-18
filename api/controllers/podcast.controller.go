@@ -9,9 +9,11 @@ import (
 	"scipodlab_api/models"
 	"scipodlab_api/utils"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/gorilla/feeds"
 	"gorm.io/gorm/clause"
 )
 
@@ -221,10 +223,33 @@ func (uc *PodcastController) DeletePodcast(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Podcast deleted"})
 }
 
+//TODO: Test if this functions is functioning properly
+//First test on postman -> if it working
+//Then try to do a test to actually create an RSS Feed and publish to spotify and then add an episode and something like that to ensure it is actually working
 func (uc *PodcastController) GetPodcastRSSFeed(c *gin.Context) {
-	// TODO: Get Podcast episodes that have the flag isPublished
-	// TODO: With Gorilla Feeds, create the RSS Feed
-	//! This is the required information
+	strId := c.Param("id")
+	podcastId, _ := strconv.Atoi(strId)
+
+	userGin, _ := c.Get("user")
+	user := userGin.(models.User)
+
+	var podcast models.Podcast
+	// Retrieve podcasts with UserID = userID
+	err := database.DB.Preload("Episodes").Where("user_id = ? AND ID = ?", user.ID, podcastId).First(&podcast).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
+			return
+	}
+
+	var episodes []models.Episode
+	// Retrieve templates with Type = "Platform" or UserID = userID
+	episodesErr := database.DB.Preload("Segments").Where("podcast_id = ? AND is_published = ?", podcastId, true).Find(&episodes).Error
+	if episodesErr != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting episodes"})
+			return
+	}
+
+	//! This is the required information - There are some that the gorilla feeds package is not acknowledging
 	// Title: podcast.name
 	// Link: podcast.RSSFeed
 	// Description: podcast.description
@@ -234,11 +259,34 @@ func (uc *PodcastController) GetPodcastRSSFeed(c *gin.Context) {
 	// Category: podcast.genre
 	// Items (Episodes): podcast.Episodes that have the flag isPublished, the first is the most recent, the last the most old
 
-	//! Return an application/xml response, that returns the XML constructed by the gorilla feeds
+	now := time.Now()
+	feed := &feeds.Feed{
+		Title:       podcast.Name,
+		Link:        &feeds.Link{Href: podcast.RSSFeed},
+		Description: podcast.Description,
+		Author:      &feeds.Author{Name: user.Username, Email: user.Email},
+		Created:     now,
+	}
 
-	//? Helper -> This will be something like that
-	// c.Header("Content-Type", "application/xml")
-	// c.XML(http.StatusOK, rssFeed)
+	for _, episode := range episodes {
+		item := &feeds.Item{
+			Title:       episode.Name,
+			Link:        &feeds.Link{Href: episode.Url},
+			Description: episode.Description,
+			Author:      &feeds.Author{Name: user.Username, Email: user.Email},
+			Created:     episode.CreatedAt,
+		}
+		feed.Items = append(feed.Items, item)
+	}
+	
+	rss, err := feed.ToRss()
+	if err != nil {
+			log.Fatal(err)
+	}
+
+	//! Return an application/xml response, that returns the XML constructed by the gorilla feeds
+	c.Header("Content-Type", "application/xml")
+	c.String(http.StatusOK, rss) // tODO: Check if we should use c.String or c.XML (ChatGPT recommended c.String)
 }
 
 //TODO: Check if there is any information in here that can be deleted
