@@ -17,4 +17,6 @@ func SendEpisodeToRender(episode models.Episode, includeNoiseCancellation bool) 
 	//TODO: include the bool flag of noise cancellation
 
 	log.Println("include noise cancellation: ", includeNoiseCancellation);
+
+	// sendMessage("startRenderEpisode", data)
 }
