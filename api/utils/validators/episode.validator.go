@@ -1,5 +1,5 @@
 package validators
 
 type RenderEpisodeValidator struct {
-	NoiseCancellation 	string `json:"noiseCancellation" validate:"required"`
+	NoiseCancellation bool `json:"noiseCancellation" validate:"required"`
 }

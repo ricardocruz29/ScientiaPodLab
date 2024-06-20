@@ -1,13 +1,12 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"scipodlab_api/database"
+	"scipodlab_api/events"
 	"scipodlab_api/models"
 	"scipodlab_api/utils"
 	"scipodlab_api/utils/validators"
@@ -223,7 +222,6 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 	//Get the info from payload
 	payload, _ := c.Get("payload")
 	info, _ := payload.(*validators.RenderEpisodeValidator)
-	
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
@@ -233,16 +231,7 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 			return
 	}
 
-	//! PRINT DATA
-	printData, _ := json.Marshal(episode)
-	fmt.Println("Received data: ", string(printData))
-
-
-	//TODO: Gather all the segments and the resource of each segment
-	//TODO: Send the paths via rabbitmq to the audio render ms to generate the final audio -> Create a json structure and then do json.marshal and call the function events.sendMessage(queueName, data)
-	//TODO: include the bool flag of noise cancellation
-
-	log.Println("include noise cancellation: ", info.NoiseCancellation);
+	events.SendEpisodeToRender(episode, info.NoiseCancellation)
 
 	//!If Podcast doesn't have any episodes, generate an RSS Feed Link
 	var podcast models.Podcast
