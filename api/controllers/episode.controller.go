@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -231,24 +233,16 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 			return
 	}
 
+	//! PRINT DATA
+	printData, _ := json.Marshal(episode)
+	fmt.Println("Received data: ", string(printData))
+
 
 	//TODO: Gather all the segments and the resource of each segment
-	//TODO: Send them via rabbitmq to the audio render ms to generate the final audio
+	//TODO: Send the paths via rabbitmq to the audio render ms to generate the final audio -> Create a json structure and then do json.marshal and call the function events.sendMessage(queueName, data)
 	//TODO: include the bool flag of noise cancellation
-	log.Println("include noise cancellation: ", info.NoiseCancellation);
 
-	//! The Audio Render MS will then store the file and send back its uuid and the duration
-	fileName := "MOCK_FINAL_FILENAME.mp3"
-	duration := 37.3 //in seconds
-	
-	episode.Url = filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
-	episode.Duration = duration
-	// Update the episode in DB
-	err = database.DB.Save(&episode).Error
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode"})
-		return
-	}
+	log.Println("include noise cancellation: ", info.NoiseCancellation);
 
 	//!If Podcast doesn't have any episodes, generate an RSS Feed Link
 	var podcast models.Podcast
@@ -270,7 +264,7 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 
 	// We don't need to send anything to the user because this will be async -> The user will not await for the response
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Successfully rendered episode", 
+		"message": "Successfully started rendering episode", 
 		"error": podcastCreateRSSFeedErr,
 	})
 }

@@ -13,7 +13,8 @@ func init() {
     initializers.LoadEnvVariables()
     initializers.ConnectToDB()
     initializers.SyncDatabase()
-
+    initializers.ConnectToRabbitMQ()
+    initializers.StartEvents()
 
     //! To run with seeding: go run . seed
     if (len(os.Args) > 1 && os.Args[1] == "seed") {
@@ -23,14 +24,7 @@ func init() {
     }
 }
 
-func main(){
-    // create a new RabbitMQ connection
-    //TODO: Do this as a initializer
-    // rabbitmqErr := events.ConnectRabbitmq()
-    // if rabbitmqErr != nil {
-	// 	log.Fatalf("Error connecting to rabbitmq: %s", err)
-	// }
-	
+func main(){	
     //Execute HTTP Server
     r := gin.Default()
     routes.SetupRoutes(r)
