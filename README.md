@@ -35,7 +35,7 @@ pip install -r requirements.txt
 export FLASK_APP=app.py
 flask run
 
-## To install additional packages and add it to requirements
+## To install additional packages and add it to requirements.txt
 
 pip install package_name
 pip freeze > requirements.txt
