@@ -10,15 +10,13 @@ from receive import receive
 app = Flask(__name__)
 load_dotenv()
 
-
-
 @app.route("/tts")
-def home():
+def tts():
     #Route that will call the function to parse text to speech. Add the file to CDN, and then return a uuid
     return "Hello, Flask!"
 
 @app.route("/stt")
-def home():
+def stt():
     #Route that will call the function to parse speech to text. Receives an uuid, gets the file from CDN and then returns text
     return "Hello, Flask!"
 
