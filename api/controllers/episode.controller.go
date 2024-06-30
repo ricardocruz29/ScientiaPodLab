@@ -11,7 +11,6 @@ import (
 	"scipodlab_api/utils"
 	"scipodlab_api/utils/validators"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -142,7 +141,6 @@ func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
 	}
 
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
-
 	// Parse form data and setup the limit as 1gb
 	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
 	if err := c.Request.ParseMultipartForm(10 << 30); err != nil {
@@ -225,41 +223,34 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
-	err := database.DB.Preload("Segments.Resource").First(&episode, episodeId).Error
+	err := database.DB.Preload("Segments").First(&episode, episodeId).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
 			return
 	}
 
-	events.SendEpisodeToRender(episode, info.NoiseCancellation)
+	var resources []string
 
-	//!If Podcast doesn't have any episodes, generate an RSS Feed Link
-	var podcast models.Podcast
-	// Retrieve podcasts with UserID = userID
-	podcastErr := database.DB.Preload("Episodes").Where("ID = ?", episode.PodcastID).First(&podcast).Error
-	if podcastErr != nil {
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Podcast not found"})
-			return
+	// Iterate through the segments to retrieve and append the corresponding resources
+	for _, segment := range episode.Segments {
+			if segment.ResourceID != nil {
+				var nameCDN string
+				if err := database.DB.Model(&models.Resource{}).Select("name_cdn").Where("id = ?", *segment.ResourceID).Scan(&nameCDN).Error; err == nil {
+					resources = append(resources, nameCDN)
+				}
+			}
 	}
 
-	var podcastCreateRSSFeedErr error
-	if (len(podcast.Episodes) == 0) {
-		linkId := strings.ReplaceAll(uuid.New().String(), "-", "")
-		podcast.RSSFeed = filepath.Join(os.Getenv("RSS_URL_PATH"), linkId)
-
-		// Update the podcast with a new RSS Feed link
-		podcastCreateRSSFeedErr = database.DB.Save(&podcast).Error
-	}
+	events.SendEpisodeToRender(resources, info.NoiseCancellation, episodeId)
 
 	// We don't need to send anything to the user because this will be async -> The user will not await for the response
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully started rendering episode", 
-		"error": podcastCreateRSSFeedErr,
 	})
 }
 
 func (uc *EpisodeController) PublishEpisode(c *gin.Context) {
-	//! This endpoint doesnt need to create an RSS Feed -> it just needs to set a flag isPublished on the episode
+	//! This endpoint doesn't need to create an RSS Feed -> it just needs to set a flag isPublished on the episode
 	strId := c.Param("id")
 	id, _ := strconv.Atoi(strId)
 

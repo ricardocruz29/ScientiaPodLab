@@ -8,7 +8,7 @@ type Episode struct {
 	Image					string							`gorm:"not null" json:"image"`
 	Description		string							`gorm:"not null" json:"description"`
 	Url						string							`json:"url"`
-	Duration			float64							`json:"duration"`
+	// Duration			float64							`json:"duration"`
 	IsPublished		bool								`gorm:"not null; default:false" json:"isPublished"`
 	Segments			[]EpisodeSegment		`json:"segments"`
 	PodcastID			int								`gorm:"foreignKey" json:"podcastId"`

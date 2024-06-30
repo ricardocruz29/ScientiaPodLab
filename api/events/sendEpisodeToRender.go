@@ -4,19 +4,32 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"scipodlab_api/models"
 )
 
-func SendEpisodeToRender(episode models.Episode, includeNoiseCancellation bool) {
+// Define a struct to represent the data that will be sent
+type RabbitMQData struct {
+	Resources            []string 	`json:"resources"`
+	EpisodeID						 int			`json:"episodeId"`							
+	NoiseCancellation 	 string     `json:"noiseCancellation"`
+}
+
+func SendEpisodeToRender(resources []string, includeNoiseCancellation string, episodeId int) {
 	//! PRINT DATA
-	printData, _ := json.Marshal(episode)
+	printData, _ := json.Marshal(resources)
 	fmt.Println("Received data: ", string(printData))
 
-	//TODO: Gather all the segments and the resource of each segment
-	//TODO: Send the paths via rabbitmq to the audio render ms to generate the final audio -> Create a json structure and then do json.marshal and call the function events.sendMessage(queueName, data)
-	//TODO: include the bool flag of noise cancellation
+	// Create an instance of MyObject
+	data := RabbitMQData{
+		Resources: resources,
+		NoiseCancellation: includeNoiseCancellation,
+		EpisodeID: episodeId,
+	}
 
-	log.Println("include noise cancellation: ", includeNoiseCancellation);
+	// Marshal struct to JSON
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		log.Fatalf("Error marshalling JSON: %s", err)
+	}
 
-	// sendMessage("startRenderEpisode", data)
+	sendMessage("startRenderEpisode", jsonData)
 }

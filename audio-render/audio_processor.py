@@ -28,13 +28,14 @@ import os
 '''
 
 class Audio:
-    def setSampleRate(self, input):
+    def set_sample_rate(self, input):
       mp3_input = self.convert(input)
       sound = AudioSegment.from_mp3(mp3_input)
       sound_w_new_fs = sound.set_frame_rate(44100)
       output_filename = str(uuid.uuid4())
-      output_path = os.path.join("temp", output_filename + '.mp3')
+      output_path = os.environ['CDN_LOCAL_PATH'] + "/audios/episodes/" + output_filename + ".mp3"
       sound_w_new_fs.export(output_path, format="mp3")
+      return output_path
        
     def trim(self, input, start="0", end=None):
       if end == None:
@@ -43,11 +44,11 @@ class Audio:
       trim_duration = end - start
 
       output_filename = str(uuid.uuid4())
-      output_path = os.path.join("temp", output_filename + '.mp3')
+      output_path = os.environ['CDN_LOCAL_PATH'] + "/audios/tmp/" + output_filename + ".mp3"
 
       cmd = f"ffmpeg -i {input} -ss {start} -t {trim_duration} {output_path}"
 
-      ffmpegRun(cmd)
+      ffmpeg_run(cmd)
         
     def convert(self, filename):
       path_list = filename.split("/")
@@ -66,10 +67,46 @@ class Audio:
           audio = AudioSegment.from_file(path+"/"+filename, format=extension)
       else:
           audio = AudioSegment.from_file(filename, format=extension)
-      audio.export("files/"+filename.split(".")[0]+".mp3", format="mp3")
 
-      return "files/"+filename.split(".")[0]+".mp3"
+      tmp_path = os.environ['CDN_LOCAL_PATH'] + "/audios/tmp/" + filename.split(".")[0] + ".mp3"
+      audio.export(tmp_path, format="mp3")
+
+      return tmp_path
+    
+    def concatenate(self, audio_paths):
+      combined = AudioSegment.empty()
+      for path in audio_paths:
+          audio = AudioSegment.from_mp3(path)
+          combined += audio
+
+      output_filename = str(uuid.uuid4())
+      output_path = os.environ['CDN_LOCAL_PATH'] + "/audios/episodes/" + output_filename + ".mp3"
+      combined.export(output_path, format="mp3")
+      return output_filename + ".mp3"
+    
+    #DOCS - https://github.com/timsainb/noisereduce
+    # def noise_reduce(self, id, file_type):
+    #   if file_type == 'WAV':
+    #       sr = 44100  # Sampling rate to WAV files
+    #   else:
+    #       sr = None
+
+    #   #Load audio file - CDN PATH + id
+    #   audio_data, sampling_rate = librosa.load(os.environ['CDN_PATH'] + "/recorded/" + id , sr=sr)
+
+    #   # Apply reduce_noise algorithm
+    #   reduced_noise = nr.reduce_noise(audio_clip=audio_data, noise_clip=audio_data, verbose=False)
+
+    #   # Build full path for reduced noise file 
+    #   output_filename = str(uuid.uuid4())
+    #   output_path = os.path.join(os.environ['CDN_PATH'], "recorded" , output_filename + '.mp3')
+
+    #   # Convert reduced file audio in AudioSegment Object
+    #   audio_segment = AudioSegment(data=reduced_noise.tobytes(), frame_rate=sampling_rate, sample_width=2, channels=1)
+
+    #   # Save audio file in FLAC format
+    #   audio_segment.export(output_path, format='flac')
 
 
-def ffmpegRun(cmd):
+def ffmpeg_run(cmd):
   subprocess.call(cmd, shell=True)

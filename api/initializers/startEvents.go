@@ -3,6 +3,6 @@ package initializers
 import "scipodlab_api/events"
 
 func StartEvents() {
-	events.FinishRenderEpisode()
-	events.StartRenderEpisode()
+	events.DeclareQueues()
+	events.ConsumeFinishRenderEpisode()
 }

@@ -21,7 +21,7 @@ func ConnectRabbitmq() error {
         log.Fatalf("Error connecting to rabbitmq: %s", err)
 				return err
     }
-	defer conn.Close()
+	// defer conn.Close()
 
 	// opening a channel to our RabbitMQ instance over
 	// the connection we have already established
@@ -30,7 +30,7 @@ func ConnectRabbitmq() error {
 			log.Fatalf("Error opening a new channel on rabbitmq: %s", err)
 			return err
 	}
-	defer RabbitMQChannel.Close()
+	// defer RabbitMQChannel.Close()
 
 	return nil
 }
@@ -38,11 +38,11 @@ func ConnectRabbitmq() error {
 func declareQueue(queueName string) error {
 	_, err := RabbitMQChannel.QueueDeclare(
 		queueName,
-		false,
-		false,
-		false,
-		false,
-		nil,
+		true,									// durable
+		false,								// auto delete
+		false,								// exclusive
+		false,								// noWait
+		nil,									// args
 	)
 	if err != nil {
 		return err
@@ -51,8 +51,8 @@ func declareQueue(queueName string) error {
 	return nil
 }
 
-func consumeQueue(queueName string) error {
-	_, err := RabbitMQChannel.Consume(
+func consumeQueue(queueName string) (<-chan []byte, error) {
+	msgs, err := RabbitMQChannel.Consume(
 		queueName, // queue name
 		"",                    // consumer
 		true,                  // auto-ack
@@ -62,10 +62,19 @@ func consumeQueue(queueName string) error {
 		nil,                   // arguments
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	msgChan := make(chan []byte)
+
+	go func() {
+		for msg := range msgs {
+			msgChan <- msg.Body
+		}
+		close(msgChan)
+	}()
+
+	return msgChan, nil
 }
 
 func sendMessage(queueName string, message []byte) error {

@@ -9,6 +9,7 @@ import (
 	"scipodlab_api/models"
 	"scipodlab_api/utils"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -113,10 +114,14 @@ func (uc *PodcastController) CreatePodcast(c *gin.Context) {
 			return
 	}
 
-	//Create podcast in db
 	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
 
-	podcast := models.Podcast{Name: name, Image: cdnFilePath, Description: description, Genre: genre, UserID: user.ID}
+	//!Generate an RSS Link for the podcast
+	linkId := strings.ReplaceAll(uuid.New().String(), "-", "")
+	rssFeed := filepath.Join(os.Getenv("RSS_URL_PATH"), linkId)
+
+	//Create podcast in db
+	podcast := models.Podcast{Name: name, Image: cdnFilePath, Description: description, Genre: genre, UserID: user.ID, RSSFeed: rssFeed}
 	result := database.DB.Create(&podcast)
 
 	if result.Error != nil {

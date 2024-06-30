@@ -95,24 +95,36 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
 	}
 
-	//Get the EpisodeSegmentID if sent
+	// Get the EpisodeSegmentID if sent
 	strEpisodeSegmentId := c.Request.FormValue("episode_segment_id")
-	var episodeSegmentId int;
 	if strEpisodeSegmentId != "" {
-		episodeSegmentId, _ = strconv.Atoi(strEpisodeSegmentId)
+		episodeSegmentId, err := strconv.Atoi(strEpisodeSegmentId)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid episode_segment_id"})
+		}
 
 		var episodeSegment models.EpisodeSegment
 		// Retrieve the episode segment by its ID
-		err := database.DB.First(&episodeSegment, episodeSegmentId).Error
+		err = database.DB.First(&episodeSegment, episodeSegmentId).Error
 		if err != nil {
-				c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
-				return
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
+			return
 		}
 
-		// TODO: Test if the resourceID exists ... -> At this point, I am not sure if it already exists or if it only existes after the DB.Create
-		//Add the resourceId to the episodeSegment
+		// Add the resourceId to the episodeSegment and save it
 		resourceID := int(resource.ID)
-		episodeSegment.ResourceID = &resourceID;
+		episodeSegment.ResourceID = &resourceID
+		if err := database.DB.Save(&episodeSegment).Error; err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode segment"})
+			return
+		}
+
+		// Add the episodeSegment to the resource's EpisodeSegments slice and save the resource
+		resource.EpisodeSegments = append(resource.EpisodeSegments, episodeSegment)
+		if err := database.DB.Save(&resource).Error; err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating resource with episode segment"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, resource)
@@ -154,10 +166,38 @@ func (uc *ResourceController) CreateTTSResource(c *gin.Context) {
 				return
 		}
 
-		// TODO: Test if the resourceID exists ... -> At this point, I am not sure if it already exists or if it only existes after the DB.Create
 		//Add the resourceId to the episodeSegment
-		resourceID := int(resource.ID)
-		episodeSegment.ResourceID = &resourceID;
+		// Get the EpisodeSegmentID if sent
+		strEpisodeSegmentId := c.Request.FormValue("episode_segment_id")
+		if strEpisodeSegmentId != "" {
+			episodeSegmentId, err := strconv.Atoi(strEpisodeSegmentId)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid episode_segment_id"})
+			}
+
+			var episodeSegment models.EpisodeSegment
+			// Retrieve the episode segment by its ID
+			err = database.DB.First(&episodeSegment, episodeSegmentId).Error
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
+				return
+			}
+
+			// Add the resourceId to the episodeSegment and save it
+			resourceID := int(resource.ID)
+			episodeSegment.ResourceID = &resourceID
+			if err := database.DB.Save(&episodeSegment).Error; err != nil {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode segment"})
+				return
+			}
+
+			// Add the episodeSegment to the resource's EpisodeSegments slice and save the resource
+			resource.EpisodeSegments = append(resource.EpisodeSegments, episodeSegment)
+			if err := database.DB.Save(&resource).Error; err != nil {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating resource with episode segment"})
+				return
+			}
+		}
 	}
 
 	c.JSON(http.StatusOK, resource)
