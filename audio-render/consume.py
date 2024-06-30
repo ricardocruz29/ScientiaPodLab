@@ -4,9 +4,6 @@ import pika
 from audio_processor import Audio
 
 def consume(channel):
-    # TODO: Should this be done in the app.py, to send back the concatenated audio?
-    # channel.queue_declare(queue='hello')  
-  
     def callback(ch, method, properties, body):
         try:
             print(" [x] Received %r" % body)  
