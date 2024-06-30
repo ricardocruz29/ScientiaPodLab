@@ -14,10 +14,9 @@ func init() {
     initializers.ConnectToDB()
     initializers.SyncDatabase()
     initializers.ConnectToRabbitMQ()
-    go func () {
-        initializers.StartEvents()
-        select {} // Keep the application running    
-    }()
+
+    initializers.StartEvents()
+   
     
     //! To run with seeding: go run . seed
     if (len(os.Args) > 1 && os.Args[1] == "seed") {
