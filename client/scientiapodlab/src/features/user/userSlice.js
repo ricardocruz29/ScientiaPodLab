@@ -2,14 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {},
+  initialState: {
+    information: undefined,
+    isOnboard: false,
+  },
   reducers: {
     setUser: (state, action) => {
-      state.user = { ...action.payload };
+      state.information = action.payload.info;
+    },
+    startOnboarding: (state, _) => {
+      state.isOnboard = true;
+    },
+    closeOnboarding: (state, _) => {
+      state.isOnboard = false;
     },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, startOnboarding, closeOnboarding } = userSlice.actions;
 
 export default userSlice.reducer;
