@@ -1,7 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
+  //! Example on how to use useAuth hook to handle authentication
+  // const { authenticate, authError } = useAuth();
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   await authenticate({ email, password }, false); // false for register
+  // };
+
   return (
     <div className="App">
       <header className="App-header">
