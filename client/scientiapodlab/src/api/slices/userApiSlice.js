@@ -3,7 +3,7 @@ import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
 export const userApiSlice = createApi({
   reducerPath: "userApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "/api" }),
+  baseQuery: axiosBaseQuery({ baseUrl: "/" }),
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (userData) => ({
