@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
-export const userApiSlice = createApi({
-  reducerPath: "userApi",
+export const userService = createApi({
+  reducerPath: "userService",
   baseQuery: axiosBaseQuery({ baseUrl: "/" }),
   endpoints: (builder) => ({
     register: builder.mutation({
@@ -25,7 +25,7 @@ export const userApiSlice = createApi({
         method: "GET",
       }),
     }),
-    disableOnboarding: builder.query({
+    disableOnboarding: builder.mutation({
       query: () => ({
         url: "/user/disable-onboarding",
         method: "PUT",
@@ -39,4 +39,5 @@ export const {
   useLoginMutation,
   useGetUserQuery,
   useLazyGetUserQuery,
-} = userApiSlice;
+  useDisableOnboardingMutation,
+} = userService;

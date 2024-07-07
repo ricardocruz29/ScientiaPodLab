@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
-export const podcastApiSlice = createApi({
-  reducerPath: "podcastApi",
+export const podcastService = createApi({
+  reducerPath: "podcastService",
   baseQuery: axiosBaseQuery({ baseUrl: "/podcasts" }),
   endpoints: (builder) => ({
     getPodcasts: builder.query({
@@ -46,4 +46,4 @@ export const {
   useDeletePodcastMutation,
   useCreatePodcastMutation,
   useUpdatePodcastMutation,
-} = podcastApiSlice;
+} = podcastService;

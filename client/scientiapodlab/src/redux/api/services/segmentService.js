@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
-export const segmentApiSlice = createApi({
-  reducerPath: "segmentApi",
+export const segmentService = createApi({
+  reducerPath: "segmentService",
   baseQuery: axiosBaseQuery({ baseUrl: "/segments" }),
   endpoints: (builder) => ({
     deleteTemplateSegment: builder.mutation({
@@ -39,4 +39,4 @@ export const {
   useCreateTemplateSegmentMutation,
   useDeleteEpisodeSegmentMutation,
   useCreateEpisodeSegmentMutation,
-} = segmentApiSlice;
+} = segmentService;

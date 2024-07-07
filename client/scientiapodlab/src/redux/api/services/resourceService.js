@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
-export const resourceApiSlice = createApi({
-  reducerPath: "resourceApi",
+export const resourceService = createApi({
+  reducerPath: "resourceService",
   baseQuery: axiosBaseQuery({ baseUrl: "/resources" }),
   endpoints: (builder) => ({
     getResources: builder.query({
@@ -39,4 +39,4 @@ export const {
   useDeleteResourceMutation,
   useCreateResourceMutation,
   useCreateTTSResourceMutation,
-} = resourceApiSlice;
+} = resourceService;

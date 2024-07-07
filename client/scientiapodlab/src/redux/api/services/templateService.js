@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 
-export const templateApiSlice = createApi({
-  reducerPath: "templateApi",
+export const templateService = createApi({
+  reducerPath: "templateService",
   baseQuery: axiosBaseQuery({ baseUrl: "/templates" }),
   endpoints: (builder) => ({
     getTemplates: builder.query({
@@ -39,4 +39,4 @@ export const {
   useDeleteTemplateMutation,
   useCreateTemplateMutation,
   useUpdateTemplateMutation,
-} = templateApiSlice;
+} = templateService;
