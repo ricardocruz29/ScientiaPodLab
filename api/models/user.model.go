@@ -6,12 +6,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Username			string			`gorm:"unique; not null" json:"username"`
-	Email					string			`gorm:"unique; not null" json:"email"`
-	Password			string			`gorm:"not null" json:"password"`
-	Podcasts			[]Podcast		`json:"podcasts"`
-	Resources 		[]Resource	`json:"resources"`
-	Templates			[]Template  `json:"templates"`
+	Username					string			`gorm:"unique; not null" json:"username"`
+	Email							string			`gorm:"unique; not null" json:"email"`
+	Password					string			`gorm:"not null" json:"password"`
+	ShowOnboarding		bool				`gorm:"not null; default:true" json:"showOnboarding"`
+	Podcasts					[]Podcast		`json:"podcasts"`
+	Resources 				[]Resource	`json:"resources"`
+	Templates					[]Template  `json:"templates"`
 }
 
 func UserModel(db *gorm.DB) {

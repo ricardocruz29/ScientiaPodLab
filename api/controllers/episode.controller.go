@@ -241,6 +241,14 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 			}
 	}
 
+	episode.Status = "RENDERING";
+	// Update the episode
+	err = database.DB.Save(&episode).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error rendering episode"})
+		return
+	}
+
 	events.SendEpisodeToRender(resources, info.NoiseCancellation, episodeId)
 
 	// We don't need to send anything to the user because this will be async -> The user will not await for the response
@@ -263,6 +271,7 @@ func (uc *EpisodeController) PublishEpisode(c *gin.Context) {
 	}
 
 	episode.IsPublished = true;
+	episode.Status = "PUBLISHED";
 
 	// Update the episode
 	err = database.DB.Save(&episode).Error

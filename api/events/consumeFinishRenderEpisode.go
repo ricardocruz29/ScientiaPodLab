@@ -44,6 +44,7 @@ func ConsumeFinishRenderEpisode() {
 			}
 
 			episode.Url = filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", renderedEpisode.AudioPath)
+			episode.Status = "FINISHED";
 			// Update the episode in DB
 			err = database.DB.Save(&episode).Error
 			if err != nil {

@@ -25,6 +25,12 @@ export const userApiSlice = createApi({
         method: "GET",
       }),
     }),
+    disableOnboarding: builder.query({
+      query: () => ({
+        url: "/user/disable-onboarding",
+        method: "PUT",
+      }),
+    }),
   }),
 });
 

@@ -14,7 +14,6 @@ func SetupUserRoutes(r *gin.Engine){
 	userRouter := r.Group("/user")
     {
         userRouter.GET("/", middleware.AuthMiddleware(), func(c *gin.Context) {uc.GetUser(c)})
-        // userRouter.PUT("/:id", middleware.AuthMiddleware(manager), func(c *gin.Context) {uc.UpdateUser(c, db)})
-        // userRouter.DELETE("/:id", middleware.AuthMiddleware(manager), func(c *gin.Context) {uc.DeleteUser(c, db)})
+        userRouter.PUT("/disable-onboarding", middleware.AuthMiddleware(), func(c *gin.Context) {uc.DisableOnboarding(c)})
     }
 }
