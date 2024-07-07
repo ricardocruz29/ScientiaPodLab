@@ -208,7 +208,30 @@ func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
 }
 
 func (uc *EpisodeController) DeleteEpisode(c *gin.Context) {
-  //TODO: Delete an episode and its segments -> Access if this should be possible after the episode is published
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
+
+	var episode models.Episode
+	// Retrieve the episode by its ID
+	err := database.DB.First(&episode, id).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+	// Delete the episode
+	if (episode.IsPublished) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Your episode is already published, so it can't be deleted"})
+		return
+	}
+
+	err = database.DB.Delete(&episode).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error deleting episode"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Episode deleted"})
 }
 
 func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
