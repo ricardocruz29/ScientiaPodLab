@@ -16,7 +16,7 @@ type RabbitMQData struct {
 func SendEpisodeToRender(resources []string, includeNoiseCancellation string, episodeId int) {
 	//! PRINT DATA
 	printData, _ := json.Marshal(resources)
-	fmt.Println("Received data: ", string(printData))
+	fmt.Println("Send Episode to Render: ", string(printData))
 
 	// Create an instance of MyObject
 	data := RabbitMQData{

@@ -33,9 +33,13 @@ pip install -r requirements.txt
 ## Set FLASK_APP and run Flask
 
 export FLASK_APP=app.py
-flask run
+python app.py
 
 ## To install additional packages and add it to requirements.txt
 
 pip install package_name
 pip freeze > requirements.txt
+
+## To use TTS follow this tutorial
+
+https://www.youtube.com/watch?v=GVPWz-nhJhg

@@ -33,7 +33,7 @@ func ConsumeFinishRenderEpisode() {
 			}
 
 			// Process the data
-			fmt.Printf("Received message: %+v\n", renderedEpisode.AudioPath)
+			fmt.Printf("Received message from consuming queue: %+v\n", renderedEpisode.AudioPath)
 
 			var episode models.Episode
 			// Retrieve the Episode by its ID

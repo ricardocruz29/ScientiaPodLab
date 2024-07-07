@@ -42,7 +42,7 @@ func validateRequestBody(c *gin.Context, validationStruct interface{}) error {
 
 	//! Print the data
 	printData, _ := json.Marshal(newData)
-	fmt.Println("Received data: ", string(printData))
+	fmt.Println("Validate Request Body: ", string(printData))
 
 	if err := validateData(newData); err != nil {
 		return err
@@ -59,7 +59,7 @@ func validateUriParams(c *gin.Context, validationStruct interface{}) error {
 
 	//! Print the data
 	printData, _ := json.Marshal(newData)
-	fmt.Println("Received data: ", string(printData))
+	fmt.Println("Validate URL Params: ", string(printData))
 	
 	if err := c.ShouldBindUri(newData); err != nil {
 		return err

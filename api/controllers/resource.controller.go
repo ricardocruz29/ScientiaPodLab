@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -138,14 +140,55 @@ func (uc *ResourceController) CreateTTSResource(c *gin.Context) {
 	payload, _ := c.Get("payload")
 	info := payload.(*validators.CreateTTSValidator)
 
-	// TODO: Http Request to generate audio with info.Text (Text-to-Speech)
-	// TODO: In the TTS MS, store the file in the CDN
-	//! Will receive its fileName - Will be an uuid
-	fileName := "MOCK_FILENAME.mp3"
+	// Prepare the request payload for the Python API
+	requestPayload := map[string]string{
+		"text":  info.Text,
+		"voice": info.Voice,
+	}
+
+	jsonPayload, err := json.Marshal(requestPayload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal request payload"})
+		return
+	}
+
+	pythonAPIURL := os.Getenv("AUDIO_RENDER_URL") + "/tts"
+	req, err := http.NewRequest("POST", pythonAPIURL, bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request"})
+		return
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send request to TTS API"})
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		c.JSON(resp.StatusCode, gin.H{"error": "TTS API returned non-200 status"})
+		return
+	}
+
+	var response map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response from TTS API"})
+		return
+	}
+
+	// Assume the Python API responds with a JSON object that contains the tts_audio_id
+	ttsAudioID, ok := response["tts_audio_id"].(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid response from TTS API"})
+		return
+	}
 	
 	//Create resource in db
-	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
-	resource := models.Resource{NameCDN: fileName, Name: info.Name, Url: cdnFilePath,  Type: "Custom", TypeSegment: "TTS", UserID: user.ID}
+	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", ttsAudioID)
+	resource := models.Resource{NameCDN: ttsAudioID, Name: info.Name, Url: cdnFilePath,  Type: "Custom", TypeSegment: "TTS", UserID: user.ID}
 	result := database.DB.Create(&resource)
 
 	if result.Error != nil {
