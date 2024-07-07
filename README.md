@@ -2,21 +2,22 @@
 
 Repository of ScientiaPodLab Thesis
 
-# Run RabbitMQ Server
-
-rabbitmq-server
+# Configure Project
 
 ## To configure rabbitMQ
 
+Install rabbitmq first
 rabbitmqctl add*user scipodlab password
 rabbitmqctl set_user_tags scipodlab administrator
 rabbitmqctl set_permissions -p / scipodlab ".*" ".\_" ".\*"
 
-# Run Go
+## To configure Go
 
-go run main.go
+Install Go in your local machine
 
-# Run Flask
+## To configure Flask
+
+Install python
 
 ## Create venv
 
@@ -33,7 +34,6 @@ pip install -r requirements.txt
 ## Set FLASK_APP and run Flask
 
 export FLASK_APP=app.py
-python app.py
 
 ## To install additional packages and add it to requirements.txt
 
@@ -43,3 +43,18 @@ pip freeze > requirements.txt
 ## To use TTS follow this tutorial
 
 https://www.youtube.com/watch?v=GVPWz-nhJhg
+
+# Run the project
+
+## Run RabbitMQ Server
+
+rabbitmq-server
+
+## Run Go
+
+go run main.go
+
+## Run Flask
+
+source venv/bin/activate
+python app.py
