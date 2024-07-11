@@ -1,6 +1,5 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { Input } from "@mui/icons-material";
 
 function App() {
   //! Example on how to use useAuth hook to handle authentication
@@ -28,6 +27,21 @@ function App() {
   // Text Input
   // Dropdown
   // Text Area
+
+  //! Material UI Components
+  // Button
+  // Floating Action Button
+  // Select
+  // Slider (?????)
+  // Text Field
+  // Typography
+  // Skeleton
+  // Accordion
+  // AppBar
+  // Stepper
+  // Tabs
+  // Modal
+  // Text-Area
 
   return (
     <div className="App">
