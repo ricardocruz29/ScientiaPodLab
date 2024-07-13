@@ -1,0 +1,25 @@
+.floatButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 84px;
+  height: 84px;
+
+  background-color: #fff;
+  border-radius: 100%;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+  border: none;
+
+  cursor: pointer;
+}
+
+.medium_floatButton {
+  width: 58px;
+  height: 58px;
+}
+
+.small_floatButton {
+  width: 32px;
+  height: 32px;
+}

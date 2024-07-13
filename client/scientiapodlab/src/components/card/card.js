@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import styles from "./card.module.css";
-import { TEMPLATE_TYPE } from "../../lib/constants/template";
+import TemplateSequence from "../templateSequence/templateSequence";
 
 function Card({ type, size = "medium", data }) {
   return (
@@ -33,7 +33,7 @@ function Card({ type, size = "medium", data }) {
             <Typography variant="body2" sx={{ color: "#00000080" }}>
               Tipo: {data.type}
             </Typography>
-
+                
             <div className={styles.template_actions}>
               {data.actions.map((item, index) => (
                 <div key={index} style={{ backgroundColor: item.background }}>
@@ -41,23 +41,7 @@ function Card({ type, size = "medium", data }) {
                 </div>
               ))}
             </div>
-
-            <div
-              className={`${styles.template_mini} ${
-                size === "small" && styles.template_mini_small
-              }}`}
-            >
-              {data.template.map((item, index) => (
-                <div
-                  key={index}
-                  style={{ backgroundColor: TEMPLATE_TYPE[item].color }}
-                >
-                  <Typography variant="caption">
-                    {TEMPLATE_TYPE[item].label}
-                  </Typography>
-                </div>
-              ))}
-            </div>
+            <TemplateSequence size="small" template={data.template} />
           </div>
         )}
         {type === "audio" && <div></div>}

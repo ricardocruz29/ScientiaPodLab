@@ -4,6 +4,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "../components/button/button";
+import TemplateSequence from "../components/templateSequence/templateSequence";
 
 export const Layout = () => {
   return (
@@ -39,7 +40,15 @@ export const Layout = () => {
                 background: "#FD6773",
               },
             ],
-            template: ["intro", "tts", "sound_effect", "content", "outro"],
+            template: [
+              { type: "intro" },
+              { type: "tts" },
+              {
+                type: "sound_effect",
+              },
+              { type: "content" },
+              { type: "outro" },
+            ],
           }}
         />
         <Button text={"Confirmar"} onButtonClick={() => console.log("Green")} />
@@ -66,6 +75,82 @@ export const Layout = () => {
           type="fill_green"
           text={"Confirmar"}
           onButtonClick={() => console.log("Fill Green")}
+        />
+
+        <TemplateSequence
+          size="medium"
+          template={[
+            { type: "intro", audio: { name: "intro.mp3", id: 1 } },
+            { type: "tts", audio: { name: "tts.mp3", id: 2 } },
+            {
+              type: "sound_effect",
+              audio: { name: "sound_effect.mp3", id: 3 },
+            },
+            { type: "content", audio: { name: "content.mp3", id: 4 } },
+            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+          ]}
+        />
+
+        <TemplateSequence
+          size="medium"
+          template={[
+            { type: "intro", audio: { name: "intro.mp3", id: 1 } },
+            { type: "tts", audio: { name: "tts.mp3", id: 2 } },
+            {
+              type: "sound_effect",
+              audio: { name: "sound_effect.mp3", id: 3 },
+            },
+            { type: "content", audio: { name: "content.mp3", id: 4 } },
+            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+          ]}
+          actions={{
+            onRemove: (id) => {
+              console.log("id: ", id);
+            },
+            onPlay: (id) => {
+              console.log("id: ", id);
+            },
+          }}
+        />
+
+        <TemplateSequence
+          size="medium"
+          template={[
+            { type: "intro" },
+            { type: "tts" },
+            {
+              type: "sound_effect",
+            },
+            { type: "content" },
+            { type: "outro" },
+          ]}
+        />
+
+        <TemplateSequence
+          size="medium"
+          template={[
+            { type: "intro" },
+            { type: "tts" },
+            {
+              type: "sound_effect",
+            },
+            { type: "content", audio: { name: "content.mp3", id: 4 } },
+            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+          ]}
+          actions={{
+            onRemove: (id) => {
+              console.log("id: ", id);
+            },
+            onPlay: (id) => {
+              console.log("id: ", id);
+            },
+            onAdd: (id) => {
+              console.log("id: ", id);
+            },
+            onRemoveTemplateSection: (id) => {
+              console.log("id: ", id);
+            },
+          }}
         />
 
         <Outlet />

@@ -14,23 +14,15 @@ function App() {
 
   //! Reusable Components
   // card - //TODO: audioCard (do wave sound first) - episodeCard (think of the design)
-  // button - green - yellow - red - fillGreen;
-  // templateSequence - template;
-  // templateSequenceCard - type (Intro, Content, Outro, TTS, etc) - canListen - canRemove - audioName - state (Active -> When we are recording episode or Static -> When reviewing/listening episode);
-  // text - 16px - 18px
-  // title - 40px - 48px - 28px - 128px (and green)
-  // progressStepper - number - active
+  // button - green - yellow - red - fillGreen //? DONE;
+  // templateSequence - template //? DONE;
+  // templateSequenceCard - //? DONE
   // Drag&Drop - MainPlaceholder - SecondaryPlaceholder - fullWidth
-  // Play button - size
-  // Tabs - optiosn - active tab
+  // Play button - size //? DONE
   // Audio Wave
-  // Text Input
-  // Dropdown
-  // Text Area
+  // * All the other components are possible to do using Material UI Components
 
   //! Material UI Components
-  // Button
-  // Floating Action Button
   // Select
   // Slider (?????)
   // Text Field
