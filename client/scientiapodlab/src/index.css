@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 *,
 *::after,
 *::before {
@@ -25,6 +27,7 @@ html {
 body {
   line-height: 1;
   font-weight: 400;
+  font-family: "Roboto", sans-serif;
   color: #343a40;
   overflow-x: hidden;
   background-color: #eef9f5;

@@ -11,16 +11,28 @@ function Card({ type, size = "medium", data }) {
         type === "episode" && styles.episode_card
       } ${size === "small" && styles.small_card}`}
     >
-      <Typography variant="h5">{data.title}</Typography>
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>
+        {data.title}
+      </Typography>
 
       <>
         {type === "template" && (
           <div className={styles.template_container}>
-            <Typography variant="body2">Duração: {data.duration}</Typography>
-            <Typography variant="body2">Intro: {data.hasIntro}</Typography>
-            <Typography variant="body2">Outro: {data.hasOutro}</Typography>
-            <Typography variant="body2">TTS: {data.hasTTS}</Typography>
-            <Typography variant="body2">Tipo: {data.type}</Typography>
+            <Typography variant="body2" sx={{ color: "#00000080" }}>
+              Duração: {data.duration}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#00000080" }}>
+              Intro: {data.hasIntro ? "Sim" : "Não"}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#00000080" }}>
+              Outro: {data.hasOutro ? "Sim" : "Não"}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#00000080" }}>
+              TTS: {data.hasTTS ? "Sim" : "Não"}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#00000080" }}>
+              Tipo: {data.type}
+            </Typography>
 
             <div className={styles.template_actions}>
               {data.actions.map((item, index) => (

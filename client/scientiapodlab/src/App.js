@@ -13,7 +13,7 @@ function App() {
   // };
 
   //! Reusable Components
-  // card - templateCard - audioCard - episodeCard - size (large / medium (dont think will be used) / small);
+  // card - //TODO: audioCard (do wave sound first) - episodeCard (think of the design)
   // button - green - yellow - red - fillGreen;
   // templateSequence - template;
   // templateSequenceCard - type (Intro, Content, Outro, TTS, etc) - canListen - canRemove - audioName - state (Active -> When we are recording episode or Static -> When reviewing/listening episode);
