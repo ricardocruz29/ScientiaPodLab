@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "../components/button/button";
 import TemplateSequence from "../components/templateSequence/templateSequence";
 import Dropzone from "../components/dropzone/dropzone";
+import AudioPlayer from "../components/audioPlayer/audioPlayer";
 
 export const Layout = () => {
   // TODO: Manage acceptedFile from dropzone - This logic should be done by the parent component or in the redux
@@ -213,6 +214,7 @@ export const Layout = () => {
                 audioFile: acceptedFile.preview,
               }}
             />
+            <AudioPlayer audioFile={acceptedFile.preview} />
           </div>
         )}
 

@@ -6,6 +6,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import WaveSurfer from "wavesurfer.js";
 import { Slider, Typography, IconButton } from "@mui/material";
+import { formatAudioTime } from "../../lib/utils/formatAudioTime";
 
 const formWaveSurferOptions = (ref, height) => ({
   container: ref,
@@ -90,12 +91,6 @@ function AudioWave({
     waveSurfer.current.setVolume(muted ? volume : 0);
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
   return (
     <div style={{ width: "100%" }}>
       <div id="waveform" ref={waveFormRef} style={{ width: "100%" }}></div>
@@ -124,7 +119,7 @@ function AudioWave({
         {showAdditionalControls && (
           <>
             <Typography variant="caption" style={{ marginLeft: 10 }}>
-              {formatTime(currentTime)} / {formatTime(duration)}
+              {formatAudioTime(currentTime)} / {formatAudioTime(duration)}
             </Typography>
             <Slider
               value={volume}
