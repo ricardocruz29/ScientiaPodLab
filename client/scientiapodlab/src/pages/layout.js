@@ -1,12 +1,40 @@
 import { Outlet } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
 import Card from "../components/card/card";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "../components/button/button";
 import TemplateSequence from "../components/templateSequence/templateSequence";
+import Dropzone from "../components/dropzone/dropzone";
 
 export const Layout = () => {
+  // TODO: Manage acceptedFile from dropzone - This logic should be done by the parent component or in the redux
+  const [acceptedFile, setAcceptedFile] = useState();
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length >= 1) setAcceptedFile(acceptedFiles[0]);
+  }, []);
+  const onReset = () => {
+    setAcceptedFile(undefined);
+  };
+
+  const [acceptedFileIMG, setAcceptedFileIMG] = useState();
+  const onDropIMG = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length >= 1) {
+      setAcceptedFileIMG({
+        file: acceptedFiles[0],
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      });
+    }
+  }, []);
+  const onResetIMG = () => {
+    setAcceptedFileIMG(undefined);
+  };
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => URL.revokeObjectURL(acceptedFileIMG?.preview);
+  }, [acceptedFileIMG?.preview]);
+
   return (
     <div>
       <div id="layout" className="sidebar">
@@ -152,6 +180,25 @@ export const Layout = () => {
             },
           }}
         />
+
+        <Dropzone
+          placeholder="Arrasta ou clica para importares o teu áudio"
+          secondaryPlaceholder="De momento, suportamos apenas o formato mp3"
+          acceptedFile={acceptedFile}
+          onDrop={onDrop}
+          onReset={onReset}
+        />
+
+        <div style={{ width: "300px" }}>
+          <Dropzone
+            type="image"
+            placeholder="Arrasta ou clica para importares a tua imagem"
+            secondaryPlaceholder="Suportamos apenas os formatos png, jpg e jpeg"
+            acceptedFile={acceptedFileIMG}
+            onDrop={onDropIMG}
+            onReset={onResetIMG}
+          />
+        </div>
 
         <Outlet />
       </div>

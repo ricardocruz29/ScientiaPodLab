@@ -21,6 +21,7 @@ html {
 
   /* Only works if there is nothing positioned absolutely in the body */
   overflow-x: hidden;
+  overflow-y: auto;
   /*scroll-behavior: smooth;*/ /*Works only on chrome and firefox */
 }
 
@@ -29,7 +30,6 @@ body {
   font-weight: 400;
   font-family: "Roboto", sans-serif;
   color: #343a40;
-  overflow-x: hidden;
   background-color: #eef9f5;
 
   min-height: 100vh;

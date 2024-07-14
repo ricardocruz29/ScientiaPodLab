@@ -35,6 +35,13 @@ function App() {
   // Modal
   // Text-Area
 
+  //! Special Components
+  // react-beautiful-dnd -> //? To edit templates
+  // wavesurfer-react -> //? To listen to audios and generate a audio wave
+  // react-use-audio-player -> //? To listen to simple audios
+  // react-dropzone -> //? Drop files
+  // react-audio-voice-recorder / react-mic -> //? To record audios
+
   return (
     <div className="App">
       <header className="App-header">

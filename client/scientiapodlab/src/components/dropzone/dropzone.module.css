@@ -1,0 +1,47 @@
+.dropzone_placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.audio_accepted {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio_row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.image_accepted {
+  position: relative;
+}
+
+.image_remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  border: none;
+  background-color: #fd6773;
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.alert {
+  margin-top: 8px;
+}
