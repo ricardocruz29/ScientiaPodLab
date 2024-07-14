@@ -12,8 +12,18 @@ function Card({ type, size = "medium", data }) {
         type === "episode" && styles.episode_card
       } ${size === "small" && styles.small_card}`}
     >
-      <Typography variant="h5" sx={{ fontWeight: 700 }}>
-        {data.title}
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 700,
+          fontSize: size === "small" ? "12px" : "24px",
+
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+        }}
+      >
+        {data.title} asjdhasdhasjd asjhd ajhsd as
       </Typography>
 
       <>
@@ -50,6 +60,7 @@ function Card({ type, size = "medium", data }) {
             <AudioWave
               audioFile={data.audioFile}
               showAdditionalControls={false}
+              size={size}
             />
           </div>
         )}

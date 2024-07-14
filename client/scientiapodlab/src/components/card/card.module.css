@@ -5,15 +5,15 @@
   flex-direction: column;
 
   width: 225px;
-  height: 250px;
+  height: 285px;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 
-.small-card {
-  width: 90px;
-  height: 100px;
+.small_card {
+  width: 130px;
+  height: 145px;
 }
 
 /* Template */
@@ -53,11 +53,14 @@
 /* Audio */
 .audio_card {
   padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.audio_container {
+/* .audio_container {
   padding: 12px 0;
-}
+} */
 
 /* Episode */
 .episode_card {

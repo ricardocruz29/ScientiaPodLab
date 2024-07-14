@@ -24,7 +24,11 @@ const formWaveSurferOptions = (ref, height) => ({
   autoCenter: true,
 });
 
-function AudioWave({ audioFile, showAdditionalControls = true }) {
+function AudioWave({
+  audioFile,
+  showAdditionalControls = true,
+  size = "medium",
+}) {
   const waveFormRef = useRef(null);
   const waveSurfer = useRef(null);
   const hasMounted = useRef(false); // New ref to track mount status
@@ -37,7 +41,10 @@ function AudioWave({ audioFile, showAdditionalControls = true }) {
 
   useEffect(() => {
     if (!waveSurfer.current) {
-      const options = formWaveSurferOptions(waveFormRef.current, 150);
+      const options = formWaveSurferOptions(
+        waveFormRef.current,
+        size === "medium" ? 150 : 50
+      );
       waveSurfer.current = WaveSurfer.create(options);
 
       waveSurfer.current.load(audioFile);
@@ -65,7 +72,7 @@ function AudioWave({ audioFile, showAdditionalControls = true }) {
         waveSurfer.current = null;
       }
     };
-  }, [audioFile]);
+  }, [audioFile, size]);
 
   const handlePlayPause = () => {
     setPlaying(!playing);
@@ -102,12 +109,14 @@ function AudioWave({ audioFile, showAdditionalControls = true }) {
         }}
       >
         <FloatButton
-          size="medium"
+          size={size === "medium" ? "medium" : "small"}
           icon={
             playing ? (
-              <PauseIcon fontSize="large" />
+              <PauseIcon fontSize={size === "medium" ? "medium" : "small"} />
             ) : (
-              <PlayArrowIcon fontSize="large" />
+              <PlayArrowIcon
+                fontSize={size === "medium" ? "medium" : "small"}
+              />
             )
           }
           onButtonClick={handlePlayPause}

@@ -197,13 +197,23 @@ export const Layout = () => {
         />
 
         {acceptedFile && acceptedFile.preview && (
-          <Card
-            type={"audio"}
-            data={{
-              title: "water.mp3",
-              audioFile: acceptedFile.preview,
-            }}
-          />
+          <div style={{ display: "flex", gap: "24px" }}>
+            <Card
+              type={"audio"}
+              data={{
+                title: "water.mp3",
+                audioFile: acceptedFile.preview,
+              }}
+            />
+            <Card
+              size="small"
+              type={"audio"}
+              data={{
+                title: "water.mp3",
+                audioFile: acceptedFile.preview,
+              }}
+            />
+          </div>
         )}
 
         <div style={{ width: "300px" }}>
