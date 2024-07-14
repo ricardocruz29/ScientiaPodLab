@@ -52,10 +52,11 @@
 
 /* Audio */
 .audio_card {
-  padding: 0 6px;
+  padding: 12px 6px;
 }
 
 .audio_container {
+  padding: 12px 0;
 }
 
 /* Episode */

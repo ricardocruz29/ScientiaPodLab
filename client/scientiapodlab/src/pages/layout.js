@@ -196,6 +196,16 @@ export const Layout = () => {
           onReset={onReset}
         />
 
+        {acceptedFile && acceptedFile.preview && (
+          <Card
+            type={"audio"}
+            data={{
+              title: "water.mp3",
+              audioFile: acceptedFile.preview,
+            }}
+          />
+        )}
+
         <div style={{ width: "300px" }}>
           <Dropzone
             type="image"

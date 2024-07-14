@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import styles from "./card.module.css";
 import TemplateSequence from "../templateSequence/templateSequence";
+import AudioWave from "../audioWave/audioWave";
 
 function Card({ type, size = "medium", data }) {
   return (
@@ -44,7 +45,14 @@ function Card({ type, size = "medium", data }) {
             <TemplateSequence size="small" template={data.template} />
           </div>
         )}
-        {type === "audio" && <div></div>}
+        {type === "audio" && (
+          <div className={styles.audio_container}>
+            <AudioWave
+              audioFile={data.audioFile}
+              showAdditionalControls={false}
+            />
+          </div>
+        )}
         {type === "episode" && <div></div>}
       </>
     </div>
