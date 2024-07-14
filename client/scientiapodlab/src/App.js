@@ -17,7 +17,7 @@ function App() {
   // button - green - yellow - red - fillGreen //? DONE;
   // templateSequence - template //? DONE;
   // templateSequenceCard - //? DONE
-  // Drag&Drop - MainPlaceholder - SecondaryPlaceholder - fullWidth
+  // Drag&Drop - MainPlaceholder - SecondaryPlaceholder - fullWidth //? DONE
   // Play button - size //? DONE
   // Audio Wave
   // * All the other components are possible to do using Material UI Components
@@ -39,7 +39,6 @@ function App() {
   // react-beautiful-dnd -> //? To edit templates
   // wavesurfer-react -> //? To listen to audios and generate a audio wave
   // react-use-audio-player -> //? To listen to simple audios
-  // react-dropzone -> //? Drop files
   // react-audio-voice-recorder / react-mic -> //? To record audios
 
   return (

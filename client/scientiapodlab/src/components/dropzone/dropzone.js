@@ -6,6 +6,7 @@ import { Alert } from "@mui/material";
 import styles from "./dropzone.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
+import AudioWave from "../audioWave/audioWave";
 
 function Dropzone({
   type = "audio",
@@ -86,28 +87,36 @@ function Dropzone({
               </div>
             )}
             {type === "audio" && (
-              <div className={styles.audio_accepted}>
-                <div className={styles.audio_row}>
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "#343A40", textAlign: "center" }}
-                  >
-                    {acceptedFile.name}
-                  </Typography>
+              <>
+                <div className={styles.audio_accepted}>
+                  <div className={styles.audio_row}>
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "#343A40", textAlign: "center" }}
+                    >
+                      {acceptedFile.file.name}
+                    </Typography>
 
-                  <div onClick={onReset} style={{ cursor: "pointer" }}>
-                    <CloseIcon
-                      sx={{ color: "rgb(255, 0 , 0)" }}
-                      fontSize="small"
-                    />
+                    <div onClick={onReset} style={{ cursor: "pointer" }}>
+                      <CloseIcon
+                        sx={{ color: "rgb(255, 0 , 0)" }}
+                        fontSize="small"
+                      />
+                    </div>
+                  </div>
+
+                  <AudioWave
+                    audioFile={acceptedFile.preview}
+                    showWave={false}
+                  />
+
+                  <div className={styles.alert}>
+                    <Alert severity="success">
+                      O ficheiro {acceptedFile.file.name} foi carregado!
+                    </Alert>
                   </div>
                 </div>
-                <div className={styles.alert}>
-                  <Alert severity="success">
-                    O ficheiro {acceptedFile.name} foi carregado!
-                  </Alert>
-                </div>
-              </div>
+              </>
             )}
           </>
         ) : (

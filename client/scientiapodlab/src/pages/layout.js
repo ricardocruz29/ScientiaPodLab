@@ -12,7 +12,11 @@ export const Layout = () => {
   // TODO: Manage acceptedFile from dropzone - This logic should be done by the parent component or in the redux
   const [acceptedFile, setAcceptedFile] = useState();
   const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length >= 1) setAcceptedFile(acceptedFiles[0]);
+    if (acceptedFiles.length >= 1)
+      setAcceptedFile({
+        file: acceptedFiles[0],
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      });
   }, []);
   const onReset = () => {
     setAcceptedFile(undefined);
@@ -32,8 +36,11 @@ export const Layout = () => {
   };
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => URL.revokeObjectURL(acceptedFileIMG?.preview);
-  }, [acceptedFileIMG?.preview]);
+    return () => {
+      URL.revokeObjectURL(acceptedFileIMG?.preview);
+      URL.revokeObjectURL(acceptedFile?.preview);
+    };
+  }, [acceptedFileIMG?.preview, acceptedFile?.preview]);
 
   return (
     <div>
