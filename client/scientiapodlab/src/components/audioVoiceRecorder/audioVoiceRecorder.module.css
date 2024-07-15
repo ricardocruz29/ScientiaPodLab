@@ -1,0 +1,20 @@
+.recorder_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.recorder_buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}

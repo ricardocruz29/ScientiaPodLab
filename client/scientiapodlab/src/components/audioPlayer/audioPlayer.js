@@ -13,7 +13,6 @@ function AudioPlayer({ audioFile, showTime = true, size = "medium", onEnd }) {
   const { load, togglePlayPause, playing, duration } = useAudioPlayer();
 
   useEffect(() => {
-    console.log("useEffect");
     load(audioFile, {
       format: "mp3",
       autoplay: false,

@@ -30,8 +30,6 @@ function App() {
 
   //! Special Components
   // react-beautiful-dnd -> //? To edit templates
-  // react-use-audio-player -> //? To listen to simple audios
-  // react-audio-voice-recorder / react-mic -> //? To record audios
 
   return (
     <div className="App">

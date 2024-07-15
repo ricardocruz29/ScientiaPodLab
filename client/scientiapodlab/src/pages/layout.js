@@ -8,6 +8,10 @@ import Button from "../components/button/button";
 import TemplateSequence from "../components/templateSequence/templateSequence";
 import Dropzone from "../components/dropzone/dropzone";
 import AudioPlayer from "../components/audioPlayer/audioPlayer";
+import AudioVoiceRecorder from "../components/audioVoiceRecorder/audioVoiceRecorder";
+import AudioWave from "../components/audioWave/audioWave";
+import FloatButton from "../components/floatButton/floatButton";
+import MicIcon from "@mui/icons-material/Mic";
 
 export const Layout = () => {
   // TODO: Manage acceptedFile from dropzone - This logic should be done by the parent component or in the redux
@@ -35,6 +39,16 @@ export const Layout = () => {
   const onResetIMG = () => {
     setAcceptedFileIMG(undefined);
   };
+
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedAudio, setRecordedAudio] = useState();
+  const onEndRecordAudio = (blob) => {
+    setIsRecording(false);
+    if (blob) {
+      setRecordedAudio(URL.createObjectURL(blob));
+    }
+  };
+
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => {
@@ -228,6 +242,21 @@ export const Layout = () => {
             onReset={onResetIMG}
           />
         </div>
+
+        {!isRecording && !recordedAudio && (
+          <FloatButton
+            icon={<MicIcon sx={{ color: "#FF0000", fontSize: "48px" }} />}
+            onButtonClick={() => {
+              setIsRecording(true);
+            }}
+          />
+        )}
+        {isRecording && !recordedAudio && (
+          <AudioVoiceRecorder onEnd={onEndRecordAudio} />
+        )}
+        {!isRecording && recordedAudio && (
+          <AudioWave audioFile={recordedAudio} />
+        )}
 
         <Outlet />
       </div>
