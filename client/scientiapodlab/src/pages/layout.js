@@ -252,7 +252,10 @@ export const Layout = () => {
           />
         )}
         {isRecording && !recordedAudio && (
-          <AudioVoiceRecorder onEnd={onEndRecordAudio} />
+          <AudioVoiceRecorder
+            onEnd={onEndRecordAudio}
+            onClose={() => setIsRecording(false)}
+          />
         )}
         {!isRecording && recordedAudio && (
           <AudioWave audioFile={recordedAudio} />

@@ -8,6 +8,7 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import StopIcon from "@mui/icons-material/Stop";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import CloseIcon from "@mui/icons-material/Close";
 
 const formWaveSurferOptions = (ref) => ({
   container: ref,
@@ -33,7 +34,7 @@ const recordPluginOptions = () => ({
   renderRecordedAudio: false,
 });
 
-function AudioVoiceRecorder({ onEnd }) {
+function AudioVoiceRecorder({ onEnd, onClose }) {
   const waveFormRef = useRef(null);
   const waveSurfer = useRef(null);
   const record = useRef(null);
@@ -112,6 +113,9 @@ function AudioVoiceRecorder({ onEnd }) {
   return (
     <>
       <div className="overlay"></div>
+      <div className={styles.close} onClick={onClose}>
+        <CloseIcon sx={{ color: "#fff", fontSize: "64px" }} />
+      </div>
       <div className={styles.recorder_container}>
         <Typography variant="h2" sx={{ color: "#fff", fontWeight: 700 }}>
           {currentTime}

@@ -48,4 +48,5 @@ body {
   min-width: 100vw;
 
   background-color: #00000095;
+  z-index: 9997;
 }

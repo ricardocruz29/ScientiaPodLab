@@ -10,6 +10,7 @@
   justify-content: center;
   align-items: center;
   gap: 24px;
+  z-index: 9998;
 }
 
 .recorder_buttons {
@@ -17,4 +18,13 @@
   justify-content: center;
   align-items: center;
   gap: 24px;
+  z-index: 9998;
+}
+
+.close {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 9999;
 }
