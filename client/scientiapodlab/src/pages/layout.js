@@ -91,13 +91,14 @@ export const Layout = () => {
               },
             ],
             template: [
-              { type: "intro" },
-              { type: "tts" },
+              { type: "intro", id: 21 },
+              { type: "tts", id: 22 },
               {
                 type: "sound_effect",
+                id: 23,
               },
-              { type: "content" },
-              { type: "outro" },
+              { type: "content", id: 24 },
+              { type: "outro", id: 25 },
             ],
           }}
         />
@@ -130,28 +131,30 @@ export const Layout = () => {
         <TemplateSequence
           size="medium"
           template={[
-            { type: "intro", audio: { name: "intro.mp3", id: 1 } },
-            { type: "tts", audio: { name: "tts.mp3", id: 2 } },
+            { type: "intro", id: 1, audio: { name: "intro.mp3", id: 1 } },
+            { type: "tts", id: 2, audio: { name: "tts.mp3", id: 2 } },
             {
               type: "sound_effect",
+              id: 3,
               audio: { name: "sound_effect.mp3", id: 3 },
             },
-            { type: "content", audio: { name: "content.mp3", id: 4 } },
-            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+            { type: "content", id: 4, audio: { name: "content.mp3", id: 4 } },
+            { type: "outro", id: 5, audio: { name: "outro.mp3", id: 5 } },
           ]}
         />
 
         <TemplateSequence
           size="medium"
           template={[
-            { type: "intro", audio: { name: "intro.mp3", id: 1 } },
-            { type: "tts", audio: { name: "tts.mp3", id: 2 } },
+            { type: "intro", id: 6, audio: { name: "intro.mp3", id: 1 } },
+            { type: "tts", id: 7, audio: { name: "tts.mp3", id: 2 } },
             {
               type: "sound_effect",
+              id: 8,
               audio: { name: "sound_effect.mp3", id: 3 },
             },
-            { type: "content", audio: { name: "content.mp3", id: 4 } },
-            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+            { type: "content", id: 9, audio: { name: "content.mp3", id: 4 } },
+            { type: "outro", id: 10, audio: { name: "outro.mp3", id: 5 } },
           ]}
           actions={{
             onRemove: (id) => {
@@ -165,27 +168,30 @@ export const Layout = () => {
 
         <TemplateSequence
           size="medium"
+          isDraggable={true}
           template={[
-            { type: "intro" },
-            { type: "tts" },
+            { type: "intro", id: 11 },
+            { type: "tts", id: 22 },
             {
               type: "sound_effect",
+              id: 13,
             },
-            { type: "content" },
-            { type: "outro" },
+            { type: "content", id: 14 },
+            { type: "outro", id: 15 },
           ]}
         />
 
         <TemplateSequence
           size="medium"
           template={[
-            { type: "intro" },
-            { type: "tts" },
+            { type: "intro", id: 16 },
+            { type: "tts", id: 17 },
             {
               type: "sound_effect",
+              id: 18,
             },
-            { type: "content", audio: { name: "content.mp3", id: 4 } },
-            { type: "outro", audio: { name: "outro.mp3", id: 5 } },
+            { type: "content", id: 4, audio: { name: "content.mp3", id: 19 } },
+            { type: "outro", id: 5, audio: { name: "outro.mp3", id: 20 } },
           ]}
           actions={{
             onRemove: (id) => {
