@@ -5,7 +5,9 @@ import (
 	"scipodlab_api/database"
 	"scipodlab_api/initializers"
 	"scipodlab_api/routes"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,6 +31,19 @@ func init() {
 func main(){	
     //Execute HTTP Server
     r := gin.Default()
+
+    r.RedirectTrailingSlash = false
+
+    // Configure CORS
+    r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"},
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+        AllowHeaders:     []string{"Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "Cache-Control"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+        MaxAge:           12 * time.Hour,
+    }))
+    
     routes.SetupRoutes(r)
 
     r.Run(":4000")

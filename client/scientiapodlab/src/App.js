@@ -1,17 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
+import React from "react";
 
 function App() {
-  //! Example on how to use useAuth hook to handle authentication
-  // const { authenticate, authError } = useAuth();
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   await authenticate({ email, password }, false); // false for register
-  // };
-
   //! Reusable Components
   // card - //TODO: episodeCard (think of the design)
 
@@ -27,9 +18,6 @@ function App() {
   // Tabs
   // Modal
   // Text-Area
-
-  //! Special Components
-  // react-beautiful-dnd -> //? To edit templates
 
   return (
     <div className="App">

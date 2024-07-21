@@ -4,8 +4,9 @@ import {
   useLoginMutation,
   useRegisterMutation,
   useLazyGetUserQuery,
-} from "../api/userApiSlice";
-import { setUser } from "../features/user/userSlice";
+} from "../redux/api/services/userService";
+import { setUser } from "../redux/features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const useAuth = () => {
   const [register] = useRegisterMutation();
   const [triggerGetUser] = useLazyGetUserQuery();
   const [authError, setAuthError] = useState(null);
+  const navigate = useNavigate();
 
   const authenticate = async (credentials, isLogin = true) => {
     try {
@@ -22,9 +24,11 @@ const useAuth = () => {
         await register(credentials).unwrap();
       }
 
-      const { data: user } = await triggerGetUser().unwrap();
-      dispatch(setUser(user));
+      const user = await triggerGetUser().unwrap();
+      dispatch(setUser({ info: user }));
       localStorage.setItem("user", JSON.stringify(user));
+
+      navigate("/resources");
     } catch (error) {
       console.error("Authentication error:", error);
       setAuthError(error);

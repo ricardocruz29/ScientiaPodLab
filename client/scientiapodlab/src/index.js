@@ -9,6 +9,8 @@ import { router } from "./router/router";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+// const store = createStore();
+
 root.render(
   <Provider store={store}>
     <RouterProvider router={router} />

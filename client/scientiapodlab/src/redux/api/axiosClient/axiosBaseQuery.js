@@ -7,14 +7,20 @@ const axiosInstance = axios.create({
 const axiosBaseQuery =
   ({ baseUrl }) =>
   async ({ url, method, data, params }) => {
+    console.log("baseURL: ", baseUrl);
+    console.log("url: ", url);
+    console.log("data: ", data);
+    console.log("params: ", params);
     try {
+      console.log("inside try");
       const headers = {};
       if (data instanceof FormData) {
+        console.log("is instance of FormData");
         headers["Content-Type"] = "multipart/form-data";
       }
 
       const result = await axiosInstance({
-        url: baseUrl + url,
+        url: "http://localhost:4000" + baseUrl + url,
         method,
         data,
         params,
@@ -24,6 +30,7 @@ const axiosBaseQuery =
       return { data: result.data || {} }; // Return an empty object if no data
     } catch (axiosError) {
       let err = axiosError;
+      console.log("error: ", err);
       return {
         error: { status: err.response?.status, data: err.response?.data },
       };

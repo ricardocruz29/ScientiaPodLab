@@ -7,27 +7,27 @@ export const userService = createApi({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (userData) => ({
-        url: "/register",
+        url: "register",
         method: "POST",
         data: userData,
       }),
     }),
     login: builder.mutation({
       query: (credentials) => ({
-        url: "/login",
+        url: "login",
         method: "POST",
         data: credentials,
       }),
     }),
     getUser: builder.query({
       query: () => ({
-        url: "/user",
+        url: "user/",
         method: "GET",
       }),
     }),
     disableOnboarding: builder.mutation({
       query: () => ({
-        url: "/user/disable-onboarding",
+        url: "user/disable-onboarding",
         method: "PUT",
       }),
     }),
