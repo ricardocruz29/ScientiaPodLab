@@ -5,6 +5,7 @@ import podcastReducer from "./features/podcast/podcastSlice";
 import resourceReducer from "./features/resource/resourceSlice";
 import templateReducer from "./features/template/templateSlice";
 import wizardReducer from "./features/wizard/wizardSlice";
+import globalReducer from "./features/global/globalSlice";
 
 import { userService } from "./api/services/userService";
 import { episodeService } from "./api/services/episodeService";
@@ -27,6 +28,7 @@ export const store = configureStore({
     resource: resourceReducer,
     template: templateReducer,
     wizard: wizardReducer,
+    global: globalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

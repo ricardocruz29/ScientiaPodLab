@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
 import Card from "../components/card/card";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -12,8 +12,22 @@ import AudioVoiceRecorder from "../components/audioVoiceRecorder/audioVoiceRecor
 import AudioWave from "../components/audioWave/audioWave";
 import FloatButton from "../components/floatButton/floatButton";
 import MicIcon from "@mui/icons-material/Mic";
+import PodcastsIcon from "@mui/icons-material/Podcasts";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import { Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { changeActiveSidebar } from "../redux/features/global/globalSlice";
 
 export const Layout = () => {
+  const dispatch = useDispatch();
+  const activeSidebar = useSelector((state) => state.global.activeSidebar);
+
+  const clickChangeActiveSidebar = (sidebar) => {
+    dispatch(changeActiveSidebar(sidebar));
+  };
+
+  //!This state is used as mock, remove to the respective components
   // TODO: Manage acceptedFile from dropzone - This logic should be done by the parent component or in the redux
   const [acceptedFile, setAcceptedFile] = useState();
   const onDrop = useCallback((acceptedFiles) => {
@@ -56,13 +70,63 @@ export const Layout = () => {
       URL.revokeObjectURL(acceptedFile?.preview);
     };
   }, [acceptedFileIMG?.preview, acceptedFile?.preview]);
+  //!----------------------------------------------------------------------
 
   return (
-    <div>
-      <div id="layout" className="sidebar">
-        <div>Layout - Menu/sidebar and Navbar</div>
+    <div className="container">
+      <div className="logo">
+        <img src="/assets/logo-small.svg" alt="Logo" />
       </div>
-      <div id="detail">
+      <div className="navbar"></div>
+      <div className="separator-column"></div>
+      <div className="separator-row"></div>
+      <div id="layout" className="sidebar">
+        <ul>
+          <li onClick={() => clickChangeActiveSidebar("podcasts")}>
+            <Link
+              to="/podcasts"
+              className={activeSidebar === "podcasts" ? "link-active" : "link"}
+            >
+              <PodcastsIcon fontSize="medium"></PodcastsIcon>
+              <Typography
+                variant="body1"
+                sx={{ fontSize: "18px", fontWeight: 500 }}
+              >
+                Podcasts
+              </Typography>
+            </Link>
+          </li>
+          <li onClick={() => clickChangeActiveSidebar("resources")}>
+            <Link
+              to="/resources"
+              className={activeSidebar === "resources" ? "link-active" : "link"}
+            >
+              <FolderCopyIcon fontSize="medium"></FolderCopyIcon>
+              <Typography
+                variant="body1"
+                sx={{ fontSize: "18px", fontWeight: 500 }}
+              >
+                Recursos
+              </Typography>
+            </Link>
+          </li>
+          <li onClick={() => clickChangeActiveSidebar("faqs")}>
+            <Link
+              to="/faqs"
+              className={activeSidebar === "faqs" ? "link-active" : "link"}
+            >
+              <QuestionMarkIcon fontSize="medium"></QuestionMarkIcon>
+              <Typography
+                variant="body1"
+                sx={{ fontSize: "18px", fontWeight: 500 }}
+              >
+                FAQs
+              </Typography>
+            </Link>
+          </li>
+        </ul>
+      </div>
+      <main id="main" className="main">
         <Card
           type={"template"}
           data={{
@@ -268,7 +332,7 @@ export const Layout = () => {
         )}
 
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };

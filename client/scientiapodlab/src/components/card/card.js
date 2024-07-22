@@ -13,10 +13,10 @@ function Card({ type, size = "medium", data }) {
       } ${size === "small" && styles.small_card}`}
     >
       <Typography
-        variant="h5"
+        variant="h6"
         sx={{
           fontWeight: 700,
-          fontSize: size === "small" ? "12px" : "24px",
+          fontSize: size === "small" ? "12px" : "18px",
 
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
