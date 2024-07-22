@@ -3,6 +3,13 @@ import { Error } from "../pages/error";
 import { Layout } from "../pages/layout";
 import Login from "../pages/login/login";
 import Register from "../pages/register/register";
+import Resources from "../pages/resources/resources";
+import Template from "../pages/resources/template/template";
+import Podcasts from "../pages/podcasts/podcasts";
+import Podcast from "../pages/podcasts/podcast/podcast";
+import EpisodeRecord from "../pages/podcasts/podcast/episode-record/episode-record";
+import Episode from "../pages/podcasts/podcast/episode/episode";
+import FAQs from "../pages/faqs/faqs";
 
 export const router = createBrowserRouter([
   {
@@ -12,29 +19,29 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/resources",
-        element: <div>Recursos Page</div>,
+        element: <Resources />,
         children: [
           {
             path: "templates/:id",
-            element: <div>Template page</div>,
+            element: <Template />,
           },
         ],
       },
       {
         path: "/podcasts",
-        element: <div>Podcasts Page</div>,
+        element: <Podcasts />,
         children: [
           {
             path: ":id",
-            element: <div>Podcast id page</div>,
+            element: <Podcast />,
             children: [
               {
                 path: "episode/record",
-                element: <div>Podcast id episode id page</div>,
+                element: <EpisodeRecord />,
               },
               {
                 path: "episode/:id",
-                element: <div>Podcast id episode id page</div>,
+                element: <Episode />,
               },
             ],
           },
@@ -42,7 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/faqs",
-        element: <div>FAQs Page</div>,
+        element: <FAQs />,
       },
     ],
   },
@@ -53,9 +60,5 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
-  },
-  {
-    path: "/promo",
-    element: <div>Landing Page</div>,
   },
 ]);

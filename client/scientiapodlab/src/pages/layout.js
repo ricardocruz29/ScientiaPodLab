@@ -22,6 +22,7 @@ import { changeActiveSidebar } from "../redux/features/global/globalSlice";
 export const Layout = () => {
   const dispatch = useDispatch();
   const activeSidebar = useSelector((state) => state.global.activeSidebar);
+  console.log("activeSidebar: ", activeSidebar);
 
   const clickChangeActiveSidebar = (sidebar) => {
     dispatch(changeActiveSidebar(sidebar));
