@@ -7,7 +7,7 @@ export const resourceService = createApi({
   endpoints: (builder) => ({
     getResources: builder.query({
       query: () => ({
-        url: "",
+        url: "/",
         method: "GET",
       }),
     }),

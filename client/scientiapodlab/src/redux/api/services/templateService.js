@@ -4,25 +4,29 @@ import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 export const templateService = createApi({
   reducerPath: "templateService",
   baseQuery: axiosBaseQuery({ baseUrl: "/templates" }),
+  tagTypes: ["template"],
   endpoints: (builder) => ({
     getTemplates: builder.query({
       query: () => ({
-        url: "",
+        url: "/",
         method: "GET",
       }),
+      providesTags: ["template"],
     }),
     deleteTemplate: builder.mutation({
       query: ({ templateID }) => ({
         url: `/${templateID}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["template"],
     }),
     createTemplate: builder.mutation({
       query: (templateData) => ({
-        url: "",
+        url: "/",
         method: "POST",
         data: templateData,
       }),
+      invalidatesTags: ["template"],
     }),
     updateTemplate: builder.mutation({
       query: ({ templateData, templateID }) => ({
@@ -30,12 +34,14 @@ export const templateService = createApi({
         method: "PUT",
         data: templateData,
       }),
+      invalidatesTags: ["template"],
     }),
   }),
 });
 
 export const {
   useGetTemplatesQuery,
+  useLazyGetTemplatesQuery,
   useDeleteTemplateMutation,
   useCreateTemplateMutation,
   useUpdateTemplateMutation,

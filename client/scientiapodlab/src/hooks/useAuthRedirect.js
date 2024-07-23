@@ -10,14 +10,7 @@ const useAuthRedirect = () => {
 
   useEffect(() => {
     if (userInfo === undefined) {
-      const storedUser = localStorage.getItem("user");
-
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        dispatch(setUser({ info: parsedUser }));
-      } else {
-        navigate("/login");
-      }
+      navigate("/login");
     }
   }, [userInfo, dispatch, navigate]);
 };

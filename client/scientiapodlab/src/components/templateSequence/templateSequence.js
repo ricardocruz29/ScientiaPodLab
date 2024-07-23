@@ -53,11 +53,11 @@ function TemplateSequence({
               className={styles.template_sequence}
               {...provided.droppableProps}
             >
-              {templateItems.map((item, index) => (
+              {templateItems?.map((item, index) => (
                 <Draggable
                   isDragDisabled={!isDraggable}
-                  key={item.id}
-                  draggableId={item.id?.toString()}
+                  key={item.ID}
+                  draggableId={item.ID?.toString()}
                   index={index}
                 >
                   {(provided, _) => (

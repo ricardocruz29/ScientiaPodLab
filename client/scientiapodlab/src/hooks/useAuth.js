@@ -26,7 +26,6 @@ const useAuth = () => {
 
       const user = await triggerGetUser().unwrap();
       dispatch(setUser({ info: user }));
-      localStorage.setItem("user", JSON.stringify(user));
 
       navigate("/resources");
     } catch (error) {

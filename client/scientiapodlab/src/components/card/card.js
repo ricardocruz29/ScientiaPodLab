@@ -23,7 +23,7 @@ function Card({ type, size = "medium", data }) {
           overflow: "hidden",
         }}
       >
-        {data.title} asjdhasdhasjd asjhd ajhsd as
+        {data.title}
       </Typography>
 
       <>
@@ -46,10 +46,18 @@ function Card({ type, size = "medium", data }) {
             </Typography>
                 
             <div className={styles.template_actions}>
-              {data.actions.map((item, index) => (
-                <div key={index} style={{ backgroundColor: item.background }}>
-                  {item.icon}
-                </div>
+              {data.actions?.map((item, index) => (
+                <>
+                  {item && (
+                    <div
+                      onClick={item.action}
+                      key={index}
+                      style={{ backgroundColor: item.background }}
+                    >
+                      {item.icon}
+                    </div>
+                  )}
+                </>
               ))}
             </div>
             <TemplateSequence size="small" template={data.template} />

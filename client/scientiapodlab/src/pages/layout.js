@@ -22,7 +22,6 @@ import { changeActiveSidebar } from "../redux/features/global/globalSlice";
 export const Layout = () => {
   const dispatch = useDispatch();
   const activeSidebar = useSelector((state) => state.global.activeSidebar);
-  console.log("activeSidebar: ", activeSidebar);
 
   const clickChangeActiveSidebar = (sidebar) => {
     dispatch(changeActiveSidebar(sidebar));
@@ -128,7 +127,7 @@ export const Layout = () => {
         </ul>
       </div>
       <main id="main" className="main">
-        <Card
+        {/* <Card
           type={"template"}
           data={{
             title: "Monólogo",
@@ -330,7 +329,7 @@ export const Layout = () => {
         )}
         {!isRecording && recordedAudio && (
           <AudioWave audioFile={recordedAudio} />
-        )}
+        )} */}
 
         <Outlet />
       </main>
