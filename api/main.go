@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"scipodlab_api/database"
 	"scipodlab_api/initializers"
@@ -36,13 +37,20 @@ func main(){
 
     // Configure CORS
     r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:3000"},
+        AllowOrigins:     []string{"*"},
         AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
         AllowHeaders:     []string{"Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "Cache-Control"},
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true,
         MaxAge:           12 * time.Hour,
     }))
+
+     // Get the CDN path from environment variable
+     cdnPath := os.Getenv("CDN_LOCAL_PATH")
+     if cdnPath == "" {
+         log.Fatal("CDN_LOCAL_PATH environment variable is not set")
+     }
+     r.Static("/cdn", cdnPath)
     
     routes.SetupRoutes(r)
 

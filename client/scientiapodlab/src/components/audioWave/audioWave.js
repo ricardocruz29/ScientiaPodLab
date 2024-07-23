@@ -41,24 +41,22 @@ function AudioWave({
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
-    if (!waveSurfer.current) {
-      const options = formWaveSurferOptions(
-        waveFormRef.current,
-        size === "medium" ? 150 : 50
-      );
-      waveSurfer.current = WaveSurfer.create(options);
+    const options = formWaveSurferOptions(
+      waveFormRef.current,
+      size === "large" ? 150 : size === "medium" ? 100 : 50
+    );
+    waveSurfer.current = WaveSurfer.create(options);
 
-      waveSurfer.current.load(audioFile);
+    waveSurfer.current.load(new URL(audioFile).href);
 
-      waveSurfer.current.on("ready", () => {
-        setVolume(waveSurfer.current.getVolume());
-        setDuration(waveSurfer.current.getDuration());
-      });
+    waveSurfer.current.on("ready", () => {
+      setVolume(waveSurfer.current.getVolume());
+      setDuration(waveSurfer.current.getDuration());
+    });
 
-      waveSurfer.current.on("audioprocess", () => {
-        setCurrentTime(waveSurfer.current.getCurrentTime());
-      });
-    }
+    waveSurfer.current.on("audioprocess", () => {
+      setCurrentTime(waveSurfer.current.getCurrentTime());
+    });
 
     if (!hasMounted.current) {
       hasMounted.current = true;

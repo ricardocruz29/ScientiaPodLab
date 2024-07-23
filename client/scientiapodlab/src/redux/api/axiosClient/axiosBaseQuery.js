@@ -7,15 +7,9 @@ const axiosInstance = axios.create({
 const axiosBaseQuery =
   ({ baseUrl }) =>
   async ({ url, method, data, params }) => {
-    console.log("baseURL: ", baseUrl);
-    console.log("url: ", url);
-    console.log("data: ", data);
-    console.log("params: ", params);
     try {
-      console.log("inside try");
       const headers = {};
       if (data instanceof FormData) {
-        console.log("is instance of FormData");
         headers["Content-Type"] = "multipart/form-data";
       }
 

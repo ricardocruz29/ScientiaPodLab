@@ -70,6 +70,21 @@ function Card({ type, size = "medium", data }) {
               showAdditionalControls={false}
               size={size}
             />
+            <div className={styles.template_actions}>
+              {data.actions?.map((item, index) => (
+                <>
+                  {item && (
+                    <div
+                      onClick={item.action}
+                      key={index}
+                      style={{ backgroundColor: item.background }}
+                    >
+                      {item.icon}
+                    </div>
+                  )}
+                </>
+              ))}
+            </div>
           </div>
         )}
         {type === "episode" && <div></div>}

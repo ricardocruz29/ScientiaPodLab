@@ -30,7 +30,7 @@ func (uc *ResourceController) GetResources(c *gin.Context) {
 
 	var resources []models.Resource
 	// Retrieve resources with Type = "Platform" or UserID = userID and TypeSegment = "TTS" OR TypeSegment = "SoundEffect"
-	err := database.DB.Where("(type = ? OR user_id = ?) AND (type_segment = ? OR type_segment = ?)", "Platform", user.ID, "TTS", "SoundEffect").Find(&resources).Error
+	err := database.DB.Where("(type = ? OR user_id = ?) AND (type_segment = ? OR type_segment = ? OR type_segment = ? OR type_segment = ? OR type_segment = ?)", "Platform", user.ID, "TTS", "SoundEffect", "Outro", "Intro", "Content").Find(&resources).Error
 	if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error":"Error getting resources"})
 	}

@@ -64,13 +64,19 @@ function Resources() {
       filtered_sound_effects = filter
         ? resources.filter(
             (resource) =>
-              resource.type_segment === "SoundEffect" &&
+              (resource.type_segment === "SoundEffect" ||
+                resource.type_segment === "Intro" ||
+                resource.type_segment === "Outro" ||
+                resource.type_segment === "Content") &&
               resource.type === filter &&
               !deletedResources.includes(resource.ID)
           )
         : resources.filter(
             (resource) =>
-              resource.type_segment === "SoundEffect" &&
+              (resource.type_segment === "SoundEffect" ||
+                resource.type_segment === "Intro" ||
+                resource.type_segment === "Outro" ||
+                resource.type_segment === "Content") &&
               !deletedResources.includes(resource.ID)
           );
 
@@ -117,27 +123,20 @@ function Resources() {
     setDeletedResources(tmpDeletedResources);
   };
 
-  const duplicateResource = async (type, data) => {
-    if (type === "Template") {
-      const { data: newTemplate } = await createTemplateMutation({
-        name: data.name,
-        duration: data.duration,
-        genre: data.genre,
-        segments: data.segments.map((s) => {
-          console.log("s:", s);
-          return {
-            Position: s.position,
-            type: s.type,
-          };
-        }),
-      });
+  const duplicateTemplate = async (data) => {
+    const { data: newTemplate } = await createTemplateMutation({
+      name: data.name,
+      duration: data.duration,
+      genre: data.genre,
+      segments: data.segments.map((s) => {
+        return {
+          Position: s.position,
+          type: s.type,
+        };
+      }),
+    });
 
-      navigate(`/template/${newTemplate.ID}`);
-    }
-
-    if (type === "Resource") {
-      //TODO: Do the logic for resource
-    }
+    navigate(`/template/${newTemplate.ID}`);
   };
 
   return (
@@ -228,7 +227,7 @@ function Resources() {
                             ),
                             background: "#FCC419",
                             action: () => {
-                              duplicateResource("Template", resource);
+                              duplicateTemplate(resource);
                             },
                           },
                           resource.type !== "Platform" && {
@@ -282,8 +281,37 @@ function Resources() {
           <>
             <Typography variant="h6">Efeitos Sonoros</Typography>
             <div className={styles.resources_row}>
-              {filtered_data.sound_effects.sound_effects?.map((resource) => {
-                return <div></div>;
+              {filtered_data.sound_effects?.map((resource) => {
+                return (
+                  <div key={resource.ID} className={styles.resource_item}>
+                    <Card
+                      type="audio"
+                      data={{
+                        title: resource.name,
+                        audioFile: resource.url,
+                        actions: [
+                          resource.type !== "Platform" && {
+                            icon: (
+                              <DeleteIcon
+                                sx={{ color: "#fff" }}
+                                fontSize="small"
+                              />
+                            ),
+                            background: "#FD6773",
+                            action: () => {
+                              deleteResource("Resource", resource.ID);
+                            },
+                          },
+                        ],
+                      }}
+                    ></Card>
+                    <div
+                      className={`${styles.filter_card} ${
+                        resource.type === "Platform" && styles.filter_red
+                      } ${resource.type === "Custom" && styles.filter_green}`}
+                    ></div>
+                  </div>
+                );
               })}
             </div>
           </>
@@ -312,7 +340,36 @@ function Resources() {
             <Typography variant="h6">TTS</Typography>
             <div className={styles.resources_row}>
               {filtered_data.tts?.map((resource) => {
-                return <div></div>;
+                return (
+                  <div key={resource.ID} className={styles.resource_item}>
+                    <Card
+                      type="audio"
+                      data={{
+                        title: resource.name,
+                        audioFile: resource.url,
+                        actions: [
+                          resource.type !== "Platform" && {
+                            icon: (
+                              <DeleteIcon
+                                sx={{ color: "#fff" }}
+                                fontSize="small"
+                              />
+                            ),
+                            background: "#FD6773",
+                            action: () => {
+                              deleteResource("Resource", resource.ID);
+                            },
+                          },
+                        ],
+                      }}
+                    ></Card>
+                    <div
+                      className={`${styles.filter_card} ${
+                        resource.type === "Platform" && styles.filter_red
+                      } ${resource.type === "Custom" && styles.filter_green}`}
+                    ></div>
+                  </div>
+                );
               })}
             </div>
           </>
