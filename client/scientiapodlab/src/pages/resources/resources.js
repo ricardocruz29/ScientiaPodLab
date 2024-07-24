@@ -136,7 +136,7 @@ function Resources() {
       }),
     });
 
-    navigate(`/template/${newTemplate.ID}`);
+    navigate(`/resources/templates/${newTemplate.ID}`);
   };
 
   return (
@@ -169,10 +169,6 @@ function Resources() {
               Templates
             </Typography>
             <div className={styles.resources_row}>
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
@@ -215,7 +211,7 @@ function Resources() {
                             ),
                             background: "#339AF0",
                             action: () => {
-                              navigate(`/template/${resource.ID}`);
+                              navigate(`/resources/templates/${resource.ID}`);
                             },
                           },
                           {
@@ -270,10 +266,6 @@ function Resources() {
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
             </div>
           </>
         )}
@@ -322,10 +314,6 @@ function Resources() {
           <>
             <Typography variant="h6">TTS</Typography>
             <div className={styles.resources_row}>
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
-              <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />
               <Skeleton variant="rectangular" width={200} height={225} />

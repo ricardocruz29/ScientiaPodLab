@@ -33,6 +33,21 @@ func (uc *TemplateController) GetTemplates(c *gin.Context) {
 	c.JSON(http.StatusOK, templates)
 }
 
+func (uc *TemplateController) GetTemplate(c *gin.Context) {
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
+
+	var template models.Template
+	// Retrieve the Template by its ID
+	err := database.DB.Preload("Segments").First(&template, id).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Template not found"})
+			return
+	}
+
+	c.JSON(http.StatusOK, template)
+}
+
 func (uc *TemplateController) CreateTemplate(c *gin.Context) {
 	userGin, _ := c.Get("user")
 	user := userGin.(models.User)

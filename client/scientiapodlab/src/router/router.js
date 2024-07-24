@@ -20,32 +20,26 @@ export const router = createBrowserRouter([
       {
         path: "/resources",
         element: <Resources />,
-        children: [
-          {
-            path: "templates/:id",
-            element: <Template />,
-          },
-        ],
+      },
+      {
+        path: "/resources/templates/:id",
+        element: <Template />,
       },
       {
         path: "/podcasts",
         element: <Podcasts />,
-        children: [
-          {
-            path: ":id",
-            element: <Podcast />,
-            children: [
-              {
-                path: "episode/record",
-                element: <EpisodeRecord />,
-              },
-              {
-                path: "episode/:id",
-                element: <Episode />,
-              },
-            ],
-          },
-        ],
+      },
+      {
+        path: "/podcasts/:id",
+        element: <Podcast />,
+      },
+      {
+        path: "/podcasts/:id/episode/record",
+        element: <EpisodeRecord />,
+      },
+      {
+        path: "/podcasts/:id/episode/:id",
+        element: <Episode />,
       },
       {
         path: "/faqs",

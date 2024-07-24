@@ -13,6 +13,13 @@ export const templateService = createApi({
       }),
       providesTags: ["template"],
     }),
+    getTemplate: builder.query({
+      query: ({ templateID }) => ({
+        url: `/${templateID}`,
+        method: "GET",
+      }),
+      providesTags: ["template"],
+    }),
     deleteTemplate: builder.mutation({
       query: ({ templateID }) => ({
         url: `/${templateID}`,
@@ -41,6 +48,7 @@ export const templateService = createApi({
 
 export const {
   useGetTemplatesQuery,
+  useGetTemplateQuery,
   useLazyGetTemplatesQuery,
   useDeleteTemplateMutation,
   useCreateTemplateMutation,
