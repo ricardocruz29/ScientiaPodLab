@@ -1,0 +1,17 @@
+.template_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.template_sequence {
+  max-width: 400px;
+  overflow: auto;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 12px;
+  justify-content: space-between;
+}

@@ -5,3 +5,6 @@ export const TEMPLATE_TYPE = {
   Content: { label: "Conteúdo", color: "#FF9B9B" },
   SoundEffect: { label: "Música", color: "#CDE4FF" },
 };
+
+//TODO: Define this -> Label and Description (based on state of the art)
+export const TEMPLATE_GENRES = {};

@@ -6,43 +6,16 @@ import FloatButton from "../floatButton/floatButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
 
 function TemplateSequence({
   size = "medium",
   template,
   actions,
   isDraggable = false,
+  onDragEnd,
 }) {
-  const [templateItems, setTemplateItems] = useState(template);
-
-  const onDragEnd = (result) => {
-    // dropped outside the list
-    if (!result.destination) {
-      return;
-    }
-
-    const items = reorder(
-      templateItems,
-      result.source.index,
-      result.destination.index
-    );
-
-    // Update on BE
-    setTemplateItems(items);
-  };
-
+  console.log("actions: ", actions);
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -53,7 +26,7 @@ function TemplateSequence({
               className={styles.template_sequence}
               {...provided.droppableProps}
             >
-              {templateItems?.map((item, index) => (
+              {template?.map((item, index) => (
                 <Draggable
                   isDragDisabled={!isDraggable}
                   key={item.ID}
@@ -134,6 +107,9 @@ function TemplateSequence({
                         )}
                         {actions && actions.onRemoveTemplateSection && (
                           <button
+                            onClick={() => {
+                              actions.onRemoveTemplateSection(item.ID);
+                            }}
                             className={styles.template_sequence_card_remove}
                           >
                             <RemoveIcon
