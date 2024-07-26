@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: 24px;
 }
 
 .template_header_edit {
@@ -51,4 +52,31 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  max-width: calc(100vw - 16px - 260px - 4px - 48px);
+}
+
+.buttons {
+  margin-top: 24px;
+  padding-right: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.template_sequence_add_row {
+  display: flex;
+  align-items: center;
+  margin-right: 24px;
+}
+
+.template_sequence_add_row_button {
+  height: 150px;
+  width: 100px;
+  background-color: #efefef;
+
+  border: 2px solid #58c49b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }

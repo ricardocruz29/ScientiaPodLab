@@ -5,6 +5,7 @@ import {
   useCreateTemplateMutation,
   useDeleteTemplateMutation,
   useGetTemplateQuery,
+  useUpdateTemplateMutation,
 } from "../../../redux/api/services/templateService";
 import styles from "./template.module.css";
 import {
@@ -27,11 +28,14 @@ import { Formik, Form, Field } from "formik";
 import Button from "../../../components/button/button";
 import { editTemplateValidationSchema } from "../../../validators/template.validator";
 import { reorder } from "../../../lib/utils/reorder";
+import AddIcon from "@mui/icons-material/Add";
+import NewTemplateItemModal from "../../../components/modals/newTemplateItem/newTemplateItem";
 
 function Template() {
   const navigate = useNavigate();
   const [createTemplateMutation] = useCreateTemplateMutation();
   const [deleteTemplateMutation] = useDeleteTemplateMutation();
+  const [updateTemplateMutation] = useUpdateTemplateMutation();
 
   //Middlewares
   useAuthRedirect();
@@ -45,8 +49,6 @@ function Template() {
   //TODO ------------------
   /*
   - Create big text for the description (constants with the respective description based on State of Art)
-  - Edit -> Create modal to choose a new card (Create Component)
-  - Edit -> Dispatch action to update the template
   */
   //TODO -------------------
 
@@ -76,7 +78,25 @@ function Template() {
   };
 
   const [isEditing, setIsEditing] = useState(false);
-  const editTemplate = () => {};
+  const editTemplate = (newValues) => {
+    console.log("newValues: ", newValues);
+    const segments = templateItems.map((ti, index) => {
+      console.log("ti: ", ti);
+      return {
+        Position: index + 1,
+        Type: ti.type,
+      };
+    });
+
+    const data = {
+      ...newValues,
+      segments,
+    };
+
+    updateTemplateMutation({ templateData: data, templateID: id });
+
+    setIsEditing(false);
+  };
   const [templateItems, setTemplateItems] = useState([]);
   const onDragEnd = (result) => {
     // dropped outside the list
@@ -101,8 +121,25 @@ function Template() {
 
     setTemplateItems(items);
   };
+  const [addTemplateCardModalOpen, setAddTemplateCardModalOpen] =
+    useState(false);
+  const addTemplateCard = (cardType) => {
+    console.log("currentTemplateItems: ", templateItems);
+    const items = [...templateItems];
 
-  console.log("Template Items: ", templateItems);
+    // Find the highest ID in the array
+    const maxID = items.reduce((max, obj) => Math.max(max, obj.ID), -Infinity);
+
+    items.push({
+      ID: maxID + 1,
+      position: templateItems.length,
+      type: cardType,
+    });
+
+    setTemplateItems(items);
+
+    setAddTemplateCardModalOpen(false);
+  };
 
   useEffect(() => {
     if (data) {
@@ -295,17 +332,24 @@ function Template() {
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
                     Sequência Sugerida
                   </Typography>
-                  <TemplateSequence
-                    template={templateItems}
-                    isDraggable={true}
-                    onDragEnd={onDragEnd}
-                    actions={{
-                      onRemoveTemplateSection: (id) => {
-                        console.log("id: ", id);
-                        removeTemplateCard(id);
-                      },
-                    }}
-                  />
+                  <div className={styles.template_sequence_add_row}>
+                    <TemplateSequence
+                      template={templateItems}
+                      isDraggable={true}
+                      onDragEnd={onDragEnd}
+                      actions={{
+                        onRemoveTemplateSection: (id) => {
+                          removeTemplateCard(id);
+                        },
+                      }}
+                    />
+                    <div
+                      className={styles.template_sequence_add_row_button}
+                      onClick={() => setAddTemplateCardModalOpen(true)}
+                    >
+                      <AddIcon sx={{ color: "#58C49B", fontSize: "128px" }} />
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.buttons}>
@@ -316,13 +360,8 @@ function Template() {
                     }}
                     type="red"
                     text="Cancelar"
-                    size="small"
                   ></Button>
-                  <Button
-                    btnType="submit"
-                    text="Confirmar"
-                    size="small"
-                  ></Button>
+                  <Button btnType="submit" text="Confirmar"></Button>
                 </div>
               </Form>
             )}
@@ -337,6 +376,13 @@ function Template() {
           handleConfirm={({ newTemplateName }) =>
             duplicateTemplate(newTemplateName)
           }
+        />
+      )}
+      {addTemplateCardModalOpen && (
+        <NewTemplateItemModal
+          isOpen={addTemplateCardModalOpen}
+          handleClose={() => setAddTemplateCardModalOpen(false)}
+          handleConfirm={(cardType) => addTemplateCard(cardType)}
         />
       )}
     </>
