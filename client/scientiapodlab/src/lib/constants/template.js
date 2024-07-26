@@ -6,5 +6,21 @@ export const TEMPLATE_TYPE = {
   SoundEffect: { label: "Música", color: "#CDE4FF" },
 };
 
-//TODO: Define this -> Label and Description (based on state of the art)
-export const TEMPLATE_GENRES = {};
+//TODO: Adjust this types based on state of the art
+export const TEMPLATE_GENRES = {
+  monologue: {
+    label: "Monólogo",
+    description:
+      "O template do tipo monólogo é ideal para xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx",
+  },
+  interview: {
+    label: "Entrevista",
+    description:
+      "O template do tipo entrevista é ideal para xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx",
+  },
+  story_telling: {
+    label: "Story Telling",
+    description:
+      "O template do tipo story telling é ideal para xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxx",
+  },
+};

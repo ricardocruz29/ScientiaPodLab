@@ -29,7 +29,6 @@ function NewTemplateItemModal({ isOpen, handleClose, handleConfirm }) {
     }
   };
 
-  console.log("selectedItem: ", selectedItem);
   return (
     <Modal
       open={isOpen}

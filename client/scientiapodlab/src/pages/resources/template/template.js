@@ -30,6 +30,10 @@ import { editTemplateValidationSchema } from "../../../validators/template.valid
 import { reorder } from "../../../lib/utils/reorder";
 import AddIcon from "@mui/icons-material/Add";
 import NewTemplateItemModal from "../../../components/modals/newTemplateItem/newTemplateItem";
+import {
+  TEMPLATE_GENRES,
+  TEMPLATE_TYPE,
+} from "../../../lib/constants/template";
 
 function Template() {
   const navigate = useNavigate();
@@ -222,7 +226,14 @@ function Template() {
                 variant="body1"
                 sx={{ color: "#00000080", fontSize: "18px" }}
               >
-                Tipo: {data?.genre}
+                Tipo: {TEMPLATE_GENRES[data?.genre]?.label}
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{ color: "#00000080", fontSize: "14px" }}
+              >
+                {TEMPLATE_GENRES[data?.genre]?.description}
               </Typography>
             </div>
 
@@ -316,9 +327,13 @@ function Template() {
                           {...field}
                           label="Tipo"
                         >
-                          <MenuItem value="monologue">Monólogo</MenuItem>
-                          <MenuItem value="interview">Entrevista</MenuItem>
-                          <MenuItem value="story">Story Tellying</MenuItem>
+                          {Object.keys(TEMPLATE_GENRES).map((tg_key, index) => {
+                            return (
+                              <MenuItem key={index} value={tg_key}>
+                                {TEMPLATE_GENRES[tg_key]?.label}
+                              </MenuItem>
+                            );
+                          })}
                         </Select>
                         {meta.touched && meta.error && (
                           <FormHelperText>{meta.error}</FormHelperText>
