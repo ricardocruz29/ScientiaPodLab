@@ -30,10 +30,7 @@ import { editTemplateValidationSchema } from "../../../validators/template.valid
 import { reorder } from "../../../lib/utils/reorder";
 import AddIcon from "@mui/icons-material/Add";
 import NewTemplateItemModal from "../../../components/modals/newTemplateItem/newTemplateItem";
-import {
-  TEMPLATE_GENRES,
-  TEMPLATE_TYPE,
-} from "../../../lib/constants/template";
+import { TEMPLATE_GENRES } from "../../../lib/constants/template";
 
 function Template() {
   const navigate = useNavigate();
@@ -49,12 +46,6 @@ function Template() {
 
   // Get data
   const { data, isLoading } = useGetTemplateQuery({ templateID: id });
-
-  //TODO ------------------
-  /*
-  - Create big text for the description (constants with the respective description based on State of Art)
-  */
-  //TODO -------------------
 
   const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
   const duplicateTemplate = async (newTemplateName) => {
@@ -83,9 +74,7 @@ function Template() {
 
   const [isEditing, setIsEditing] = useState(false);
   const editTemplate = (newValues) => {
-    console.log("newValues: ", newValues);
     const segments = templateItems.map((ti, index) => {
-      console.log("ti: ", ti);
       return {
         Position: index + 1,
         Type: ti.type,
