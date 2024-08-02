@@ -44,6 +44,12 @@
   cursor: pointer;
 }
 
+.image_preview {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
 .alert {
   margin-top: 8px;
 }

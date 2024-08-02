@@ -25,7 +25,7 @@ export const episodeService = createApi({
     }),
     createEpisode: builder.mutation({
       query: (episodeData) => ({
-        url: "",
+        url: "/",
         method: "POST",
         data: episodeData,
       }),

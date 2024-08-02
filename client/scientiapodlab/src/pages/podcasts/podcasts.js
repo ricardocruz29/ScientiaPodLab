@@ -6,6 +6,7 @@ import styles from "./podcasts.module.css";
 import { useState } from "react";
 import { Skeleton, Typography } from "@mui/material";
 import Button from "../../components/button/button";
+import WizardModal from "../../components/modals/wizard/wizard";
 
 function Podcasts() {
   const navigate = useNavigate();
@@ -56,10 +57,22 @@ function Podcasts() {
         {!isLoading && data && (
           <div className={styles.podcasts_section}>
             <Typography>Podcasts sections </Typography>
+            {/* //TODO: This should be deleted, only for test purposes */}
+            <Button
+              text="Quero criar o meu primeiro podcast"
+              onButtonClick={() => setWizardOpen(true)}
+            ></Button>
           </div>
         )}
       </div>
-      {wizardOpen && <h1>Modal do Wizard</h1>}
+      {wizardOpen && (
+        <WizardModal
+          isOpen={wizardOpen}
+          handleClose={() => setWizardOpen(false)}
+          mode="episode"
+          podcastID={6}
+        />
+      )}
     </>
   );
 }

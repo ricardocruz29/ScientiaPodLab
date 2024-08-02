@@ -33,12 +33,12 @@ function Dropzone({
       });
     }
 
-    if (acceptedFile) {
+    if (acceptedFile?.file) {
       setDropzoneDisabled(true);
     } else {
       setDropzoneDisabled(false);
     }
-  }, [type, acceptedFile]);
+  }, [type, acceptedFile?.file]);
 
   const {
     getRootProps,
@@ -58,7 +58,7 @@ function Dropzone({
       ...baseStyle,
       ...(isDragActive ? focusedStyle : {}),
       ...(isFocused ? focusedStyle : {}),
-      ...(acceptedFile ? focusedStyle : {}),
+      ...(acceptedFile?.file ? focusedStyle : {}),
       ...(fileRejections.length >= 1 ? rejectStyle : {}),
     }),
     [isFocused, isDragActive, fileRejections, acceptedFile]
@@ -69,11 +69,12 @@ function Dropzone({
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
 
-        {acceptedFile ? (
+        {acceptedFile && acceptedFile.file && acceptedFile.preview ? (
           <>
             {type === "image" && (
               <div className={styles.image_accepted}>
                 <img
+                  className={styles.image_preview}
                   alt={"Preview do ficheiro " + acceptedFile.file.name}
                   src={acceptedFile.preview}
                   // Revoke data uri after image is loaded

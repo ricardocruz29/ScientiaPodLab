@@ -7,7 +7,7 @@ export const podcastService = createApi({
   endpoints: (builder) => ({
     getPodcasts: builder.query({
       query: () => ({
-        url: "",
+        url: "/",
         method: "GET",
       }),
     }),
@@ -25,7 +25,7 @@ export const podcastService = createApi({
     }),
     createPodcast: builder.mutation({
       query: (podcastData) => ({
-        url: "",
+        url: "/",
         method: "POST",
         data: podcastData,
       }),

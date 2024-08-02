@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  margin-bottom: 36px;
+}
+
+.first_form {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.first_form_dropzone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 500px;
+}
+
+.first_form_values {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer {
+  margin-top: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.step_title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+}
+
+.step_title > div {
+  height: 64px;
+  width: 64px;
+  border-radius: 100%;
+  background-color: #58c49b;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
