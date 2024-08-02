@@ -81,7 +81,7 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	}
 
 	fileName := uuid.New().String() + fileExtension
-	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", fileName)
+	filePath := os.Getenv("CDN_LOCAL_PATH") + "/" + filepath.Join("audios/resources", fileName)
 	err = c.SaveUploadedFile(resourceAudio, filePath)
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
@@ -89,7 +89,7 @@ func (uc *ResourceController) CreateResource(c *gin.Context) {
 	}
 
 	//Create resource in db
-	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", fileName)
+	cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("audios/resources", fileName)
 	resource := models.Resource{NameCDN: fileName, Name: name, Url: cdnFilePath,  Type: "Custom", TypeSegment: typeSegment, UserID: user.ID}
 	result := database.DB.Create(&resource)
 
@@ -187,7 +187,7 @@ func (uc *ResourceController) CreateTTSResource(c *gin.Context) {
 	}
 	
 	//Create resource in db
-	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "audios/resources", ttsAudioID)
+	cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("audios/resources", ttsAudioID)
 	resource := models.Resource{NameCDN: ttsAudioID, Name: info.Name, Url: cdnFilePath,  Type: "Custom", TypeSegment: "TTS", UserID: user.ID}
 	result := database.DB.Create(&resource)
 
@@ -272,7 +272,7 @@ func (uc *ResourceController) DeleteResource(c *gin.Context) {
 	}
 
 	// Remove file
-	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "audios/resources", resource.NameCDN)
+	filePath := os.Getenv("CDN_LOCAL_PATH") + "/" + filepath.Join("audios/resources", resource.NameCDN)
 	err = os.Remove(filePath)
 	if err != nil {
 			log.Println("Error: ", err.Error())

@@ -108,7 +108,7 @@ func (uc *EpisodeController) CreateEpisode(c *gin.Context) {
 	}
 
 	fileName := uuid.New().String() + fileExtension
-	filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "images", fileName)
+	filePath := os.Getenv("CDN_LOCAL_PATH") + "/" + filepath.Join("images", fileName)
 	err = c.SaveUploadedFile(image, filePath)
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
@@ -116,7 +116,7 @@ func (uc *EpisodeController) CreateEpisode(c *gin.Context) {
 	}
 
 	//Create podcast in db
-	cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
+	cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("images", fileName)
 
 	episode := models.Episode{Name: name, Image: cdnFilePath, Description: description, TemplateID: templateId, PodcastID: podcastId}
 	result := database.DB.Create(&episode)
@@ -174,7 +174,7 @@ func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
 		}
 
 		fileName := uuid.New().String() + fileExtension
-		filePath := filepath.Join(os.Getenv("CDN_LOCAL_PATH"), "images", fileName)
+		filePath := os.Getenv("CDN_LOCAL_PATH") + "/" + filepath.Join("images", fileName)
 		err = c.SaveUploadedFile(image, filePath)
 		if err != nil {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
@@ -182,7 +182,7 @@ func (uc *EpisodeController) UpdateEpisode(c *gin.Context) {
 		}
 
 		//Create episode in db
-		cdnFilePath := filepath.Join(os.Getenv("CDN_URL_PATH"), "images", fileName)
+		cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("images", fileName)
 		episode.Image = cdnFilePath
 	}
 	

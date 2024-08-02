@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import useAuthRedirect from "../../hooks/useAuthRedirect";
 import useChangeActiveSidebar from "../../hooks/useChangeActiveSidebar";
-import { useGetPodcastsQuery } from "../../redux/api/services/podcastService";
+import {
+  useCreatePodcastMutation,
+  useGetPodcastsQuery,
+} from "../../redux/api/services/podcastService";
 import styles from "./podcasts.module.css";
 import { useState } from "react";
 import { Skeleton, Typography } from "@mui/material";
@@ -9,7 +11,7 @@ import Button from "../../components/button/button";
 import WizardModal from "../../components/modals/wizard/wizard";
 
 function Podcasts() {
-  const navigate = useNavigate();
+  const [createPodcast] = useCreatePodcastMutation();
 
   // Middlewares
   useAuthRedirect();
@@ -19,6 +21,35 @@ function Podcasts() {
   const { data, isLoading } = useGetPodcastsQuery();
 
   const [wizardOpen, setWizardOpen] = useState(false);
+
+  const handleConfirm = async (values) => {
+    const formData = new FormData();
+
+    if (values.plan) {
+      formData.append("name", values.plan.name);
+      formData.append("description", values.plan.description);
+      formData.append("genre", values.plan.genre);
+
+      if (values.plan.image && values.plan.image.file) {
+        formData.append("image", values.plan.image.file);
+      }
+    }
+
+    //! For episode
+    // if (values.organization) {
+    //   formData.append("templateId", values.organization.templateID);
+    // }
+
+    // formData.append("podcastId", podcastID);
+
+    try {
+      await createPodcast(formData).unwrap();
+
+      setWizardOpen(false);
+    } catch (error) {
+      console.error("Failed to create podcast/episode", error);
+    }
+  };
 
   return (
     <>
@@ -56,7 +87,24 @@ function Podcasts() {
         )}
         {!isLoading && data && (
           <div className={styles.podcasts_section}>
-            <Typography>Podcasts sections </Typography>
+            <Typography variant="h4" sx={{ fontWeight: 600 }}>
+              Os teus Podcasts
+            </Typography>
+
+            {data.map((podcast, index) => {
+              return (
+                <div className={styles.podcast_card} key={index}>
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    {podcast.name}
+                  </Typography>
+                  <img
+                    className={styles.podcast_image}
+                    alt={"Imagem do podcast " + podcast.name}
+                    src={podcast.image}
+                  />
+                </div>
+              );
+            })}
             {/* //TODO: This should be deleted, only for test purposes */}
             <Button
               text="Quero criar o meu primeiro podcast"
@@ -69,8 +117,7 @@ function Podcasts() {
         <WizardModal
           isOpen={wizardOpen}
           handleClose={() => setWizardOpen(false)}
-          mode="episode"
-          podcastID={6}
+          handleConfirm={(values) => handleConfirm(values)}
         />
       )}
     </>

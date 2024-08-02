@@ -25,8 +25,6 @@ import Dropzone from "../../dropzone/dropzone";
 import { useGetTemplatesQuery } from "../../../redux/api/services/templateService";
 import TemplateSequence from "../../templateSequence/templateSequence";
 import { TEMPLATE_GENRES } from "../../../lib/constants/template";
-import { useCreatePodcastMutation } from "../../../redux/api/services/podcastService";
-import { useCreateEpisodeMutation } from "../../../redux/api/services/episodeService";
 
 const style = {
   position: "absolute",
@@ -73,10 +71,7 @@ const targetAudience = [
   { value: "hobbyists", label: "Hobbyists" },
 ];
 
-function WizardModal({ isOpen, handleClose, mode = "podcast", podcastID }) {
-  const [createPodcast] = useCreatePodcastMutation();
-  const [createEpisode] = useCreateEpisodeMutation();
-
+function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
   const [activeStep, setActiveStep] = useState(1);
   const [steps, setSteps] = useState([]);
   const [values, setValues] = useState({});
@@ -203,38 +198,6 @@ function WizardModal({ isOpen, handleClose, mode = "podcast", podcastID }) {
 
     if (activeStep !== 1 || (activeStep === 1 && values.plan?.image?.file)) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
-  };
-
-  const handleConfirm = async () => {
-    const formData = new FormData();
-
-    if (values.plan) {
-      formData.append("name", values.plan.name);
-      formData.append("description", values.plan.description);
-      formData.append("genre", values.plan.genre);
-
-      if (values.plan.image && values.plan.image.file) {
-        formData.append("image", values.plan.image.file);
-      }
-    }
-
-    if (values.organization) {
-      formData.append("templateId", values.organization.templateID);
-    }
-
-    formData.append("podcastId", podcastID);
-
-    try {
-      if (mode === "podcast") {
-        await createPodcast(formData).unwrap();
-      } else {
-        await createEpisode(formData).unwrap();
-      }
-
-      handleClose();
-    } catch (error) {
-      console.error("Failed to create podcast/episode", error);
     }
   };
 
