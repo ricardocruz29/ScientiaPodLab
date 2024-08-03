@@ -6,15 +6,15 @@ import {
 } from "../../redux/api/services/podcastService";
 import styles from "./podcasts.module.css";
 import { useEffect, useState } from "react";
-import { Skeleton, Typography } from "@mui/material";
+import { Skeleton, Typography, Tooltip } from "@mui/material";
 import Button from "../../components/button/button";
 import WizardModal from "../../components/modals/wizard/wizard";
 import { useCreateEpisodeMutation } from "../../redux/api/services/episodeService";
-import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { PODCAST_GENRES } from "../../lib/constants/wizard";
+import InfoIcon from "@mui/icons-material/Info";
 
 function Podcasts() {
-  const navigate = useNavigate();
-
   const [createPodcast] = useCreatePodcastMutation();
   const [createEpisode] = useCreateEpisodeMutation();
 
@@ -138,22 +138,16 @@ function Podcasts() {
             {podcasts.map((podcast, index) => {
               return (
                 <div className={styles.podcast_card} key={index}>
-                  <div
-                    onClick={() => {
-                      navigate(`/podcasts/${podcast.ID}`);
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      marginBottom: "12px",
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        marginBottom: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {podcast.name}
-                    </Typography>
-                  </div>
+                    {podcast.name}
+                  </Typography>
+
                   <div className={styles.podcast_card_content}>
                     <img
                       className={styles.podcast_image}
@@ -161,9 +155,71 @@ function Podcasts() {
                       src={podcast.image}
                     />
                     <div>
-                      <Typography variant="body1" sx={{ color: "#00000080" }}>
-                        {podcast.description}
-                      </Typography>
+                      <div className={styles.podcast_card_content_main}>
+                        <Typography
+                          variant="body1"
+                          sx={{ color: "#00000080", marginBottom: "12px" }}
+                        >
+                          {podcast.description}
+                        </Typography>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "12px",
+                            marginBottom: "12px",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{ color: "#00000080" }}
+                          >
+                            Data lançamento:{" "}
+                            {moment(podcast.CreatedAt).format("DD/MM/YYYY")}
+                          </Typography>
+
+                          {podcast.episodes.length > 0 && (
+                            <Typography
+                              variant="body1"
+                              sx={{ color: "#00000080" }}
+                            >
+                              Número episódios: {podcast.episodes.length}
+                            </Typography>
+                          )}
+
+                          <Typography
+                            variant="body1"
+                            sx={{ color: "#00000080" }}
+                          >
+                            Género:{" "}
+                            {
+                              PODCAST_GENRES.find(
+                                (pg) => pg.value === podcast.genre
+                              )?.label
+                            }
+                          </Typography>
+                        </div>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "4px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{ color: "#00000080" }}
+                          >
+                            RSS Feed: {podcast.rssFeed}
+                          </Typography>
+                          <Tooltip title="O RSS Feed do podcast é uma lista que se atualiza automaticamente com todos os episódios do teu podcast. Quando gravares um novo episódio, esta lista é atualizada de forma automática. Cada podcast que criares terá um RSS Feed único. Com este link, podes publicar os teus podcasts nas plataformas que preferires. Assim, sempre que gravares um novo episódio, ele será automaticamente adicionado às tuas plataformas de podcasts favoritas. Para mais informações, visita a secção de FAQs.">
+                            <InfoIcon
+                              sx={{ color: "#58C49B", cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        </div>
+                      </div>
 
                       {podcast.episodes?.length > 0 ? (
                         <>

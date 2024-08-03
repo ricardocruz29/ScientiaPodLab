@@ -35,6 +35,12 @@
   gap: 24px;
 }
 
+.podcast_card_content > img {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}
+
 .podcast_card_content > div {
   display: flex;
   flex-direction: column;

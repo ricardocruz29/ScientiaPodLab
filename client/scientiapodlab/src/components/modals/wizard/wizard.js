@@ -25,6 +25,7 @@ import Dropzone from "../../dropzone/dropzone";
 import { useGetTemplatesQuery } from "../../../redux/api/services/templateService";
 import TemplateSequence from "../../templateSequence/templateSequence";
 import { TEMPLATE_GENRES } from "../../../lib/constants/template";
+import { PODCAST_GENRES, TARGET_AUDIENCE } from "../../../lib/constants/wizard";
 
 const style = {
   position: "absolute",
@@ -36,40 +37,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-const podcastGenres = [
-  { value: "comedy", label: "Comédia" },
-  { value: "history", label: "História" },
-  { value: "true_crime", label: "Crime Verdadeiro" },
-  { value: "sex_and_relationships", label: "Sexo e Relacionamentos" },
-  { value: "self_care", label: "Autocuidado" },
-  { value: "stories", label: "Histórias" },
-  { value: "educational", label: "Educacional" },
-  { value: "news_and_politics", label: "Notícias e Política" },
-  { value: "influencer_life", label: "#VidaDeInfluenciador" },
-  { value: "arts_and_entertainment", label: "Artes e Entretenimento" },
-  { value: "sports", label: "Esportes" },
-  { value: "music", label: "Música" },
-  { value: "british_podcast_awards", label: "Prêmios de Podcast Britânico" },
-  { value: "business_and_technology", label: "Negócios e Tecnologia" },
-  { value: "games", label: "Jogos" },
-  { value: "lifestyle_and_health", label: "Estilo de Vida e Saúde" },
-];
-
-const targetAudience = [
-  { value: "children", label: "Crianças" },
-  { value: "teenagers", label: "Adolescentes" },
-  { value: "young_adults", label: "Jovens Adultos" },
-  { value: "adults", label: "Adultos" },
-  { value: "seniors", label: "Idosos" },
-  { value: "families", label: "Famílias" },
-  { value: "professionals", label: "Profissionais" },
-  { value: "students", label: "Estudantes" },
-  { value: "parents", label: "Pais" },
-  { value: "educators", label: "Educadores" },
-  { value: "entrepreneurs", label: "Empreendedores" },
-  { value: "hobbyists", label: "Hobbyists" },
-];
 
 function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
   const [activeStep, setActiveStep] = useState(1);
@@ -375,15 +342,13 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                                 {...field}
                                 label="Gênero"
                               >
-                                {Object.keys(podcastGenres)?.map(
-                                  (pg_key, index) => {
-                                    return (
-                                      <MenuItem key={index} value={pg_key}>
-                                        {podcastGenres[pg_key]?.label}
-                                      </MenuItem>
-                                    );
-                                  }
-                                )}
+                                {PODCAST_GENRES?.map((pg, index) => {
+                                  return (
+                                    <MenuItem key={index} value={pg.value}>
+                                      {PODCAST_GENRES[index]?.label}
+                                    </MenuItem>
+                                  );
+                                })}
                               </Select>
                               {meta.touched && meta.error && (
                                 <FormHelperText>{meta.error}</FormHelperText>
@@ -407,11 +372,11 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                                 {...field}
                                 label="Público Alvo"
                               >
-                                {Object.keys(targetAudience)?.map(
+                                {Object.keys(TARGET_AUDIENCE)?.map(
                                   (ta_key, index) => {
                                     return (
                                       <MenuItem key={index} value={ta_key}>
-                                        {targetAudience[ta_key]?.label}
+                                        {TARGET_AUDIENCE[ta_key]?.label}
                                       </MenuItem>
                                     );
                                   }

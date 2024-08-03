@@ -6,7 +6,6 @@ import Register from "../pages/register/register";
 import Resources from "../pages/resources/resources";
 import Template from "../pages/resources/template/template";
 import Podcasts from "../pages/podcasts/podcasts";
-import Podcast from "../pages/podcasts/podcast/podcast";
 import EpisodeRecord from "../pages/podcasts/podcast/episode-record/episode-record";
 import Episode from "../pages/podcasts/podcast/episode/episode";
 import FAQs from "../pages/faqs/faqs";
@@ -28,10 +27,6 @@ export const router = createBrowserRouter([
       {
         path: "/podcasts",
         element: <Podcasts />,
-      },
-      {
-        path: "/podcasts/:id",
-        element: <Podcast />,
       },
       {
         path: "/podcasts/:id/episode/record",

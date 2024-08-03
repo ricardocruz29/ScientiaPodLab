@@ -27,7 +27,7 @@ const useAuth = () => {
       const user = await triggerGetUser().unwrap();
       dispatch(setUser({ info: user }));
 
-      navigate("/resources");
+      navigate("/podcasts");
     } catch (error) {
       console.error("Authentication error:", error);
       setAuthError(error);

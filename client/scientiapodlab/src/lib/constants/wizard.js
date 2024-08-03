@@ -1,0 +1,33 @@
+export const PODCAST_GENRES = [
+  { value: "comedy", label: "Comédia" },
+  { value: "history", label: "História" },
+  { value: "true_crime", label: "Crime Verdadeiro" },
+  { value: "sex_and_relationships", label: "Sexo e Relacionamentos" },
+  { value: "self_care", label: "Autocuidado" },
+  { value: "stories", label: "Histórias" },
+  { value: "educational", label: "Educacional" },
+  { value: "news_and_politics", label: "Notícias e Política" },
+  { value: "influencer_life", label: "#VidaDeInfluenciador" },
+  { value: "arts_and_entertainment", label: "Artes e Entretenimento" },
+  { value: "sports", label: "Esportes" },
+  { value: "music", label: "Música" },
+  { value: "british_podcast_awards", label: "Prêmios de Podcast Britânico" },
+  { value: "business_and_technology", label: "Negócios e Tecnologia" },
+  { value: "games", label: "Jogos" },
+  { value: "lifestyle_and_health", label: "Estilo de Vida e Saúde" },
+];
+
+export const TARGET_AUDIENCE = [
+  { value: "children", label: "Crianças" },
+  { value: "teenagers", label: "Adolescentes" },
+  { value: "young_adults", label: "Jovens Adultos" },
+  { value: "adults", label: "Adultos" },
+  { value: "seniors", label: "Idosos" },
+  { value: "families", label: "Famílias" },
+  { value: "professionals", label: "Profissionais" },
+  { value: "students", label: "Estudantes" },
+  { value: "parents", label: "Pais" },
+  { value: "educators", label: "Educadores" },
+  { value: "entrepreneurs", label: "Empreendedores" },
+  { value: "hobbyists", label: "Hobbyists" },
+];
