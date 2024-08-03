@@ -4,12 +4,14 @@ import axiosBaseQuery from "../axiosClient/axiosBaseQuery";
 export const podcastService = createApi({
   reducerPath: "podcastService",
   baseQuery: axiosBaseQuery({ baseUrl: "/podcasts" }),
+  tagTypes: ["Podcasts"], // Add your tag types here
   endpoints: (builder) => ({
     getPodcasts: builder.query({
       query: () => ({
         url: "/",
         method: "GET",
       }),
+      providesTags: ["Podcasts"],
     }),
     getPodcast: builder.query({
       query: ({ podcastID }) => ({
@@ -29,6 +31,7 @@ export const podcastService = createApi({
         method: "POST",
         data: podcastData,
       }),
+      invalidatesTags: ["Podcasts"],
     }),
     updatePodcast: builder.mutation({
       query: ({ podcastData, podcastID }) => ({
@@ -36,6 +39,7 @@ export const podcastService = createApi({
         method: "PUT",
         data: podcastData,
       }),
+      invalidatesTags: ["Podcasts"],
     }),
   }),
 });

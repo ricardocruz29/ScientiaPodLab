@@ -13,3 +13,37 @@
   justify-content: center;
   gap: 8px;
 }
+
+.podcast_card {
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-start;
+  gap: 12px;
+
+  margin-bottom: 24px;
+}
+
+.podcast_card_content {
+  display: flex;
+
+  gap: 24px;
+}
+
+.podcast_card_content > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.podcasts_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}

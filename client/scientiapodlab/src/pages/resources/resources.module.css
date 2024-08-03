@@ -46,12 +46,13 @@
 
 .resources_row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 18px;
   max-width: calc(100vw - 16px - 260px - 4px - 48px);
-  min-height: 275px;
+  height: 300px;
   overflow-x: auto;
+  padding-top: 1rem;
   padding-left: 1.2rem;
   margin-left: -1.2rem;
 }
