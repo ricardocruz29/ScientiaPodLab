@@ -1,0 +1,51 @@
+.page_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template_section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template_section_header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.template_section_header > * {
+  flex: 0 1 fit-content;
+}
+
+.edit_template_actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit_template_actions > div {
+  display: flex;
+  gap: 8px;
+}
+
+.template_sequence_add_row {
+  display: flex;
+  align-items: center;
+  margin-right: 24px;
+  max-width: calc(100vw - 340px);
+}
+
+.template_sequence_add_row_button {
+  height: 150px;
+  width: 100px;
+  background-color: #efefef;
+
+  border: 2px solid #58c49b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

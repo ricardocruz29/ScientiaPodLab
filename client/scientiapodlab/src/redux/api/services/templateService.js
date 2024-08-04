@@ -49,6 +49,7 @@ export const templateService = createApi({
 export const {
   useGetTemplatesQuery,
   useGetTemplateQuery,
+  useLazyGetTemplateQuery,
   useLazyGetTemplatesQuery,
   useDeleteTemplateMutation,
   useCreateTemplateMutation,

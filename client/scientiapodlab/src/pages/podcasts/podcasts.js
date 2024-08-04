@@ -13,8 +13,10 @@ import { useCreateEpisodeMutation } from "../../redux/api/services/episodeServic
 import moment from "moment";
 import { PODCAST_GENRES } from "../../lib/constants/wizard";
 import InfoIcon from "@mui/icons-material/Info";
+import { useNavigate } from "react-router-dom";
 
 function Podcasts() {
+  const navigate = useNavigate();
   const [createPodcast] = useCreatePodcastMutation();
   const [createEpisode] = useCreateEpisodeMutation();
 
@@ -60,8 +62,11 @@ function Podcasts() {
         await createPodcast(formData).unwrap();
         setPodcastWizardOpen(false);
       } else {
-        await createEpisode(formData).unwrap();
-        setEpisodeWizardOpenID(undefined);
+        const episode = await createEpisode(formData).unwrap();
+
+        navigate(
+          `/podcasts/${episodeWizardOpenID}/episode/${episode.ID}/record`
+        );
       }
     } catch (error) {
       console.error("Failed to create podcast/episode", error);

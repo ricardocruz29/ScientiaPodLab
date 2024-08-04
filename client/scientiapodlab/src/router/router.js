@@ -29,11 +29,11 @@ export const router = createBrowserRouter([
         element: <Podcasts />,
       },
       {
-        path: "/podcasts/:id/episode/record",
+        path: "/podcasts/:podcastId/episode/:episodeId/record",
         element: <EpisodeRecord />,
       },
       {
-        path: "/podcasts/:id/episode/:id",
+        path: "/podcasts/:podcastId/episode/:episodeId",
         element: <Episode />,
       },
       {

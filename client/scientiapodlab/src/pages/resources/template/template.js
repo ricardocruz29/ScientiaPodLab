@@ -123,9 +123,15 @@ function Template() {
     // Find the highest ID in the array
     const maxID = items.reduce((max, obj) => Math.max(max, obj.ID), -Infinity);
 
+    // Fund the highest position in the array
+    const maxPosition = items.reduce(
+      (max, obj) => Math.max(max, obj.position),
+      -Infinity
+    );
+
     items.push({
       ID: maxID + 1,
-      position: templateItems.length,
+      position: maxPosition + 1,
       type: cardType,
     });
 
