@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type SegmentController struct {}
@@ -89,4 +90,73 @@ func (sc *SegmentController) DeleteEpisodeSegment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Episode segment deleted"})
+}
+
+func (sc *SegmentController) UpdateEpisodeSegments(c *gin.Context) {
+	payload, _ := c.Get("payload")
+	info := payload.(*validators.UpdateEpisodeSegmentsValidator)
+
+	strId := c.Param("id")
+	id, _ := strconv.Atoi(strId)
+
+	var initialEpisode models.Episode
+	if err := database.DB.Preload("Segments").First(&initialEpisode, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+		return
+	}
+
+	segmentIDs := make(map[int]bool)
+	for index, segment := range info.Segments {
+		position := index + 1
+		if segment.ID != nil {
+			// Update existing segment
+			segmentIDs[*segment.ID] = true
+			var existingSegment models.EpisodeSegment
+			if err := database.DB.First(&existingSegment, *segment.ID).Error; err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Segment not found"})
+				return
+			}
+			existingSegment.Position = position
+			existingSegment.ResourceID = segment.ResourceID
+			if err := database.DB.Save(&existingSegment).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update segment"})
+				return
+			}
+		} else {
+			// Create new segment
+			newSegment := models.EpisodeSegment{
+				Position:   position,
+				Type:       segment.Type,
+				ResourceID: segment.ResourceID,
+				EpisodeID: 	id,
+			}
+			if err := database.DB.Create(&newSegment).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create segment"})
+				return
+			}
+		}
+	}
+
+	// Remove segments that are not in the input list
+	for _, segment := range initialEpisode.Segments {
+		if !segmentIDs[int(segment.ID)] {
+			if err := database.DB.Delete(&segment).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete segment"})
+				return
+			}
+		}
+	}
+
+	var episode models.Episode
+	// Retrieve the Episode by its ID
+	err := database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+    return db.Order("position asc")
+	}).First(&episode, id).Error
+
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
+			return
+	}
+
+	c.JSON(http.StatusOK, episode);
 }

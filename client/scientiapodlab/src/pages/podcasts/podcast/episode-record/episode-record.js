@@ -5,14 +5,19 @@ import { useGetEpisodeQuery } from "../../../../redux/api/services/episodeServic
 import styles from "./episode-record.module.css";
 import { Typography, Skeleton } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useLazyGetTemplateQuery } from "../../../../redux/api/services/templateService";
 import TemplateSequence from "../../../../components/templateSequence/templateSequence";
 import { reorder } from "../../../../lib/utils/reorder";
 import Button from "../../../../components/button/button";
 import NewTemplateItemModal from "../../../../components/modals/newTemplateItem/newTemplateItem";
 import AddIcon from "@mui/icons-material/Add";
+import AudioNew from "../../../../components/audioNew/audioNew";
+import { useCreateResourceMutation } from "../../../../redux/api/services/resourceService";
+import { useUpdateEpisodeSegmentsMutation } from "../../../../redux/api/services/segmentService";
 
 function EpisodeRecord() {
+  const [createResourceMutation] = useCreateResourceMutation();
+  const [updateEpisodeSegmentsMutation] = useUpdateEpisodeSegmentsMutation();
+
   // Middlewares
   useAuthRedirect();
   useChangeActiveSidebar("podcasts");
@@ -23,35 +28,28 @@ function EpisodeRecord() {
   const { data: episode, isLoading } = useGetEpisodeQuery({
     episodeID: episodeId,
   });
-  const [triggerGetTemplate, { data: template, isLoading: isLoadingTemplate }] =
-    useLazyGetTemplateQuery();
-
-  useEffect(() => {
-    if (episode) {
-      triggerGetTemplate({ templateID: episode.templateId });
-    }
-  }, [episode, triggerGetTemplate]);
 
   const [episodeSegments, setEpisodeSegments] = useState();
   const [tmpEditableEpisodeSegments, setTmpEditableEpisodeSegments] =
     useState();
 
   useEffect(() => {
-    if (template) {
+    if (episode) {
       const eSegments = [];
-      template.segments.forEach((ts) => {
+      episode.segments.forEach((es) => {
         eSegments.push({
-          type: ts.type,
-          position: ts.position,
+          type: es.type,
+          position: es.position,
           audio: undefined,
-          ID: ts.ID,
+          ID: es.ID,
+          isTmp: false,
         });
       });
 
       setEpisodeSegments(eSegments);
       setTmpEditableEpisodeSegments(eSegments);
     }
-  }, [template]);
+  }, [episode]);
 
   const [addTemplateCardModalOpen, setAddTemplateCardModalOpen] =
     useState(false);
@@ -63,8 +61,39 @@ function EpisodeRecord() {
     setTmpEditableEpisodeSegments(episodeSegments);
     setIsEditingTemplate(false);
   };
-  const confirmEditTemplate = () => {
-    setEpisodeSegments(tmpEditableEpisodeSegments);
+  const confirmEditTemplate = async () => {
+    const simplifiedEpisodeSegments = [];
+    tmpEditableEpisodeSegments.forEach((tes) => {
+      if (tes.isTmp) {
+        simplifiedEpisodeSegments.push({
+          type: tes.type,
+          resourceId: tes.audio?.ID,
+        });
+      } else {
+        simplifiedEpisodeSegments.push({
+          ID: tes.ID,
+          type: tes.type,
+          resourceId: tes.audio?.ID,
+        });
+      }
+    });
+
+    const { data } = await updateEpisodeSegmentsMutation({
+      segments: simplifiedEpisodeSegments,
+      episodeID: episodeId,
+    });
+
+    const { segments: updatedEpisodeSegments } = data;
+
+    const updatedTmpEditableEpisodeSegments = [...tmpEditableEpisodeSegments];
+    updatedEpisodeSegments.forEach((ues, index) => {
+      const tmpEpisodeSegment = tmpEditableEpisodeSegments[index];
+
+      tmpEpisodeSegment.isTmp = false;
+      tmpEpisodeSegment.ID = ues.ID;
+    });
+
+    setEpisodeSegments(updatedTmpEditableEpisodeSegments);
     setIsEditingTemplate(false);
   };
   const onDragEnd = (result) => {
@@ -106,6 +135,7 @@ function EpisodeRecord() {
       ID: maxID + 1,
       position: maxPosition + 1,
       type: cardType,
+      isTmp: true,
     });
 
     setTmpEditableEpisodeSegments(items);
@@ -113,48 +143,94 @@ function EpisodeRecord() {
     setAddTemplateCardModalOpen(false);
   };
 
+  const [addAudioSegment, setAddAudioSegment] = useState();
   const addAudioToSegment = (id) => {
     const segment = episodeSegments.find((es) => es.ID === id);
 
-    console.log("segment: ", segment);
+    setAddAudioSegment(segment);
+  };
+
+  const removeAudioFromSegment = (id) => {
+    const eSegments = [...episodeSegments];
+    const segment = eSegments.find((i) => i.ID === id);
+    segment.audio = undefined;
+
+    setEpisodeSegments(eSegments);
+    setTmpEditableEpisodeSegments(eSegments);
+  };
+
+  const confirmAddAudioToSegment = async (audio, type) => {
+    console.log("audio: ", audio);
+    const eSegments = [...episodeSegments];
+
+    console.log("eSegments before: ", eSegments);
+    console.log("addAudioSegment: ", addAudioSegment);
+
+    if (type === "Biblioteca") {
+      const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
+      segment.audio = { ...audio, id: audio.ID };
+    }
+
+    if (type === "Importar") {
+      const formData = new FormData();
+
+      formData.append("resource_audio", audio.file);
+      formData.append("type_segment", addAudioSegment.type);
+      formData.append("name", audio.file.name);
+      formData.append("episode_segment_id", addAudioSegment.ID);
+
+      const { data: resource } = await createResourceMutation(formData);
+      console.log("resource: ", resource);
+
+      const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
+      segment.audio = { ...resource, id: resource?.ID };
+    }
+
+    console.log("eSegments after: ", eSegments);
+    setEpisodeSegments(eSegments);
+    setTmpEditableEpisodeSegments(eSegments);
+
+    setAddAudioSegment(undefined);
+  };
+
+  const cancelAddAudioToSegment = () => {
+    setAddAudioSegment(undefined);
   };
 
   console.log("episode: ", episode);
-  console.log("template: ", template);
   console.log("episodeSegments: ", episodeSegments);
 
   return (
     <div className={styles.page_container}>
-      {(isLoading || isLoadingTemplate) && (
+      {isLoading && (
         <Skeleton variant="rectangular" width={1300} height={720} />
       )}
-      {!isLoading && !isLoadingTemplate && episode && template && (
+      {!isLoading && episode && (
         <>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 600, marginBottom: "20px" }}
-          >
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>
             Grava o teu episódio - Construção
           </Typography>
-          <Typography variant="body1" sx={{ color: "#343A4070" }}>
-            Esta é a etapa para construíres o teu episódio. Oferecemos-te várias
-            formas de construíres o teu episódio!!
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#343A4070" }}>
-            Importa um ficheiro de áudio, grava a tua voz aqui na plataforma ou
-            experimenta a mais recente tecnologia de Text-to-Speech onde
-            escreves o teu texto e nós geramos o áudio para ti!
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#343A4070" }}>
-            Vais ter um template para seguir, mas sente-te livre para fazeres
-            tudo à tua maneira!
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#343A4070" }}>
-            Sente-te à vontade para utilizares os recursos que disponibilizámos
-            na plataforma, faz experiências para ver se está ao teu agrado.
-            Mesmo depois de finalizares, poderás voltar atrás para editar algum
-            aspeto que não tenhas gostado.
-          </Typography>
+          <div className={styles.introduction_text}>
+            <Typography variant="body1" sx={{ color: "#343A4070" }}>
+              Esta é a etapa para construíres o teu episódio. Oferecemos-te
+              várias formas de construíres o teu episódio!!
+            </Typography>
+            <Typography variant="body1" sx={{ color: "#343A4070" }}>
+              Importa um ficheiro de áudio, grava a tua voz aqui na plataforma
+              ou experimenta a mais recente tecnologia de Text-to-Speech onde
+              escreves o teu texto e nós geramos o áudio para ti!
+            </Typography>
+            <Typography variant="body1" sx={{ color: "#343A4070" }}>
+              Vais ter um template para seguir, mas sente-te livre para fazeres
+              tudo à tua maneira!
+            </Typography>
+            <Typography variant="body1" sx={{ color: "#343A4070" }}>
+              Sente-te à vontade para utilizares os recursos que
+              disponibilizámos na plataforma, faz experiências para ver se está
+              ao teu agrado. Mesmo depois de finalizares, poderás voltar atrás
+              para editar algum aspeto que não tenhas gostado.
+            </Typography>
+          </div>
 
           <div className={styles.template_section}>
             <div className={styles.template_section_header}>
@@ -163,7 +239,6 @@ function EpisodeRecord() {
                 sx={{
                   fontWeight: 600,
                   color: "#343A4080",
-                  marginBottom: "12px",
                 }}
               >
                 Através do wizard, escolheste o template xxxxxxxxx.
@@ -175,7 +250,6 @@ function EpisodeRecord() {
                     sx={{
                       fontWeight: 600,
                       color: "#343A4080",
-                      marginBottom: "12px",
                     }}
                   >
                     Podes
@@ -187,7 +261,7 @@ function EpisodeRecord() {
                       sx={{
                         fontWeight: 600,
                         color: "#343A4080",
-                        marginBottom: "12px",
+
                         textDecoration: "underline",
                         cursor: "pointer",
                       }}
@@ -201,7 +275,6 @@ function EpisodeRecord() {
                     sx={{
                       fontWeight: 600,
                       color: "#343A4080",
-                      marginBottom: "12px",
                     }}
                   >
                     a qualquer momento!
@@ -214,7 +287,6 @@ function EpisodeRecord() {
                     sx={{
                       fontWeight: 600,
                       color: "#343A4080",
-                      marginBottom: "12px",
                     }}
                   >
                     Quando acabares a edição clica em confirmar!
@@ -257,8 +329,12 @@ function EpisodeRecord() {
                           onAdd: (id) => {
                             addAudioToSegment(id);
                           },
+                          onRemove: (id) => {
+                            removeAudioFromSegment(id);
+                          },
                         }
                   }
+                  selectedSegment={addAudioSegment?.ID}
                 />
                 {isEditingTemplate && (
                   <div
@@ -269,8 +345,18 @@ function EpisodeRecord() {
                   </div>
                 )}
               </div>
-            )}
+            )}{" "}
           </div>
+
+          {addAudioSegment && (
+            <AudioNew
+              type={addAudioSegment.type}
+              handleConfirm={(audio, type) =>
+                confirmAddAudioToSegment(audio, type)
+              }
+              handleCancel={cancelAddAudioToSegment}
+            />
+          )}
         </>
       )}
       {addTemplateCardModalOpen && (

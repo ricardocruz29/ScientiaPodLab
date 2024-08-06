@@ -19,7 +19,7 @@ export const resourceService = createApi({
     }),
     createResource: builder.mutation({
       query: (resourceData) => ({
-        url: "",
+        url: "/",
         method: "POST",
         data: resourceData,
       }),
@@ -36,6 +36,7 @@ export const resourceService = createApi({
 
 export const {
   useGetResourcesQuery,
+  useLazyGetResourcesQuery,
   useDeleteResourceMutation,
   useCreateResourceMutation,
   useCreateTTSResourceMutation,

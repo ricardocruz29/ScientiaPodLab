@@ -1,0 +1,39 @@
+.audio_new_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resources_section {
+  display: flex;
+  flex-direction: column;
+}
+
+.resources_row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 18px;
+  max-width: calc(100vw - 16px - 260px - 4px - 48px);
+  height: 300px;
+  overflow-x: auto;
+  padding-top: 1rem;
+  padding-left: 1.2rem;
+  margin-left: -1.2rem;
+}
+
+.actions {
+  margin-left: auto;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+  padding-right: 25px;
+}
+
+.import_section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding-right: 25px;
+}

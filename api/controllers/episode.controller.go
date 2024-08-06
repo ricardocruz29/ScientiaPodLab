@@ -14,6 +14,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type EpisodeController struct {}
@@ -28,7 +29,9 @@ func (uc *EpisodeController) GetPodcastEpisodes(c *gin.Context) {
 	
 		var episodes []models.Episode
 		// Retrieve templates with Type = "Platform" or UserID = userID
-		err := database.DB.Preload("Segments").Where("podcast_id = ?", podcastId).Find(&episodes).Error
+		err := database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+			return db.Order("position asc")
+	}).Where("podcast_id = ?", podcastId).Find(&episodes).Error
 		if err != nil {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting episodes"})
 				return
@@ -43,7 +46,9 @@ func (uc *EpisodeController) GetEpisode(c *gin.Context) {
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
-	err := database.DB.Preload("Segments").First(&episode, id).Error
+	err := database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+    return db.Order("position asc")
+}).First(&episode, id).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
 			return
@@ -115,10 +120,29 @@ func (uc *EpisodeController) CreateEpisode(c *gin.Context) {
 			return
 	}
 
-	//Create podcast in db
+	//Create Segments
+	var template models.Template
+	// Retrieve the Template by its ID
+	err = database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+    return db.Order("position asc")
+}).First(&template, templateId).Error
+	if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Template not found"})
+			return
+	}
+	// Create the new array of simplified segments
+	var simplifiedSegments []models.EpisodeSegment
+	for _, segment := range template.Segments {
+		simplifiedSegments = append(simplifiedSegments, models.EpisodeSegment{
+			Position: segment.Position,
+			Type:     segment.Type,
+		})
+	}
+
+	//Create episode in db
 	cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("images", fileName)
 
-	episode := models.Episode{Name: name, Image: cdnFilePath, Description: description, TemplateID: templateId, PodcastID: podcastId}
+	episode := models.Episode{Name: name, Image: cdnFilePath, Description: description, TemplateID: templateId, PodcastID: podcastId, Segments: simplifiedSegments}
 	result := database.DB.Create(&episode)
 
 	if result.Error != nil {
@@ -246,7 +270,9 @@ func (uc *EpisodeController) RenderEpisode(c *gin.Context) {
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
-	err := database.DB.Preload("Segments").First(&episode, episodeId).Error
+	err := database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+    return db.Order("position asc")
+}).First(&episode, episodeId).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
 			return
@@ -287,7 +313,9 @@ func (uc *EpisodeController) PublishEpisode(c *gin.Context) {
 
 	var episode models.Episode
 	// Retrieve the Episode by its ID
-	err := database.DB.Preload("Segments").First(&episode, id).Error
+	err := database.DB.Preload("Segments", func(db *gorm.DB) *gorm.DB {
+    return db.Order("position asc")
+}).First(&episode, id).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode not found"})
 			return

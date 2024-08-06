@@ -17,6 +17,7 @@ func SetupSegmentRoutes(r *gin.Engine){
       segmentRouter.POST("/template",  middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.CreateTemplateSegmentValidator{}, nil), func(c *gin.Context) { sc.CreateTemplateSegment(c)})
       segmentRouter.DELETE("/:id/template",  middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) { sc.DeleteTemplateSegment(c)})
       segmentRouter.POST("/episode",  middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.CreateEpisodeSegmentValidator{}, nil), func(c *gin.Context) { sc.CreateEpisodeSegment(c)})
+      segmentRouter.PUT("/:id/episode",  middleware.AuthMiddleware(), middleware.ValidationMiddleware(validators.UpdateEpisodeSegmentsValidator{}, nil), func(c *gin.Context) { sc.UpdateEpisodeSegments(c)})
       segmentRouter.DELETE("/:id/episode",  middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) { sc.DeleteEpisodeSegment(c)})
     }
 }

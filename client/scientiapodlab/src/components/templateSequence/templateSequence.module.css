@@ -23,6 +23,10 @@
   padding: 6px;
 }
 
+.template_sequence_card_on_add {
+  border: 5px solid #58c49b;
+}
+
 .template_sequence_card_audio {
   display: flex;
   flex-direction: column;

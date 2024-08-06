@@ -31,6 +31,13 @@ export const segmentService = createApi({
         data: episodeSegmentData,
       }),
     }),
+    updateEpisodeSegments: builder.mutation({
+      query: ({ segments, episodeID }) => ({
+        url: `/${episodeID}/episode`,
+        method: "PUT",
+        data: { segments },
+      }),
+    }),
   }),
 });
 
@@ -39,4 +46,5 @@ export const {
   useCreateTemplateSegmentMutation,
   useDeleteEpisodeSegmentMutation,
   useCreateEpisodeSegmentMutation,
+  useUpdateEpisodeSegmentsMutation,
 } = segmentService;

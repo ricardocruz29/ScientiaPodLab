@@ -2,11 +2,10 @@ import { Typography } from "@mui/material";
 import styles from "./templateSequence.module.css";
 import { TEMPLATE_TYPE } from "../../lib/constants/template";
 import CloseIcon from "@mui/icons-material/Close";
-import FloatButton from "../floatButton/floatButton";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import AudioPlayer from "../audioPlayer/audioPlayer";
 
 function TemplateSequence({
   size = "medium",
@@ -14,8 +13,8 @@ function TemplateSequence({
   actions,
   isDraggable = false,
   onDragEnd,
+  selectedSegment,
 }) {
-  console.log("actions: ", actions);
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -44,6 +43,9 @@ function TemplateSequence({
                         className={`${styles.template_sequence_card} ${
                           size === "small" &&
                           styles.template_sequence_card_small
+                        } ${
+                          selectedSegment === item.ID &&
+                          styles.template_sequence_card_on_add
                         }`}
                         style={{
                           backgroundColor: TEMPLATE_TYPE[item.type].color,
@@ -72,7 +74,7 @@ function TemplateSequence({
                               {actions && actions.onRemove && (
                                 <div
                                   onClick={() => {
-                                    actions.onRemove(item.audio.id);
+                                    actions.onRemove(item.ID);
                                   }}
                                   style={{ cursor: "pointer" }}
                                 >
@@ -83,25 +85,20 @@ function TemplateSequence({
                                 </div>
                               )}
                             </div>
-
-                            {actions && actions.onPlay && (
-                              <FloatButton
-                                size="small"
-                                icon={
-                                  <PlayArrowIcon
-                                    sx={{ color: "343A40" }}
-                                    fontSize="small"
-                                  />
-                                }
-                                onButtonClick={() => {
-                                  actions.onPlay(item.audio.id);
-                                }}
-                              />
-                            )}
+                            <AudioPlayer
+                              size="small"
+                              showTime={false}
+                              audioFile={item.audio.url}
+                            />
                           </div>
                         )}
                         {actions && actions.onAdd && !item.audio && (
-                          <button className={styles.template_sequence_card_add}>
+                          <button
+                            className={styles.template_sequence_card_add}
+                            onClick={() => {
+                              actions.onAdd(item.ID);
+                            }}
+                          >
                             <AddIcon fontSize="small" sx={{ color: "#fff" }} />
                           </button>
                         )}

@@ -3,14 +3,17 @@ import styles from "./card.module.css";
 import TemplateSequence from "../templateSequence/templateSequence";
 import AudioWave from "../audioWave/audioWave";
 
-function Card({ type, size = "medium", data }) {
+function Card({ type, size = "medium", data, onClick, isSelected = false }) {
   return (
     <div
       className={`${styles.card} ${
         type === "template" && styles.template_card
       } ${type === "audio" && styles.audio_card} ${
         type === "episode" && styles.episode_card
-      } ${size === "small" && styles.small_card}`}
+      } ${size === "small" && styles.small_card} ${
+        onClick !== undefined && styles.pointer
+      } ${isSelected && styles.selected}`}
+      onClick={onClick ? () => onClick() : undefined}
     >
       <Typography
         variant="h6"

@@ -13,19 +13,21 @@ function AudioPlayer({ audioFile, showTime = true, size = "medium", onEnd }) {
   const { load, togglePlayPause, playing, duration } = useAudioPlayer();
 
   useEffect(() => {
-    load(audioFile, {
-      format: "mp3",
-      autoplay: false,
-      onplay: () => {
-        intervalRef.current = setInterval(() => {
-          setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
-        }, 1000);
-      },
-      onpause: () => {
-        clearInterval(intervalRef.current);
-      },
-      onend: () => console.log("onEnd"),
-    });
+    if (audioFile) {
+      load(audioFile, {
+        format: "mp3",
+        autoplay: false,
+        onplay: () => {
+          intervalRef.current = setInterval(() => {
+            setCurrentTime((prevCurrentTime) => prevCurrentTime + 1);
+          }, 1000);
+        },
+        onpause: () => {
+          clearInterval(intervalRef.current);
+        },
+        onend: () => console.log("onEnd"),
+      });
+    }
 
     return () => {
       if (intervalRef.current) {

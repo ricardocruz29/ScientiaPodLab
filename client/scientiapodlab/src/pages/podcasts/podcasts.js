@@ -147,7 +147,6 @@ function Podcasts() {
                     variant="h6"
                     sx={{
                       fontWeight: 600,
-                      marginBottom: "12px",
                     }}
                   >
                     {podcast.name}
@@ -230,6 +229,8 @@ function Podcasts() {
                         <>
                           Map Episodes Card{" "}
                           <Button
+                            type="fill_green"
+                            size="small"
                             text="Gravar novo episódio"
                             onButtonClick={() =>
                               setEpisodeWizardOpenID(podcast.ID)
