@@ -13,7 +13,7 @@
 
 .small_card {
   width: 130px;
-  height: 145px;
+  min-height: 145px;
 }
 
 .pointer {

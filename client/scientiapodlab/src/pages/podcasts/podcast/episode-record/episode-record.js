@@ -11,11 +11,15 @@ import Button from "../../../../components/button/button";
 import NewTemplateItemModal from "../../../../components/modals/newTemplateItem/newTemplateItem";
 import AddIcon from "@mui/icons-material/Add";
 import AudioNew from "../../../../components/audioNew/audioNew";
-import { useCreateResourceMutation } from "../../../../redux/api/services/resourceService";
+import {
+  useCreateResourceMutation,
+  useCreateTTSResourceMutation,
+} from "../../../../redux/api/services/resourceService";
 import { useUpdateEpisodeSegmentsMutation } from "../../../../redux/api/services/segmentService";
 
 function EpisodeRecord() {
   const [createResourceMutation] = useCreateResourceMutation();
+  const [createTTSResourceMutation] = useCreateTTSResourceMutation();
   const [updateEpisodeSegmentsMutation] = useUpdateEpisodeSegmentsMutation();
 
   // Middlewares
@@ -181,6 +185,32 @@ function EpisodeRecord() {
 
       const { data: resource } = await createResourceMutation(formData);
       console.log("resource: ", resource);
+
+      const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
+      segment.audio = { ...resource, id: resource?.ID };
+    }
+
+    if (type === "Gravar") {
+      const formData = new FormData();
+
+      formData.append("resource_audio", audio.file);
+      formData.append("type_segment", addAudioSegment.type);
+      formData.append("name", audio.name);
+      formData.append("episode_segment_id", addAudioSegment.ID);
+
+      const { data: resource } = await createResourceMutation(formData);
+      console.log("resource: ", resource);
+
+      const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
+      segment.audio = { ...resource, id: resource?.ID };
+    }
+
+    if (type === "Texto") {
+      const { data: resource } = await createTTSResourceMutation({
+        name: audio.name,
+        text: audio.text,
+        voice: audio.voice,
+      });
 
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
       segment.audio = { ...resource, id: resource?.ID };

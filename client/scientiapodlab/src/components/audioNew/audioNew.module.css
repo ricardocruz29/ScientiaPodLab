@@ -37,3 +37,49 @@
 
   padding-right: 25px;
 }
+
+.record_section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding-right: 25px;
+}
+
+.record_section_audio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tts_section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 25px;
+}
+
+.tts_section_content {
+  display: flex;
+  gap: 24px;
+}
+
+.tts_section_content > div {
+  width: 385px;
+}
+
+.tts_section_content form {
+  flex: 1 1 100%;
+}
+
+.tts_section_content_voices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tts_section_content_voices_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}

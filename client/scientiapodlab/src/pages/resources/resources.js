@@ -65,19 +65,13 @@ function Resources() {
       filtered_sound_effects = filter
         ? resources.filter(
             (resource) =>
-              (resource.type_segment === "SoundEffect" ||
-                resource.type_segment === "Intro" ||
-                resource.type_segment === "Outro" ||
-                resource.type_segment === "Content") &&
+              resource.type_segment === "SoundEffect" &&
               resource.type === filter &&
               !deletedResources.includes(resource.ID)
           )
         : resources.filter(
             (resource) =>
-              (resource.type_segment === "SoundEffect" ||
-                resource.type_segment === "Intro" ||
-                resource.type_segment === "Outro" ||
-                resource.type_segment === "Content") &&
+              resource.type_segment === "SoundEffect" &&
               !deletedResources.includes(resource.ID)
           );
 

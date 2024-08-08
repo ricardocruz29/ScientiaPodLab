@@ -1,6 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { useGetResourcesQuery } from "../../redux/api/services/resourceService";
-import { Tabs, Tab, Skeleton, Alert } from "@mui/material";
+import {
+  Tabs,
+  Tab,
+  Skeleton,
+  Alert,
+  TextField,
+  Typography,
+} from "@mui/material";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import MicIcon from "@mui/icons-material/Mic";
@@ -9,6 +16,14 @@ import styles from "./audioNew.module.css";
 import Card from "../../components/card/card";
 import Button from "../button/button";
 import Dropzone from "../dropzone/dropzone";
+import FloatButton from "../../components/floatButton/floatButton";
+import AudioWave from "../audioWave/audioWave";
+import AudioVoiceRecorder from "../audioVoiceRecorder/audioVoiceRecorder";
+import {
+  newAudioNameValidationSchema,
+  newAudioTTSValidationSchema,
+} from "../../validators/newAudio.validator";
+import { Formik, Form, Field } from "formik";
 
 function AudioNew({ type, handleConfirm, handleCancel }) {
   const { data: resources, isLoading: isLoadingResources } =
@@ -33,10 +48,22 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
   const [error, setError] = useState(false);
 
   const onHandleConfirm = () => {
+    const currentTab = tabs?.find((t) => t.active)?.label;
+
     if (!newAudio) {
       setError(true);
     } else {
-      handleConfirm(newAudio, tabs?.find((t) => t.active)?.label);
+      if (currentTab === "Gravar" && newAudio.name === "") {
+        setError(true);
+      } else if (
+        currentTab === "Texto" &&
+        newAudio.name === "" &&
+        newAudio.text === ""
+      ) {
+        setError(true);
+      } else {
+        handleConfirm(newAudio, currentTab);
+      }
     }
   };
 
@@ -65,6 +92,20 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
   const onReset = () => {
     setError(false);
     setNewAudio(undefined);
+  };
+
+  //Specific to type Gravar
+  const [isRecording, setIsRecording] = useState(false);
+  const onEndRecordAudio = (blob) => {
+    setIsRecording(false);
+    setError(false);
+    if (blob) {
+      setNewAudio({
+        ...newAudio,
+        file: blob,
+        preview: URL.createObjectURL(blob),
+      });
+    }
   };
 
   useEffect(() => {
@@ -118,6 +159,8 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
     }
   }, [type]);
 
+  console.log("newAudio: ", newAudio);
+
   return (
     <div className={styles.audio_new_container}>
       {tabs?.length > 0 && (
@@ -156,13 +199,7 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
             {!isLoadingResources && resources && (
               <div className={styles.resources_row}>
                 {resources
-                  .filter(
-                    (r) =>
-                      r.type_segment === "SoundEffect" ||
-                      r.type_segment === "Intro" ||
-                      r.type_segment === "Outro" ||
-                      r.type_segment === "Content"
-                  )
+                  .filter((r) => r.type_segment === "SoundEffect")
                   ?.map((resource, index) => {
                     return (
                       <Card
@@ -248,6 +285,198 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
             <div className={styles.alert}>
               <Alert severity="error">
                 Tens de escolher um áudio para seguires em frente!
+              </Alert>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* //! Recording */}
+      {tabs?.find((t) => t.active)?.label === "Gravar" && (
+        <section className={styles.record_section}>
+          <Formik
+            initialValues={{ name: "" }}
+            validationSchema={newAudioNameValidationSchema}
+          >
+            {({ setFieldValue }) => (
+              <Form>
+                <Field name="name">
+                  {({ field, meta }) => (
+                    <TextField
+                      type="text"
+                      label="Nome áudio"
+                      {...field}
+                      value={newAudio?.name}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setNewAudio({ ...newAudio, name: value });
+                        setFieldValue("name", value);
+                      }}
+                      fullWidth
+                      error={meta.touched && Boolean(meta.error)}
+                      helperText={meta.touched && meta.error}
+                    />
+                  )}
+                </Field>
+              </Form>
+            )}
+          </Formik>
+          <div className={styles.record_section_audio}>
+            {!isRecording && !newAudio?.preview && (
+              <FloatButton
+                icon={<MicIcon sx={{ color: "#FF0000", fontSize: "48px" }} />}
+                onButtonClick={() => {
+                  setIsRecording(true);
+                }}
+              />
+            )}
+            {isRecording && !newAudio?.preview && (
+              <AudioVoiceRecorder
+                onEnd={onEndRecordAudio}
+                onClose={() => setIsRecording(false)}
+              />
+            )}
+            {!isRecording && newAudio?.preview && (
+              <AudioWave audioFile={newAudio.preview} />
+            )}
+          </div>
+
+          {error && (
+            <div className={styles.alert}>
+              <Alert severity="error">
+                Tens de gravar um áudio e atribuires-lhe um nome para seguires
+                em frente!
+              </Alert>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* //! TTS */}
+      {tabs?.find((t) => t.active)?.label === "Texto" && (
+        <section className={styles.tts_section}>
+          <div className={styles.tts_section_content}>
+            <div className={styles.tts_section_content_voices}>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: 600,
+                  color: "#343A4080",
+                }}
+              >
+                Escolhe uma Voz entre as disponíveis
+              </Typography>
+              <div className={styles.tts_section_content_voices_grid}>
+                <Card
+                  type="audio"
+                  size="small"
+                  data={{
+                    title: "Voz A.mp3",
+                    audioFile: "http://localhost:4000/cdn/audios/tts/a.mp3",
+                  }}
+                  onClick={() =>
+                    setNewAudio({ ...newAudio, voice: "pt-PT-Standard-a" })
+                  }
+                  isSelected={newAudio?.voice === "pt-PT-Standard-a"}
+                ></Card>
+                <Card
+                  type="audio"
+                  size="small"
+                  data={{
+                    title: "Voz B.mp3",
+                    audioFile: "http://localhost:4000/cdn/audios/tts/b.mp3",
+                  }}
+                  onClick={() =>
+                    setNewAudio({ ...newAudio, voice: "pt-PT-Standard-B" })
+                  }
+                  isSelected={newAudio?.voice === "pt-PT-Standard-B"}
+                ></Card>
+                <Card
+                  type="audio"
+                  size="small"
+                  data={{
+                    title: "Voz C.mp3",
+                    audioFile: "http://localhost:4000/cdn/audios/tts/c.mp3",
+                  }}
+                  onClick={() =>
+                    setNewAudio({ ...newAudio, voice: "pt-PT-Standard-C" })
+                  }
+                  isSelected={newAudio?.voice === "pt-PT-Standard-C"}
+                ></Card>
+                <Card
+                  type="audio"
+                  size="small"
+                  data={{
+                    title: "Voz D.mp3",
+                    audioFile: "http://localhost:4000/cdn/audios/tts/d.mp3",
+                  }}
+                  onClick={() =>
+                    setNewAudio({ ...newAudio, voice: "pt-PT-Standard-D" })
+                  }
+                  isSelected={newAudio?.voice === "pt-PT-Standard-D"}
+                ></Card>
+              </div>
+            </div>
+            <Formik
+              initialValues={{ name: "", text: "" }}
+              validationSchema={newAudioTTSValidationSchema}
+            >
+              {({ setFieldValue }) => (
+                <Form
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "24px",
+                  }}
+                >
+                  <Field name="name">
+                    {({ field, meta }) => (
+                      <TextField
+                        type="text"
+                        label="Nome áudio"
+                        {...field}
+                        value={newAudio?.name}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setNewAudio({ ...newAudio, name: value });
+                          setFieldValue("name", value);
+                        }}
+                        fullWidth
+                        error={meta.touched && Boolean(meta.error)}
+                        helperText={meta.touched && meta.error}
+                      />
+                    )}
+                  </Field>
+                  <Field name="text">
+                    {({ field, meta }) => (
+                      <TextField
+                        type="text"
+                        label="Texto"
+                        {...field}
+                        value={newAudio?.text}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setNewAudio({ ...newAudio, text: value });
+                          setFieldValue("text", value);
+                        }}
+                        multiline
+                        rows={11}
+                        fullWidth
+                        error={meta.touched && Boolean(meta.error)}
+                        helperText={meta.touched && meta.error}
+                      />
+                    )}
+                  </Field>
+                </Form>
+              )}
+            </Formik>
+          </div>
+
+          {error && (
+            <div className={styles.alert}>
+              <Alert severity="error">
+                Tens de escolher uma voz e escrever um texto para que possamos
+                gerar um áudio!
               </Alert>
             </div>
           )}
