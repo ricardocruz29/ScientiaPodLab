@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import useAuthRedirect from "../../../../hooks/useAuthRedirect";
 import useChangeActiveSidebar from "../../../../hooks/useChangeActiveSidebar";
-import { useGetEpisodeQuery } from "../../../../redux/api/services/episodeService";
+import {
+  useGetEpisodeQuery,
+  useRenderEpisodeMutation,
+} from "../../../../redux/api/services/episodeService";
 import styles from "./episode-record.module.css";
-import { Typography, Skeleton } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Typography, Skeleton, Alert } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import TemplateSequence from "../../../../components/templateSequence/templateSequence";
 import { reorder } from "../../../../lib/utils/reorder";
 import Button from "../../../../components/button/button";
@@ -12,13 +15,19 @@ import NewTemplateItemModal from "../../../../components/modals/newTemplateItem/
 import AddIcon from "@mui/icons-material/Add";
 import AudioNew from "../../../../components/audioNew/audioNew";
 import {
+  useCreateRecordResourceMutation,
   useCreateResourceMutation,
   useCreateTTSResourceMutation,
 } from "../../../../redux/api/services/resourceService";
 import { useUpdateEpisodeSegmentsMutation } from "../../../../redux/api/services/segmentService";
+import EpisodeRenderModal from "../../../../components/modals/episodeRender/episodeRender";
 
 function EpisodeRecord() {
+  const navigate = useNavigate();
+
+  const [renderEpisodeMutation] = useRenderEpisodeMutation();
   const [createResourceMutation] = useCreateResourceMutation();
+  const [createRecordResourceMutation] = useCreateRecordResourceMutation();
   const [createTTSResourceMutation] = useCreateTTSResourceMutation();
   const [updateEpisodeSegmentsMutation] = useUpdateEpisodeSegmentsMutation();
 
@@ -164,6 +173,8 @@ function EpisodeRecord() {
   };
 
   const confirmAddAudioToSegment = async (audio, type) => {
+    setError(false);
+
     console.log("audio: ", audio);
     const eSegments = [...episodeSegments];
 
@@ -193,12 +204,14 @@ function EpisodeRecord() {
     if (type === "Gravar") {
       const formData = new FormData();
 
+      console.log("audioFile: ", audio.file);
+
       formData.append("resource_audio", audio.file);
       formData.append("type_segment", addAudioSegment.type);
       formData.append("name", audio.name);
       formData.append("episode_segment_id", addAudioSegment.ID);
 
-      const { data: resource } = await createResourceMutation(formData);
+      const { data: resource } = await createRecordResourceMutation(formData);
       console.log("resource: ", resource);
 
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
@@ -215,8 +228,6 @@ function EpisodeRecord() {
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
       segment.audio = { ...resource, id: resource?.ID };
     }
-
-    console.log("eSegments after: ", eSegments);
     setEpisodeSegments(eSegments);
     setTmpEditableEpisodeSegments(eSegments);
 
@@ -229,6 +240,27 @@ function EpisodeRecord() {
 
   console.log("episode: ", episode);
   console.log("episodeSegments: ", episodeSegments);
+
+  const [error, setError] = useState(false);
+
+  const [episodeRenderModalOpen, setEpisodeRenderModalOpen] = useState(false);
+
+  const onGoBack = () => {
+    navigate("/podcasts");
+  };
+
+  const onRenderEpisode = () => {
+    if (episodeSegments.some((es) => !es.audio)) {
+      setError(true);
+    } else {
+      console.log("valid");
+      setEpisodeRenderModalOpen(true);
+      renderEpisodeMutation({
+        data: { noiseCancellation: "false" },
+        episodeID: episodeId,
+      });
+    }
+  };
 
   return (
     <div className={styles.page_container}>
@@ -387,13 +419,37 @@ function EpisodeRecord() {
               handleCancel={cancelAddAudioToSegment}
             />
           )}
+
+          {error && (
+            <div className={styles.alert}>
+              <Alert severity="error">
+                Para podermos gerar o teu áudio, tens de ter todos os segmnetos
+                com um áudio atribuido!
+              </Alert>
+            </div>
+          )}
+
+          {!addAudioSegment && (
+            <div className={styles.actions}>
+              <Button onButtonClick={onGoBack} type="red" text="Voltar atrás" />
+              <Button onButtonClick={onRenderEpisode} text="Gerar Áudio" />
+            </div>
+          )}
         </>
       )}
+
       {addTemplateCardModalOpen && (
         <NewTemplateItemModal
           isOpen={addTemplateCardModalOpen}
           handleClose={() => setAddTemplateCardModalOpen(false)}
           handleConfirm={(cardType) => addTemplateSection(cardType)}
+        />
+      )}
+
+      {episodeRenderModalOpen && (
+        <EpisodeRenderModal
+          isOpen={episodeRenderModalOpen}
+          handleClose={() => setEpisodeRenderModalOpen(false)}
         />
       )}
     </div>

@@ -24,6 +24,13 @@ export const resourceService = createApi({
         data: resourceData,
       }),
     }),
+    createRecordResource: builder.mutation({
+      query: (resourceData) => ({
+        url: "/record",
+        method: "POST",
+        data: resourceData,
+      }),
+    }),
     createTTSResource: builder.mutation({
       query: (resourceData) => ({
         url: "/tts",
@@ -39,5 +46,6 @@ export const {
   useLazyGetResourcesQuery,
   useDeleteResourceMutation,
   useCreateResourceMutation,
+  useCreateRecordResourceMutation,
   useCreateTTSResourceMutation,
 } = resourceService;

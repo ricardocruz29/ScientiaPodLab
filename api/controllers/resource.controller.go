@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"scipodlab_api/database"
 	"scipodlab_api/models"
@@ -36,6 +37,107 @@ func (uc *ResourceController) GetResources(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resources)
+}
+
+func (uc *ResourceController) CreateRecordedResource(c *gin.Context) {
+	userGin, _ := c.Get("user")
+	user := userGin.(models.User)
+
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<30) // 1GB
+
+	// Parse form data and setup the limit as 1gb
+	// ! This needs to be tested when frontend is up and running - The limit doesn't seem to be 1GB
+	if err := c.Request.ParseMultipartForm(10 << 30); err != nil {
+		log.Print("error" , err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid File, 1gb limit"})
+		return
+	}
+
+	//Get the resource file
+	resourceAudio, err := c.FormFile("resource_audio")
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"Error obtaining Resource Audio"})
+		return
+	}
+
+	//Get the Type Segment
+	typeSegment := c.Request.FormValue("type_segment")
+	if typeSegment == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No type segment was sent"})
+		return
+	}
+
+	//Get the Name
+	name := c.Request.FormValue("name")
+	if name == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error":"No name was sent"})
+		return
+	}
+
+	// Save the uploaded file as a temporary .webm file
+	tempFileName := uuid.New().String() + ".webm"
+	tempFilePath := filepath.Join(os.TempDir(), tempFileName)
+	if err := c.SaveUploadedFile(resourceAudio, tempFilePath); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error storing file"})
+		return
+	}
+
+	// Convert the .webm file to .mp3 using ffmpeg
+	mp3FileName := uuid.New().String() + ".mp3"
+	mp3FilePath := os.Getenv("CDN_LOCAL_PATH") + "/" + filepath.Join("audios/resources", mp3FileName)
+
+	cmd := exec.Command("ffmpeg", "-i", tempFilePath, "-f", "mp3", mp3FilePath)
+	if err := cmd.Run(); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error converting file to mp3"})
+		return
+	}
+
+	// Remove the temporary .webm file
+	if err := os.Remove(tempFilePath); err != nil {
+		log.Printf("Warning: Failed to remove temporary file: %s", tempFilePath)
+	}
+	//Create resource in db
+	cdnFilePath := os.Getenv("CDN_URL_PATH") + "/" + filepath.Join("audios/resources", mp3FileName)
+	resource := models.Resource{NameCDN: mp3FileName, Name: name, Url: cdnFilePath,  Type: "Custom", TypeSegment: typeSegment, UserID: user.ID}
+	result := database.DB.Create(&resource)
+
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating resource"})
+	}
+
+	// Get the EpisodeSegmentID if sent
+	strEpisodeSegmentId := c.Request.FormValue("episode_segment_id")
+	if strEpisodeSegmentId != "" {
+		episodeSegmentId, err := strconv.Atoi(strEpisodeSegmentId)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid episode_segment_id"})
+		}
+
+		var episodeSegment models.EpisodeSegment
+		// Retrieve the episode segment by its ID
+		err = database.DB.First(&episodeSegment, episodeSegmentId).Error
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Episode segment not found"})
+			return
+		}
+
+		// Add the resourceId to the episodeSegment and save it
+		resourceID := int(resource.ID)
+		episodeSegment.ResourceID = &resourceID
+		if err := database.DB.Save(&episodeSegment).Error; err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating episode segment"})
+			return
+		}
+
+		// Add the episodeSegment to the resource's EpisodeSegments slice and save the resource
+		resource.EpisodeSegments = append(resource.EpisodeSegments, episodeSegment)
+		if err := database.DB.Save(&resource).Error; err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error updating resource with episode segment"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, resource)
 }
 
 func (uc *ResourceController) CreateResource(c *gin.Context) {

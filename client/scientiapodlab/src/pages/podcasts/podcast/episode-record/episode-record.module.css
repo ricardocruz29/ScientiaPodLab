@@ -54,3 +54,9 @@
   justify-content: center;
   cursor: pointer;
 }
+
+.actions {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+}

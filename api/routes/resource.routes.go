@@ -16,6 +16,7 @@ func SetupResourceRoutes(r *gin.Engine){
     {
 			resourceRouter.GET("/", middleware.AuthMiddleware(),  func(c *gin.Context) { rc.GetResources(c)})
 			resourceRouter.POST("/", middleware.AuthMiddleware(), func(c *gin.Context) {rc.CreateResource(c)})
+			resourceRouter.POST("/record", middleware.AuthMiddleware(), func(c *gin.Context) {rc.CreateRecordedResource(c)})
 			resourceRouter.POST("/tts", middleware.AuthMiddleware(),  middleware.ValidationMiddleware(validators.CreateTTSValidator{}, nil), func(c *gin.Context) {rc.CreateTTSResource(c)})
 			resourceRouter.DELETE("/:id", middleware.AuthMiddleware(), middleware.ValidationMiddleware(nil, validators.IDParamsValidator{}), func(c *gin.Context) {rc.DeleteResource(c)})
     }
