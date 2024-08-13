@@ -247,6 +247,13 @@ function Episode() {
                   />
                 </div>
               )}
+              <div style={{ marginTop: "32px" }}>
+                <Button
+                  onButtonClick={() => navigate("/podcasts")}
+                  type="red"
+                  text="Voltar atrás"
+                />
+              </div>
             </div>
           </div>
         )}
