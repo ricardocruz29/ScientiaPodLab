@@ -109,7 +109,6 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
   };
 
   useEffect(() => {
-    console.log("insideUseEffect: ", type);
     if (type) {
       const availableTabs = [];
       if (type === "SoundEffect" || type === "TTS") {
@@ -158,8 +157,6 @@ function AudioNew({ type, handleConfirm, handleCancel }) {
       setTabs(availableTabs);
     }
   }, [type]);
-
-  console.log("newAudio: ", newAudio);
 
   return (
     <div className={styles.audio_new_container}>

@@ -461,7 +461,6 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                             onChange={(event) => {
                               field.onChange(event);
                               const selectedValue = event.target.value;
-                              console.log("Selected value:", selectedValue);
 
                               setValues({
                                 ...values,

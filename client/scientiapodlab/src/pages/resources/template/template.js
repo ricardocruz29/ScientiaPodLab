@@ -117,7 +117,6 @@ function Template() {
   const [addTemplateCardModalOpen, setAddTemplateCardModalOpen] =
     useState(false);
   const addTemplateCard = (cardType) => {
-    console.log("currentTemplateItems: ", templateItems);
     const items = [...templateItems];
 
     // Find the highest ID in the array

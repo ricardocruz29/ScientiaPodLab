@@ -14,6 +14,8 @@ import moment from "moment";
 import { PODCAST_GENRES } from "../../lib/constants/wizard";
 import InfoIcon from "@mui/icons-material/Info";
 import { useNavigate } from "react-router-dom";
+import Card from "../../components/card/card";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Podcasts() {
   const navigate = useNavigate();
@@ -25,7 +27,12 @@ function Podcasts() {
   useChangeActiveSidebar("podcasts");
 
   // Get data
-  const { data, isLoading } = useGetPodcastsQuery();
+  const { data, isLoading } = useGetPodcastsQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   useEffect(() => {
     if (data) setPodcasts(data);
@@ -34,8 +41,6 @@ function Podcasts() {
   const [podcastWizardOpen, setPodcastWizardOpen] = useState(false);
   const [episodeWizardOpenID, setEpisodeWizardOpenID] = useState();
   const [podcasts, setPodcasts] = useState([]);
-
-  console.log("podcasts: ", podcasts);
 
   const handleConfirm = async (values, mode) => {
     const formData = new FormData();
@@ -217,7 +222,23 @@ function Podcasts() {
                           >
                             RSS Feed: {podcast.rssFeed}
                           </Typography>
-                          <Tooltip title="O RSS Feed do podcast é uma lista que se atualiza automaticamente com todos os episódios do teu podcast. Quando gravares um novo episódio, esta lista é atualizada de forma automática. Cada podcast que criares terá um RSS Feed único. Com este link, podes publicar os teus podcasts nas plataformas que preferires. Assim, sempre que gravares um novo episódio, ele será automaticamente adicionado às tuas plataformas de podcasts favoritas. Para mais informações, visita a secção de FAQs.">
+                          <Tooltip
+                            title={
+                              <p style={{ fontSize: "12px" }}>
+                                O RSS Feed do podcast é uma lista que se
+                                atualiza automaticamente com todos os episódios
+                                do teu podcast. Quando gravares um novo
+                                episódio, esta lista é atualizada de forma
+                                automática. Cada podcast que criares terá um RSS
+                                Feed único. Com este link, podes publicar os
+                                teus podcasts nas plataformas que preferires.
+                                Assim, sempre que gravares um novo episódio, ele
+                                será automaticamente adicionado às tuas
+                                plataformas de podcasts favoritas. Para mais
+                                informações, visita a secção de FAQs.
+                              </p>
+                            }
+                          >
                             <InfoIcon
                               sx={{ color: "#58C49B", cursor: "pointer" }}
                             />
@@ -227,7 +248,38 @@ function Podcasts() {
 
                       {podcast.episodes?.length > 0 ? (
                         <>
-                          Map Episodes Card{" "}
+                          <div className={styles.episodes_list}>
+                            {podcast.episodes.map((episode, index) => {
+                              return (
+                                <Card
+                                  key={index}
+                                  type="episode"
+                                  size="small"
+                                  data={{
+                                    ...episode,
+                                    title: episode.name,
+                                    actions: [
+                                      {
+                                        icon: (
+                                          <VisibilityIcon
+                                            sx={{ color: "#fff" }}
+                                            fontSize="small"
+                                          />
+                                        ),
+                                        background: "#339AF0",
+                                        action: () => {
+                                          navigate(
+                                            `/podcasts/${episode.podcastId}/episode/${episode.ID}`
+                                          );
+                                        },
+                                      },
+                                    ],
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
+
                           <Button
                             type="fill_green"
                             size="small"

@@ -21,6 +21,7 @@ import {
 } from "../../../../redux/api/services/resourceService";
 import { useUpdateEpisodeSegmentsMutation } from "../../../../redux/api/services/segmentService";
 import EpisodeRenderModal from "../../../../components/modals/episodeRender/episodeRender";
+import { useLazyGetResourcesQuery } from "../../../../redux/api/services/resourceService";
 
 function EpisodeRecord() {
   const navigate = useNavigate();
@@ -38,13 +39,22 @@ function EpisodeRecord() {
   const { episodeId } = useParams();
 
   // Get data
-  const { data: episode, isLoading } = useGetEpisodeQuery({
-    episodeID: episodeId,
-  });
+  const { data: episode, isLoading } = useGetEpisodeQuery(
+    {
+      episodeID: episodeId,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
 
   const [episodeSegments, setEpisodeSegments] = useState();
   const [tmpEditableEpisodeSegments, setTmpEditableEpisodeSegments] =
     useState();
+
+  // Lazy query to get resources
+  const [getResources, { data: resourcesData }] = useLazyGetResourcesQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
 
   useEffect(() => {
     if (episode) {
@@ -56,13 +66,40 @@ function EpisodeRecord() {
           audio: undefined,
           ID: es.ID,
           isTmp: false,
+          resourceId: es.resourceId,
         });
       });
 
       setEpisodeSegments(eSegments);
       setTmpEditableEpisodeSegments(eSegments);
+
+      // If there are any segments with resourceId, trigger the resource fetch
+      if (eSegments.some((es) => es.resourceId !== undefined)) {
+        getResources();
+      }
     }
-  }, [episode]);
+  }, [episode, getResources]);
+
+  useEffect(() => {
+    if (resourcesData && episodeSegments.length > 0) {
+      const updatedSegments = episodeSegments.map((segment) => {
+        if (segment.resourceId !== undefined) {
+          // Find the corresponding resource in the resourcesData
+          const resource = resourcesData.find(
+            (res) => res.ID === segment.resourceId
+          );
+          return {
+            ...segment,
+            audio: resource ? { ...resource } : undefined, // Assign URL if resource found
+          };
+        }
+        return segment;
+      });
+
+      setEpisodeSegments(updatedSegments);
+      setTmpEditableEpisodeSegments(updatedSegments);
+    }
+  }, [resourcesData]);
 
   const [addTemplateCardModalOpen, setAddTemplateCardModalOpen] =
     useState(false);
@@ -175,13 +212,23 @@ function EpisodeRecord() {
   const confirmAddAudioToSegment = async (audio, type) => {
     setError(false);
 
-    console.log("audio: ", audio);
     const eSegments = [...episodeSegments];
 
-    console.log("eSegments before: ", eSegments);
-    console.log("addAudioSegment: ", addAudioSegment);
-
     if (type === "Biblioteca") {
+      const simplifiedEpisodeSegments = [];
+      episodeSegments.forEach((es) => {
+        simplifiedEpisodeSegments.push({
+          ID: es.ID,
+          type: es.type,
+          resourceId: es.ID === addAudioSegment.ID ? audio.ID : es.audio?.ID,
+        });
+      });
+
+      await updateEpisodeSegmentsMutation({
+        segments: simplifiedEpisodeSegments,
+        episodeID: episodeId,
+      });
+
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
       segment.audio = { ...audio, id: audio.ID };
     }
@@ -195,7 +242,6 @@ function EpisodeRecord() {
       formData.append("episode_segment_id", addAudioSegment.ID);
 
       const { data: resource } = await createResourceMutation(formData);
-      console.log("resource: ", resource);
 
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
       segment.audio = { ...resource, id: resource?.ID };
@@ -204,15 +250,12 @@ function EpisodeRecord() {
     if (type === "Gravar") {
       const formData = new FormData();
 
-      console.log("audioFile: ", audio.file);
-
       formData.append("resource_audio", audio.file);
       formData.append("type_segment", addAudioSegment.type);
       formData.append("name", audio.name);
       formData.append("episode_segment_id", addAudioSegment.ID);
 
       const { data: resource } = await createRecordResourceMutation(formData);
-      console.log("resource: ", resource);
 
       const segment = eSegments.find((i) => i.ID === addAudioSegment.ID);
       segment.audio = { ...resource, id: resource?.ID };
@@ -238,9 +281,6 @@ function EpisodeRecord() {
     setAddAudioSegment(undefined);
   };
 
-  console.log("episode: ", episode);
-  console.log("episodeSegments: ", episodeSegments);
-
   const [error, setError] = useState(false);
 
   const [episodeRenderModalOpen, setEpisodeRenderModalOpen] = useState(false);
@@ -253,7 +293,6 @@ function EpisodeRecord() {
     if (episodeSegments.some((es) => !es.audio)) {
       setError(true);
     } else {
-      console.log("valid");
       setEpisodeRenderModalOpen(true);
       renderEpisodeMutation({
         data: { noiseCancellation: "false" },

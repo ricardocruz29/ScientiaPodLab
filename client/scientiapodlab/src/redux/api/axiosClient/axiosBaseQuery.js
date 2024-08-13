@@ -24,7 +24,6 @@ const axiosBaseQuery =
       return { data: result.data || {} }; // Return an empty object if no data
     } catch (axiosError) {
       let err = axiosError;
-      console.log("error: ", err);
       return {
         error: { status: err.response?.status, data: err.response?.data },
       };
