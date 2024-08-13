@@ -16,6 +16,7 @@ import {
   Select,
   InputLabel,
   FormHelperText,
+  Alert,
 } from "@mui/material";
 import { Skeleton } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -341,6 +342,11 @@ function Template() {
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
                     Sequência Sugerida
                   </Typography>
+
+                  <Alert severity="warning">
+                    Podes reordenar as secções ao arrastá-las com o rato!
+                  </Alert>
+
                   <div className={styles.template_sequence_add_row}>
                     <TemplateSequence
                       template={templateItems}

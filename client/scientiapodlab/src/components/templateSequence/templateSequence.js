@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import styles from "./templateSequence.module.css";
 import { TEMPLATE_TYPE } from "../../lib/constants/template";
 import CloseIcon from "@mui/icons-material/Close";
@@ -6,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AudioPlayer from "../audioPlayer/audioPlayer";
+import { Typography } from "@mui/material";
 
 function TemplateSequence({
   size = "medium",

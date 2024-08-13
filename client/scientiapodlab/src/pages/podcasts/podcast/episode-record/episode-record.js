@@ -410,42 +410,50 @@ function EpisodeRecord() {
               )}
             </div>
             {episodeSegments && (
-              <div className={styles.template_sequence_add_row}>
-                <TemplateSequence
-                  template={
-                    !isEditingTemplate
-                      ? episodeSegments
-                      : tmpEditableEpisodeSegments
-                  }
-                  isDraggable={isEditingTemplate}
-                  onDragEnd={onDragEnd}
-                  actions={
-                    isEditingTemplate
-                      ? {
-                          onRemoveTemplateSection: (id) => {
-                            removeTemplateSection(id);
-                          },
-                        }
-                      : {
-                          onAdd: (id) => {
-                            addAudioToSegment(id);
-                          },
-                          onRemove: (id) => {
-                            removeAudioFromSegment(id);
-                          },
-                        }
-                  }
-                  selectedSegment={addAudioSegment?.ID}
-                />
+              <>
                 {isEditingTemplate && (
-                  <div
-                    className={styles.template_sequence_add_row_button}
-                    onClick={() => setAddTemplateCardModalOpen(true)}
-                  >
-                    <AddIcon sx={{ color: "#58C49B", fontSize: "128px" }} />
-                  </div>
+                  <Alert severity="warning">
+                    Podes reordenar as secções ao arrastá-las com o rato!
+                  </Alert>
                 )}
-              </div>
+
+                <div className={styles.template_sequence_add_row}>
+                  <TemplateSequence
+                    template={
+                      !isEditingTemplate
+                        ? episodeSegments
+                        : tmpEditableEpisodeSegments
+                    }
+                    isDraggable={isEditingTemplate}
+                    onDragEnd={onDragEnd}
+                    actions={
+                      isEditingTemplate
+                        ? {
+                            onRemoveTemplateSection: (id) => {
+                              removeTemplateSection(id);
+                            },
+                          }
+                        : {
+                            onAdd: (id) => {
+                              addAudioToSegment(id);
+                            },
+                            onRemove: (id) => {
+                              removeAudioFromSegment(id);
+                            },
+                          }
+                    }
+                    selectedSegment={addAudioSegment?.ID}
+                  />
+                  {isEditingTemplate && (
+                    <div
+                      className={styles.template_sequence_add_row_button}
+                      onClick={() => setAddTemplateCardModalOpen(true)}
+                    >
+                      <AddIcon sx={{ color: "#58C49B", fontSize: "128px" }} />
+                    </div>
+                  )}
+                </div>
+              </>
             )}{" "}
           </div>
 
