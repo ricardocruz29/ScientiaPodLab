@@ -8,7 +8,7 @@ import Template from "../pages/resources/template/template";
 import Podcasts from "../pages/podcasts/podcasts";
 import EpisodeRecord from "../pages/podcasts/podcast/episode-record/episode-record";
 import Episode from "../pages/podcasts/podcast/episode/episode";
-import FAQs from "../pages/faqs/faqs";
+import Help from "../pages/help/help";
 
 export const router = createBrowserRouter([
   {
@@ -37,8 +37,8 @@ export const router = createBrowserRouter([
         element: <Episode />,
       },
       {
-        path: "/faqs",
-        element: <FAQs />,
+        path: "/help",
+        element: <Help />,
       },
     ],
   },

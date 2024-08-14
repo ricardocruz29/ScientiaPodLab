@@ -235,7 +235,7 @@ function Podcasts() {
                                 Assim, sempre que gravares um novo episódio, ele
                                 será automaticamente adicionado às tuas
                                 plataformas de podcasts favoritas. Para mais
-                                informações, visita a secção de FAQs.
+                                informações, visita a secção de Ajuda.
                               </p>
                             }
                           >

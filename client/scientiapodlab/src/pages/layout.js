@@ -52,17 +52,17 @@ export const Layout = () => {
               </Typography>
             </Link>
           </li>
-          <li onClick={() => clickChangeActiveSidebar("faqs")}>
+          <li onClick={() => clickChangeActiveSidebar("help")}>
             <Link
-              to="/faqs"
-              className={activeSidebar === "faqs" ? "link-active" : "link"}
+              to="/help"
+              className={activeSidebar === "help" ? "link-active" : "link"}
             >
               <QuestionMarkIcon fontSize="medium"></QuestionMarkIcon>
               <Typography
                 variant="body1"
                 sx={{ fontSize: "18px", fontWeight: 500 }}
               >
-                FAQs
+                Ajuda
               </Typography>
             </Link>
           </li>
