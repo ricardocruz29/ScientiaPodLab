@@ -13,7 +13,7 @@ export const resourceService = createApi({
     }),
     deleteResource: builder.mutation({
       query: ({ resourceID }) => ({
-        url: `/${resourceID}/`,
+        url: `/${resourceID}`,
         method: "DELETE",
       }),
     }),

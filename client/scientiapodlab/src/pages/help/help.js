@@ -51,7 +51,8 @@ function Help() {
           </Typography>
           <Typography paragraph>
             Considerando este problema, surgiu o ScientiaPodLab, uma plataforma
-            unificadora para a criação de podcasts de comunicação de ciência.
+            unificadora para a criação de podcasts de comunicação de ciência. Lê
+            os capítulos seguintes para que te consigamos ajudar ao máximo!
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -59,7 +60,9 @@ function Help() {
       {/* Comunicação de Ciência */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Comunicação de Ciência</Typography>
+          <Typography variant="h6">
+            O que significa Comunicação de Ciência?
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography paragraph>
@@ -71,18 +74,36 @@ function Help() {
           </Typography>
           <Typography paragraph>
             Existem três razões principais que levam os cientistas à realização
-            de comunicação de ciência: Porque têm de o fazer, porque querem e
-            porque devem. Têm de o fazer porque muito dos fundos da investigação
-            científica resultam das taxas pagas pela sociedade. A sociedade
-            interessa-se pelos descobrimentos e pelos falhanços desta elite.
+            de comunicação de ciência:{" "}
+            <strong>
+              Porque têm de o fazer, porque querem e porque devem.
+            </strong>
           </Typography>
           <Typography paragraph>
-            Querem-no fazer porque gostam da ciência e, consequentemente, gostam
-            de falar com pessoas, não apenas cientistas, mas também com amigos,
-            família e quem esteja interessado em ouvir. Devem-no fazer porque
-            enquanto cientistas, têm a responsabilidade de questionar argumentos
-            não provados. Ao fazerem-no, ensinam os cidadãos a questionar aquilo
-            que veem.
+            <strong>Têm de o fazer</strong> porque muito dos fundos da
+            investigação científica resultam das taxas pagas pela sociedade. A
+            sociedade interessa-se pelos descobrimentos e pelos falhanços desta
+            elite.
+          </Typography>
+          <Typography paragraph>
+            <strong>Querem-no fazer</strong> porque gostam da ciência e,
+            consequentemente, gostam de falar com pessoas, não apenas
+            cientistas, mas também com amigos, família e quem esteja interessado
+            em ouvir.
+          </Typography>
+          <Typography paragraph>
+            <strong>Devem-no fazer</strong> porque enquanto cientistas, têm a
+            responsabilidade de questionar argumentos não provados. Ao
+            fazerem-no, ensinam os cidadãos a questionar aquilo que veem.
+          </Typography>
+          <Typography paragraph></Typography>
+          <Typography paragraph>
+            Com isto, não queremos de todo fazer-te sentir que tenhas de fazer
+            um podcast! Apenas estamos aqui para te encorajar e para te
+            ajudarmos ao máximo! Uma sociedade onde haja uma maior Comunicação
+            de Ciência é benéfica para todos. Sabemos que é um processo muito
+            díficil, e por isso estamos aqui para te facilitar o trabalho ao
+            máximo!
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -90,7 +111,7 @@ function Help() {
       {/* Podcasts */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Podcasts</Typography>
+          <Typography variant="h6">Como fazer um Podcast?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography paragraph>
@@ -109,33 +130,21 @@ function Help() {
             possível na rádio, em que o conteúdo publicado é controlado pela
             própria entidade.
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      {/* As Etapas de Criação de um Podcast */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">
-            As Etapas de Criação de um Podcast
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
           <Typography paragraph>
-            Embora a ideia de que a criação de um podcast é uma tarefa fácil,
-            ser transmitida à sociedade por plataformas de criação de podcasts,
-            é importante analisar o contexto e o objetivo do podcast.
+            <strong>As Etapas de Criação de um Podcast</strong>
           </Typography>
           <Typography paragraph>
             A criação de um podcast cujo objetivo é passar o tempo e, a criação
             de um podcast de comunicação de ciência representam dois processos
             completamente diferentes a nível de complexidade e,
             consequentemente, podemos estar perante uma tarefa árdua que não é
-            acessível a todos.
+            acessível à partida a todos. Mas não desistas já, estamos aqui para
+            te ajudar :)
           </Typography>
           <Typography paragraph>
             A criação de um podcast pode ser desmembrada em cinco pilares:
           </Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>Planeamento</li>
             <li>Organização dos episódios</li>
             <li>Equipamento e Gravação</li>
@@ -144,80 +153,180 @@ function Help() {
           </Typography>
           <Typography paragraph>
             Antes da gravação do podcast em si, existem duas etapas muito
-            importantes: o planeamento e a organização dos episódios.
+            importantes:{" "}
+            <strong>o planeamento e a organização dos episódios.</strong>
           </Typography>
           <Typography paragraph>
-            Na fase de planeamento, primeiramente, é importante definir o
-            objetivo do podcast e o público que se pretende atingir. De seguida,
-            é importante pensar no título do podcast e na descrição, considerada
-            a parte mais importante na decisão de ouvir um novo podcast
+            Na fase de <strong>planeamento</strong>, primeiramente, é importante
+            definir o objetivo do podcast e o público que se pretende atingir.
+            Pensa também no título e na descrição do podcast, e leva o tempo que
+            precisares. O título e a descrição são muitas vezes aquilo que
+            convence um ouvinte a ouvir o teu podcast ou não!
           </Typography>
           <Typography paragraph>
-            Na fase de organização dos episódios, a primeira pergunta que
-            devemos colocar é acerca da duração dos episódios.
+            Na fase de <strong>organização dos episódios</strong>, a primeira
+            pergunta que devemos colocar é acerca da duração dos episódios, e a
+            partir daí escolheres uma estrutura para o teu podcast que
+            corresponda ao objetivo e ao público do teu podcast.
+          </Typography>
+
+          <Typography paragraph>
+            <strong>
+              Tipos de estruturas e as suas vantagens e desvantagens:
+            </strong>
+          </Typography>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
+            <li>
+              Entrevista pode ajudar para quem não tem o background científico
+              para fazer sozinho. Fazer a orientação para que os convidados
+              toquem em certos pontos.
+            </li>
+            <li>
+              Na entrevista, o locutor pode ser alguém mais ligado à área de
+              comunicação, que irá entrevistar um investigador/cientista. Guia a
+              entrevista e “corrige” ou ajuda a desmembrar a comunicação feita
+              por alguém que talvez não esteja tão habituado a fazê-lo.
+            </li>
+            <li>
+              Monólogo pode ser arriscado porque ou fazemos algo criativo e
+              inovador ou então sente-se falta da presença do espetador. Quando
+              falamos sobre a nossa própria área, perdemos a noção do que é que
+              o público sabe.
+            </li>
+            <li>
+              No monólogo, preparar ao máximo a mensagem antes de começar a
+              falar. Para cientistas que não sejam da área, este método é um
+              bocado perigoso.
+            </li>
+            <li>
+              Storytelling aliado com efeitos sonoros pode conferir uma maior
+              imersão ao ouvinte.
+            </li>
+          </Typography>
+          <Typography paragraph></Typography>
+          <Typography paragraph>
+            Relativamente à estrutura, o monólogo foi identificado como um risco
+            porque ou se faz algo muito criativo ou inovador ou então pode-se
+            senti falta da presença do espetador. Quando falamos sobre a nossa
+            própria área, perdemos a noção do que é que o público sabe. A
+            entrevista neste contexto pode ser melhor, uma vez que pode juntar o
+            melhor de dois mundos. Alguém especialista na área científica, e
+            alguém com experiência em comunicação/jornalismo. Quando quisermos
+            incluir na estrutura alguém da área de comunicação que entrevista um
+            investigador/cientista, acho que ele por si só irá conseguir guiar a
+            entrevista e “corrigir” o cientista na comunicação.{" "}
           </Typography>
           <Typography paragraph>
-            De seguida, é importante pensar no título e no formato do episódio.
-            Depois destas duas fases concluídas é que a fase de gravação começa.
-            Em primeiro lugar é importante criar um guião, seja este mais
-            exaustivo ou mais livre.
+            A estrutura que escolhes é dinâmica/versátil, e pode incluir mais do
+            que uma destas "estruturas" clássicas. Tem apenas em atenção algumas
+            dicas relativamente à estrutura:
           </Typography>
           <Typography paragraph>
-            De seguida, é necessário pensar na questão do hardware e do software
-            a utilizar para a gravação do podcast. Esta decisão é importante
-            para alcançar uma boa qualidade de áudio, algo muito importante na
-            comunicação através do formato de áudio
+            <strong>Introdução - </strong>Para um podcast mais dinâmico,
+            apresenta-te de forma informal, e utiliza efeitos sonoros, música de
+            fundo, jingles, etc. Caso tenhas convidados, apresenta-os e
+            contextualiza a importância deles. Ainda na introdução, apresenta o
+            teu conteúdo. Faz-lo de forma dinâmica para apanhar a atenção dos
+            ouvintes. Se o teu objetivo for algo mais curto, secalhar a
+            introdução pode passar apenas pela passagem de uma música e um
+            slogan, não precisando de te apresentares.
           </Typography>
           <Typography paragraph>
-            Finalmente, depois de todo o pré-planeamento concluído, é que se
-            deve proceder à gravação do áudio
+            <strong>Comunicação - </strong>Existem muitas estruturas possíveis
+            para fazer o teu podcast. Escolhe a que se adequa melhor. Apesar de
+            não ser necessário manteres sempre a mesma estrutura nos episódios
+            do teu podcast, é comum usar apenas 1 ou 2 estruturas. Adequa o teu
+            tipo de discurso ao teu público alvo e também aos teus convidados.
+            Para uma comunicação melhor, tenta falar com um ritmo mais lento. É
+            importante para haver clareza no discurso na comunicação de ciência.
+            Dá exemplos do que estás a falar se for algo menos comum e que o teu
+            público possa não perceber.
           </Typography>
           <Typography paragraph>
-            Com a gravação concluída, realiza-se a fase de edição e produção do
-            episódio. Finalmente, com o episódio editado, chega-se à última fase
-            de criação de um podcast, a publicação e promoção, que envolve a
-            escolha de uma plataforma de hosting de podcasts e a submissão para
-            diretórios de podcasts como o Spotify, Apple Podcasts e Google
-            Podcasts.
+            <strong>Conteúdo - </strong>Credibiliza o conteúdo que transmites no
+            teu podcast. Através da fundamentação de onde retiras essa
+            informação (Seja através de livros, artigos, conhecimento próprio,
+            especialistas externos)
           </Typography>
           <Typography paragraph>
-            Em suma, à criação de um podcast estão inerentes várias etapas. A
-            ideia de os podcasts serem de fácil de criação pode não ser
-            totalmente verdade tendo em conta o tipo de conteúdo, o formato
-            escolhido e a literacia tecnológica do utilizador. No contexto da
-            comunicação de ciência através do formato podcast, para além da
-            dificuldade inerente à comunicação de ciência, surge também a
-            dificuldade de criação de um podcast.
+            <strong>Elementos Adicionais - </strong> Já pensaste em criar o teu
+            slogan? Pode ser um bom branding para o teu podcast. Faz uso de
+            músicas de fundo para dinamizar o teu podcast e emergir o ouvinte.
+            Contudo, cuidado para esta não se sobrepor à voz. Pode ser um bom
+            exemplo utilizares em momentos como a intro, a outro, ou em pausas
+            durante o episódio. O mesmo caso para os efeitos sonoros. Pode ser
+            importante para introduzir dinâmica ao teu podcast. Escolhe os
+            momentos certos para os utilizar.
           </Typography>
-          {/* Mais conteúdo aqui */}
+
+          <Typography paragraph>
+            Depois destas duas fases estarem concluídas é que devemos começar a
+            pensar na fase de gravação. Começa por criar um guião, seja este
+            mais exaustivo ou mais livre, e inspira-te nos templates que te
+            oferecémos. Podes a qualquer momento criar novos templates para que
+            ele se adeque ao que pretendes atingir com o episódio.
+          </Typography>
+          <Typography paragraph>
+            E não te esqueças também da questão do equipamento de gravação!
+            Tendo em conta os teus recursos e objetivo, a decisão pode passar
+            entre gravar com um telemóvel, ou então fazeres algum investimento
+            em equipamento de gravação de qualidade. É uma decisão que tens de
+            avaliar, mas um bom áudio a longo prazo é um fator bastante
+            importante!
+          </Typography>
+          <Typography paragraph>
+            Tens isto tudo pensado? Vamos passar à gravação do áudio! Aqui na
+            plataforma tentamos fazer com que este processo seja o mais
+            intuitivo possível. Escolhes um template, e vais preenchendo os
+            segmentos! Se a meio tiveres alguma dúvida, não hesites em voltar a
+            trás e vir ler esta informação novamente! Nós vamos guardando o teu
+            episódio, e podes retomar a gravação sempre que queiras.
+          </Typography>
+          <Typography paragraph>
+            Finalmente, com o episódio gravado, chega-se à última fase de
+            criação de um podcast, a sua <strong>publicação</strong>. Eu sei que
+            este passo é bastante assustador, mas vamos tentar quebrar a sua
+            complexidade ao máximo.
+          </Typography>
+          <Typography paragraph>
+            Começa por escolher os diretórios de podcasts onde pretendes listar
+            o teu podcast. Alguns exemplos dos diretórios mais conhecidos são o
+            Spotify, Apple Podcasts e Google Podcasts.
+          </Typography>
+
+          <Typography paragraph>
+            Todos estes diretórios funcionam da mesma forma. Entras nestes
+            diretórios, registas-te e crias o teu podcast. Algures neste registo
+            vai-te ser pedido um RSS Feed. O que é um RSS Feed? Essencialmente é
+            o link do teu podcast. Estes diretórios pedem-te este link, para que
+            possam estar à escuta de novos episódios.
+          </Typography>
+
+          <Typography paragraph>
+            Podes ir buscar o link do teu podcast à página do podcast. É só
+            registares este link nos diretórios, e a partir daqui o processo de
+            adicionar episódios é completamente automático! Não precisas de te
+            preocupar mais. Sempre que publicares um novo episódio aqui na
+            plataforma, os diretórios vão automaticamente exibi-lo na tua página
+            do podcast.
+          </Typography>
         </AccordionDetails>
       </Accordion>
 
       {/* Dicas para um melhor Podcast de Comunicação de Ciência */}
-      <Accordion>
+      <Accordion style={{ marginBottom: "40px" }}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">
-            Dicas para um melhor Podcast de Comunicação de Ciência
+            Algumas dicas para um melhor Podcast e uma melhor Comunicação de
+            Ciência
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography paragraph>
-            A utilização de podcasts como meio de comunicação de ciência é uma
-            potencial solução para atenuar o problema de cada vez ser mais
-            difícil transmitires a tua mensagem científica e para atraíres o
-            público para que a ouça.
-          </Typography>
-          <Typography paragraph>
-            Aspetos como o uso do entretenimento e qualidade de produção, são
-            fundamentais para a decisão de continuar a ouvir um podcast. Isso
-            aplica-se tanto aos podcasts em geral quanto aos podcasts de
-            comunicação de ciência.
-          </Typography>
-          <Typography paragraph>
             É importante fazermos a generalização da ciência a um público mais
             geral, através de, por exemplo:
           </Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>Usar termos simples;</li>
             <li>Evitar utilizar linguagem sofisticada e frases complexas;</li>
             <li>Não exagerar nas implicações;</li>
@@ -227,16 +336,15 @@ function Help() {
             </li>
           </Typography>
           <Typography paragraph>
-            Quem é o público que pretendemos atingir & Qual o nosso objetivo
-            enquanto locutores. Estas devem ser as duas primeiras perguntas que
-            nos colocamos. Algo muito importante, independente do público que
-            pretendemos atingir é o rigor científico. Não devemos nunca evitar o
-            rigor só para nos facilitar a vida enquanto comunicadores. Devemos é
-            simplificar a mensagem mais ou menos dependendo do nosso público e
-            do nosso objetivo, contudo, nunca perdendo o rigor científico. Isto
-            é, podemos passar a mensagem com maior ou menor densidade. Por
-            vezes, simplificar demais pode desvirtuar o conteúdo numa tentativa
-            de chegarmos a um público maior.
+            Independentemente do público que pretendemos atingir e o objetivo do
+            nosso podcast de Comunicação de Ciência, devemos manter o rigor
+            científico. Não devemos nunca evitar o rigor só para nos facilitar a
+            vida enquanto comunicadores. Devemos é simplificar a mensagem mais
+            ou menos dependendo do nosso público e do nosso objetivo, contudo,
+            nunca perdendo o rigor científico. Isto é, podemos passar a mensagem
+            com maior ou menor densidade. Por vezes, simplificar demais pode
+            desvirtuar o conteúdo numa tentativa de chegarmos a um público
+            maior.
           </Typography>
           <Typography paragraph>
             Para mantermos este rigor, os termos devem ser desconstruídos e
@@ -254,7 +362,7 @@ function Help() {
             perguntas iniciais. O equilíbrio pode estar na identificação da
             audiência, na adaptação da mensagem e na gestão da duração.
           </Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>
               Uma mensagem com a duração mais longa do que necessita torna-se
               massuda. Para público informado, técnico e específico, pode-se
@@ -301,7 +409,7 @@ function Help() {
           <Typography paragraph>
             Resumindo, aqui seguem algumas dicas muito importantes:
           </Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>
               Versatilidade da mensagem. O público-alvo pode não ser exatamente
               aquele que atingimos. A nossa mensagem tem de ser versátil. O
@@ -417,8 +525,10 @@ function Help() {
               podcast.
             </li>
           </Typography>
-          <Typography paragraph>Alguns Alertas e Preocupações</Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
+          <Typography paragraph>
+            Alguns alertas e preocupações a ter em conta:
+          </Typography>
+          <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>
               O público-alvo pensado pode não ser exatamente aquele que
               atingimos. A nossa mensagem tem de ser versátil.
@@ -456,103 +566,6 @@ function Help() {
               inferiorizadas. A partir do momento que o fazemos, perdemos o
               público.
             </li>
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      {/* Estruturas de Podcast */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Estruturas de Podcast</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography paragraph>
-            <strong>
-              Tipos de estruturas e as suas vantagens e desvantagens:
-            </strong>
-          </Typography>
-          <Typography component="ul" style={{ marginLeft: "24px" }}>
-            <li>
-              Entrevista pode ajudar para quem não tem o background científico
-              para fazer sozinho. Fazer a orientação para que os convidados
-              toquem em certos pontos.
-            </li>
-            <li>
-              Na entrevista, o locutor pode ser alguém mais ligado à área de
-              comunicação, que irá entrevistar um investigador/cientista. Guia a
-              entrevista e “corrige” ou ajuda a desmembrar a comunicação feita
-              por alguém que talvez não esteja tão habituado a fazê-lo.
-            </li>
-            <li>
-              Monólogo pode ser arriscado porque ou fazemos algo criativo e
-              inovador ou então sente-se falta da presença do espetador. Quando
-              falamos sobre a nossa própria área, perdemos a noção do que é que
-              o público sabe.
-            </li>
-            <li>
-              No monólogo, preparar ao máximo a mensagem antes de começar a
-              falar. Para cientistas que não sejam da área, este método é um
-              bocado perigoso.
-            </li>
-            <li>
-              Storytelling aliado com efeitos sonoros pode conferir uma maior
-              imersão ao ouvinte.
-            </li>
-          </Typography>
-          <Typography paragraph></Typography>
-          <Typography paragraph>
-            Relativamente à estrutura, o monólogo foi identificado como um risco
-            porque ou se faz algo muito criativo ou inovador ou então pode-se
-            senti falta da presença do espetador. Quando falamos sobre a nossa
-            própria área, perdemos a noção do que é que o público sabe. A
-            entrevista neste contexto pode ser melhor, uma vez que pode juntar o
-            melhor de dois mundos. Alguém especialista na área científica, e
-            alguém com experiência em comunicação/jornalismo. Quando quisermos
-            incluir na estrutura alguém da área de comunicação que entrevista um
-            investigador/cientista, acho que ele por si só irá conseguir guiar a
-            entrevista e “corrigir” o cientista na comunicação.{" "}
-          </Typography>
-          <Typography paragraph>
-            A estrutura que escolhes é dinâmica/versátil, e pode incluir mais do
-            que uma destas "estruturas" clássicas. Tem apenas em atenção algumas
-            dicas relativamente à estrutura:
-          </Typography>
-          <Typography paragraph>
-            <strong>Introdução - </strong>Para um podcast mais dinâmico,
-            apresenta-te de forma informal, e utiliza efeitos sonoros, música de
-            fundo, jingles, etc. Caso tenhas convidados, apresenta-os e
-            contextualiza a importância deles. Ainda na introdução, apresenta o
-            teu conteúdo. Faz-lo de forma dinâmica para apanhar a atenção dos
-            ouvintes. Se o teu objetivo for algo mais curto, secalhar a
-            introdução pode passar apenas pela passagem de uma música e um
-            slogan, não precisando de te apresentares.
-          </Typography>
-          <Typography paragraph>
-            <strong>Comunicação - </strong>Existem muitas estruturas possíveis
-            para fazer o teu podcast. Escolhe a que se adequa melhor. Apesar de
-            não ser necessário manteres sempre a mesma estrutura nos episódios
-            do teu podcast, é comum usar apenas 1 ou 2 estruturas. Adequa o teu
-            tipo de discurso ao teu público alvo e também aos teus convidados.
-            Para uma comunicação melhor, tenta falar com um ritmo mais lento. É
-            importante para haver clareza no discurso na comunicação de ciência.
-            Dá exemplos do que estás a falar se for algo menos comum e que o teu
-            público possa não perceber.
-          </Typography>
-          <Typography paragraph>
-            <strong>Conteúdo - </strong>Credibiliza o conteúdo que transmites no
-            teu podcast. Através da fundamentação de onde retiras essa
-            informação (Seja através de livros, artigos, conhecimento próprio,
-            especialistas externos)
-          </Typography>
-          <Typography paragraph>
-            <strong>Elementos Adicionais - </strong> Já pensaste em criar o teu
-            slogan? Pode ser um bom branding para o teu podcast. Faz uso de
-            músicas de fundo para dinamizar o teu podcast e emergir o ouvinte.
-            Contudo, cuidado para esta não se sobrepor à voz. Pode ser um bom
-            exemplo utilizares em momentos como a intro, a outro, ou em pausas
-            durante o episódio. O mesmo caso para os efeitos sonoros. Pode ser
-            importante para introduzir dinâmica ao teu podcast. Escolhe os
-            momentos certos para os utilizar.
           </Typography>
         </AccordionDetails>
       </Accordion>

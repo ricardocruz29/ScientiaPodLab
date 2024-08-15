@@ -6,6 +6,7 @@ import AudioPlayer from "../audioPlayer/audioPlayer";
 import FloatButton from "../floatButton/floatButton";
 import MicIcon from "@mui/icons-material/Mic";
 import { useNavigate } from "react-router-dom";
+import { TEMPLATE_GENRES } from "../../lib/constants/template";
 
 function Card({ type, size = "medium", data, onClick, isSelected = false }) {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function Card({ type, size = "medium", data, onClick, isSelected = false }) {
               TTS: {data.hasTTS ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
-              Tipo: {data.type}
+              Tipo: {TEMPLATE_GENRES[data.type]?.label}
             </Typography>
                 
             <div className={styles.template_actions}>

@@ -4,6 +4,7 @@ import TemplateSequence from "../../templateSequence/templateSequence";
 import Button from "../../button/button";
 import { Formik, Form, Field } from "formik";
 import { duplicateTemplateValidationSchema } from "../../../validators/template.validator";
+import { TEMPLATE_GENRES } from "../../../lib/constants/template";
 
 const style = {
   position: "absolute",
@@ -22,6 +23,8 @@ function DuplicateTemplateModal({
   handleClose,
   handleConfirm,
 }) {
+  console.log("originalTemplate: ", originalTemplate);
+
   return (
     <Modal
       open={isOpen}
@@ -47,7 +50,7 @@ function DuplicateTemplateModal({
               TTS: {originalTemplate.hasTTS ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
-              Tipo: {originalTemplate.type}
+              Tipo: {TEMPLATE_GENRES[originalTemplate.genre]?.label}
             </Typography>
           </div>
 

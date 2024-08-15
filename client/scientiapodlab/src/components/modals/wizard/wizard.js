@@ -581,47 +581,76 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   variant="body1"
                   sx={{ color: "#00000080", marginBottom: "36px" }}
                 >
-                  Contudo, a escolha de um bom equipamento de gravação é crucial
-                  para uma maior qualidade do teu podcast.
+                  Contudo, tendo em conta os teus recursos e objetivo, a decisão
+                  pode passar entre gravar com um telemóvel, ou então fazeres
+                  algum investimento em equipamento de gravação de qualidade. É
+                  uma decisão que tens de avaliar, mas um bom áudio a longo
+                  prazo é um fator bastante importante!
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{ color: "#00000080", marginBottom: "12px" }}
                 >
-                  Lista de Equipamentos:
+                  Segue esta lista de equipamentos, e avalia o que necessitas:
                 </Typography>
-                <ul style={{ marginLeft: "36px" }}>
+                <ul style={{ marginLeft: "36px", marginBottom: "12px" }}>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      Microfone
+                      Telemóvel - Se estiveres a fazer podcasts para
+                      experimentar
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      Computador
+                      Computador - Para teres o software para tratamento dos
+                      episódios, se assim entenderes
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxx
+                      Microfone - Se quiseres algo com mais qualidade
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxxxxxx
+                      Fones de ouvido - Para monitorização e garantir a melhor
+                      qualidade de som
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxx
+                      Interface de áudio - Para conectar microfones
+                      profissionais ao computador
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxx
+                      Software de gravação - Como Audacity ou Adobe Audition,
+                      para editar os episódios
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body1" sx={{ color: "#00000080" }}>
+                      Suportes de microfone - Para manter o microfone estável e
+                      reduzir ruídos indesejados
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body1" sx={{ color: "#00000080" }}>
+                      Acessórios de isolamento acústico - Como espumas ou
+                      painéis para melhorar a qualidade do som
                     </Typography>
                   </li>
                 </ul>
+                <Typography
+                  variant="body1"
+                  sx={{ color: "#00000080", marginBottom: "12px" }}
+                >
+                  Isto são apenas alguns dos possíveis equipamentos de gravação.
+                  Isto é um mundo, e por isso tens de avaliar bem o objetivo do
+                  teu podcast e os recursos que tens disponíveis e ver o que se
+                  justifica utilizares e investires.
+                </Typography>
               </div>
 
               <div className={styles.footer}>
@@ -656,6 +685,21 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
               </div>
 
               <div>
+                {mode === "episode" && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "#00000080",
+                      marginBottom: "12px",
+                      marginTop: "12px",
+                    }}
+                  >
+                    Antes de começares a gravar, planeia bem o teu episódio. Faz
+                    um guião se achares que se justifica, ou se quiseres algo
+                    mais espontâneo aponta só os tópicos.
+                  </Typography>
+                )}
+
                 <Typography
                   variant="body1"
                   sx={{
@@ -676,76 +720,65 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   variant="body1"
                   sx={{ color: "#00000080", marginBottom: "12px" }}
                 >
-                  Face ao teu público-alvo sugerimos:
+                  Deixamos-te aqui algumas dicas para ajudar na Comunicação de
+                  Ciência. Aconselhamos-te ainda a em qualquer altura visitares
+                  a página de Ajuda que contém muito conteúdo que te pode ajudar
+                  tanto na gravação do teu podcast, como numa melhor Comunicação
+                  de Ciência.
                 </Typography>
                 <ul style={{ marginLeft: "36px", marginBottom: "24px" }}>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxx
+                      <strong>Versatilidade da mensagem</strong> - Por vezes, o
+                      público que queremos atingir nem sempre é quem nos ouve.
+                      Tenta adaptar a mensagem, o ritmo, tom, e duração para
+                      todos os públicos.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxx
+                      <strong>Conheça o público -</strong> Envolve o teu público
+                      no podcast, faz senti-lo que ele faz parte.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxx
+                      <strong>Manter o rigor científico</strong> - Simplificar e
+                      desmembrar conteúdos compelxos, através de por exemplos
+                      metáforas e analogias, mas sem comprometer o rigor da
+                      mensagem.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxxxxxx
+                      <strong>Confiança e carisma -</strong> A tua voz e a
+                      confiança que passas através dela impactam muito a tua
+                      comunicação. Trabalha nisso para que estejas o melhor
+                      preparado possível.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxx
+                      <strong>Duração e ritmo -</strong> Ajusta de acordo com o
+                      objetivo do teu podcast e também de acordo com o teu
+                      público-alvo. Para um público mais técnico e específico,
+                      talvez eles vão querer algo com mais rigor e mais longo
+                      para se especializarem no assunto. Para um público mais
+                      jovem, que possamos ter dificuldades em captar a sua
+                      atenção, secalhar algo mais curto e mais dinâmico possa
+                      ajudar.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxx
-                    </Typography>
-                  </li>
-                </ul>
-
-                <Typography
-                  variant="body1"
-                  sx={{ color: "#00000080", marginBottom: "12px" }}
-                >
-                  E mais umas dicas finais e gerais:
-                </Typography>
-                <ul style={{ marginLeft: "36px", marginBottom: "24px" }}>
-                  <li>
-                    <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxx
+                      <strong>Usa termos técnicos com explicações -</strong> Dá
+                      exemplos e contexto para facilitar a compreensão.
                     </Typography>
                   </li>
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxx
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxx
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxxxxxxxx
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxx
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body1" sx={{ color: "#00000080" }}>
-                      xxxxxxxxxxxxx
+                      <strong>Incorporar elementos sonoros -</strong> Jingles e
+                      música de fundo ajudam a capturar a atenção.
                     </Typography>
                   </li>
                 </ul>
