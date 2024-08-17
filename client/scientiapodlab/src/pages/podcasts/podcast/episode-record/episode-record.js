@@ -326,10 +326,10 @@ function EpisodeRecord() {
               tudo à tua maneira!
             </Typography>
             <Typography variant="body1" sx={{ color: "#343A4070" }}>
-              Sente-te à vontade para utilizares os recursos que
-              disponibilizámos na plataforma, faz experiências para ver se está
-              ao teu agrado. Mesmo depois de finalizares, poderás voltar atrás
-              para editar algum aspeto que não tenhas gostado.
+              Sente-te à vontade para utilizar os recursos que disponibilizamos
+              na plataforma, faz experiências para ver se está ao teu agrado.
+              Mesmo depois de finalizares, podes voltar atrás para editar algum
+              aspeto que não tenhas gostado.
             </Typography>
           </div>
 
@@ -342,7 +342,7 @@ function EpisodeRecord() {
                   color: "#343A4080",
                 }}
               >
-                Através do wizard, escolheste o template xxxxxxxxx.
+                Através do wizard, escolheste o seguinte template.
               </Typography>
               {!isEditingTemplate ? (
                 <div style={{ display: "flex", gap: "4px" }}>

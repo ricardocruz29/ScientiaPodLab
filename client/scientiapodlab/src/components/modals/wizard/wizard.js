@@ -559,7 +559,7 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   }}
                 >
                   Tens o teu {mode === "episode" ? "episódio" : "podcast"}{" "}
-                  pensado .... Tens o template escolhido de forma a organizares
+                  pensado .... Tens o template escolhido de forma a organizar
                   melhor os teus episódios ...
                 </Typography>
                 <Typography
@@ -649,7 +649,7 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   Isto são apenas alguns dos possíveis equipamentos de gravação.
                   Isto é um mundo, e por isso tens de avaliar bem o objetivo do
                   teu podcast e os recursos que tens disponíveis e ver o que se
-                  justifica utilizares e investires.
+                  justifica utilizar e investir.
                 </Typography>
               </div>
 
@@ -744,7 +744,7 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   <li>
                     <Typography variant="body1" sx={{ color: "#00000080" }}>
                       <strong>Manter o rigor científico</strong> - Simplificar e
-                      desmembrar conteúdos compelxos, através de por exemplos
+                      desmembrar conteúdos complexos, através de por exemplos
                       metáforas e analogias, mas sem comprometer o rigor da
                       mensagem.
                     </Typography>
@@ -764,9 +764,8 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                       público-alvo. Para um público mais técnico e específico,
                       talvez eles vão querer algo com mais rigor e mais longo
                       para se especializarem no assunto. Para um público mais
-                      jovem, que possamos ter dificuldades em captar a sua
-                      atenção, secalhar algo mais curto e mais dinâmico possa
-                      ajudar.
+                      jovem, onde podemos ter dificuldades em captar a sua
+                      atenção, algo mais curto e mais dinâmico pode ajudar.
                     </Typography>
                   </li>
                   <li>

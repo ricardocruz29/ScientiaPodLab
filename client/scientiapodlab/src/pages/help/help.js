@@ -52,7 +52,7 @@ function Help() {
           <Typography paragraph>
             Considerando este problema, surgiu o ScientiaPodLab, uma plataforma
             unificadora para a criação de podcasts de comunicação de ciência. Lê
-            os capítulos seguintes para que te consigamos ajudar ao máximo!
+            os capítulos seguintes para que consigamos ajudar ao máximo!
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -80,7 +80,7 @@ function Help() {
             </strong>
           </Typography>
           <Typography paragraph>
-            <strong>Têm de o fazer</strong> porque muito dos fundos da
+            <strong>Têm de o fazer</strong> porque muitos dos fundos da
             investigação científica resultam das taxas pagas pela sociedade. A
             sociedade interessa-se pelos descobrimentos e pelos falhanços desta
             elite.
@@ -102,7 +102,7 @@ function Help() {
             um podcast! Apenas estamos aqui para te encorajar e para te
             ajudarmos ao máximo! Uma sociedade onde haja uma maior Comunicação
             de Ciência é benéfica para todos. Sabemos que é um processo muito
-            díficil, e por isso estamos aqui para te facilitar o trabalho ao
+            difícil, e por isso estamos aqui para te facilitar o trabalho ao
             máximo!
           </Typography>
         </AccordionDetails>
@@ -177,9 +177,9 @@ function Help() {
           </Typography>
           <Typography paragraph component="ul" style={{ marginLeft: "24px" }}>
             <li>
-              Entrevista pode ajudar para quem não tem o background científico
-              para fazer sozinho. Fazer a orientação para que os convidados
-              toquem em certos pontos.
+              Entrevista pode ajudar quem não tem o background científico para
+              fazer sozinho. Fazer a orientação para que os convidados toquem em
+              certos pontos.
             </li>
             <li>
               Na entrevista, o locutor pode ser alguém mais ligado à área de
@@ -189,7 +189,7 @@ function Help() {
             </li>
             <li>
               Monólogo pode ser arriscado porque ou fazemos algo criativo e
-              inovador ou então sente-se falta da presença do espetador. Quando
+              inovador ou então sentimos falta da presença do espetador. Quando
               falamos sobre a nossa própria área, perdemos a noção do que é que
               o público sabe.
             </li>
@@ -207,7 +207,7 @@ function Help() {
           <Typography paragraph>
             Relativamente à estrutura, o monólogo foi identificado como um risco
             porque ou se faz algo muito criativo ou inovador ou então pode-se
-            senti falta da presença do espetador. Quando falamos sobre a nossa
+            sentir falta da presença do espetador. Quando falamos sobre a nossa
             própria área, perdemos a noção do que é que o público sabe. A
             entrevista neste contexto pode ser melhor, uma vez que pode juntar o
             melhor de dois mundos. Alguém especialista na área científica, e
@@ -227,14 +227,14 @@ function Help() {
             fundo, jingles, etc. Caso tenhas convidados, apresenta-os e
             contextualiza a importância deles. Ainda na introdução, apresenta o
             teu conteúdo. Faz-lo de forma dinâmica para apanhar a atenção dos
-            ouvintes. Se o teu objetivo for algo mais curto, secalhar a
-            introdução pode passar apenas pela passagem de uma música e um
-            slogan, não precisando de te apresentares.
+            ouvintes. Se o teu objetivo for algo mais curto, a introdução pode
+            passar apenas pela passagem de uma música e um slogan, não
+            precisando de te apresentares.
           </Typography>
           <Typography paragraph>
             <strong>Comunicação - </strong>Existem muitas estruturas possíveis
             para fazer o teu podcast. Escolhe a que se adequa melhor. Apesar de
-            não ser necessário manteres sempre a mesma estrutura nos episódios
+            não ser necessário mantermos sempre a mesma estrutura nos episódios
             do teu podcast, é comum usar apenas 1 ou 2 estruturas. Adequa o teu
             tipo de discurso ao teu público alvo e também aos teus convidados.
             Para uma comunicação melhor, tenta falar com um ritmo mais lento. É
@@ -252,18 +252,18 @@ function Help() {
             <strong>Elementos Adicionais - </strong> Já pensaste em criar o teu
             slogan? Pode ser um bom branding para o teu podcast. Faz uso de
             músicas de fundo para dinamizar o teu podcast e emergir o ouvinte.
-            Contudo, cuidado para esta não se sobrepor à voz. Pode ser um bom
-            exemplo utilizares em momentos como a intro, a outro, ou em pausas
-            durante o episódio. O mesmo caso para os efeitos sonoros. Pode ser
-            importante para introduzir dinâmica ao teu podcast. Escolhe os
-            momentos certos para os utilizar.
+            Contudo, cuidado para não se sobrepor à voz. Pode ser um bom exemplo
+            utilizar em momentos como a intro, a outro, ou em pausas durante o
+            episódio. O mesmo caso para os efeitos sonoros. Pode ser importante
+            para introduzir dinâmica ao teu podcast. Escolhe os momentos certos
+            para os utilizar.
           </Typography>
 
           <Typography paragraph>
             Depois destas duas fases estarem concluídas é que devemos começar a
             pensar na fase de gravação. Começa por criar um guião, seja este
             mais exaustivo ou mais livre, e inspira-te nos templates que te
-            oferecémos. Podes a qualquer momento criar novos templates para que
+            oferecemos. Podes a qualquer momento criar novos templates para que
             ele se adeque ao que pretendes atingir com o episódio.
           </Typography>
           <Typography paragraph>
@@ -275,7 +275,7 @@ function Help() {
             importante!
           </Typography>
           <Typography paragraph>
-            Tens isto tudo pensado? Vamos passar à gravação do áudio! Aqui na
+            Tens isso tudo pensado? Vamos passar à gravação do áudio! Aqui na
             plataforma tentamos fazer com que este processo seja o mais
             intuitivo possível. Escolhes um template, e vais preenchendo os
             segmentos! Se a meio tiveres alguma dúvida, não hesites em voltar a
@@ -304,7 +304,7 @@ function Help() {
 
           <Typography paragraph>
             Podes ir buscar o link do teu podcast à página do podcast. É só
-            registares este link nos diretórios, e a partir daqui o processo de
+            registar este link nos diretórios, e a partir daqui o processo de
             adicionar episódios é completamente automático! Não precisas de te
             preocupar mais. Sempre que publicares um novo episódio aqui na
             plataforma, os diretórios vão automaticamente exibi-lo na tua página
@@ -339,8 +339,8 @@ function Help() {
             Independentemente do público que pretendemos atingir e o objetivo do
             nosso podcast de Comunicação de Ciência, devemos manter o rigor
             científico. Não devemos nunca evitar o rigor só para nos facilitar a
-            vida enquanto comunicadores. Devemos é simplificar a mensagem mais
-            ou menos dependendo do nosso público e do nosso objetivo, contudo,
+            vida enquanto comunicadores. Devemos simplificar a mensagem mais ou
+            menos dependendo do nosso público e do nosso objetivo, contudo,
             nunca perdendo o rigor científico. Isto é, podemos passar a mensagem
             com maior ou menor densidade. Por vezes, simplificar demais pode
             desvirtuar o conteúdo numa tentativa de chegarmos a um público
@@ -358,7 +358,7 @@ function Help() {
             e complexa chega aos que realmente estão interessados no assunto.
             Informa, sensibiliza e atinge o objetivo. Contudo, pode afastar
             algum público, mas tem a vantagem de atrair e esclarecer aqueles que
-            estão realmente interessados. Aqui é crucial responder-mos às 2
+            estão realmente interessados. Aqui é crucial respondermos às 2
             perguntas iniciais. O equilíbrio pode estar na identificação da
             audiência, na adaptação da mensagem e na gestão da duração.
           </Typography>
@@ -393,7 +393,7 @@ function Help() {
           <Typography paragraph>
             Os podcasts mais ouvidos, são de comédia, e isso representa a
             procura pela descontração por parte das pessoas. A Ciência nesse
-            caso pode ser difícil de conjugar e consequentemente, de chegar as
+            caso pode ser difícil de conjugar e consequentemente, de chegar às
             pessoas. É difícil introduzir comédia na ciência porque pode tirar
             credibilidade. Demasiado simples, pode afetar a credibilidade. As
             pessoas querem cada vez mais conteúdo rápido. Contudo, ter em
@@ -429,8 +429,8 @@ function Help() {
             </li>
             <li>Não abdicar do trabalho de pesquisa.</li>
             <li>
-              Confiança do que estamos a comunicar. Temos de passar a ideia que
-              somos especialistas. A nível da voz, a confiança é chave, e o
+              Confiança no que estamos a comunicar. Temos de passar a ideia de
+              que somos especialistas. A nível da voz, a confiança é chave, e o
               podcast é apenas a voz. Se pensarmos noutros mundos, num palco
               televisivo, mesmo a roupa que estamos a usar e os nossos gestos e
               a confiança que passamos afetam a credibilidade da mensagem.
@@ -476,8 +476,8 @@ function Help() {
               difícil de entender).
             </li>
             <li>
-              Para público informado e técnico, a duração pode estender-se até a
-              1 hora. A densidade da informação pode aumentar consideravelmente.
+              Para público informado e técnico, a duração pode estender-se até 1
+              hora. A densidade da informação pode aumentar consideravelmente.
             </li>
             <li>
               Para um público mais desinformado, onde pretendemos apenas
