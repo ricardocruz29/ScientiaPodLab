@@ -33,6 +33,11 @@
   align-items: center;
 }
 
+.footer > div {
+  display: flex;
+  gap: 8px;
+}
+
 .step_title {
   display: flex;
   justify-content: flex-start;

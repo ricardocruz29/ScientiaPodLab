@@ -789,11 +789,19 @@ function WizardModal({ isOpen, handleClose, handleConfirm, mode = "podcast" }) {
                   type="yellow"
                   text="Anterior"
                 ></Button>
-                <Button
-                  onButtonClick={() => handleConfirm(values)}
-                  type="fill_green"
-                  text="Vamos a isso!"
-                ></Button>
+                <div>
+                  {mode === "podcast" && (
+                    <Button
+                      onButtonClick={() => handleConfirm(values, false)}
+                      text="Concluir"
+                    ></Button>
+                  )}
+                  <Button
+                    onButtonClick={() => handleConfirm(values, true)}
+                    type="fill_green"
+                    text="Gravar já o primeiro episódio!"
+                  ></Button>
+                </div>
               </div>
             </div>
           )}

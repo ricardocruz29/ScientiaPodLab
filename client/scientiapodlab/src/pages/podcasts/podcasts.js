@@ -42,7 +42,7 @@ function Podcasts() {
   const [episodeWizardOpenID, setEpisodeWizardOpenID] = useState();
   const [podcasts, setPodcasts] = useState([]);
 
-  const handleConfirm = async (values, mode) => {
+  const handleConfirm = async (values, mode, shouldRecordEpisode) => {
     const formData = new FormData();
 
     if (values.plan) {
@@ -64,8 +64,10 @@ function Podcasts() {
 
     try {
       if (mode === "podcast") {
-        await createPodcast(formData).unwrap();
+        const podcast = await createPodcast(formData).unwrap();
         setPodcastWizardOpen(false);
+
+        if (shouldRecordEpisode) setEpisodeWizardOpenID(podcast.ID);
       } else {
         const episode = await createEpisode(formData).unwrap();
 
@@ -323,7 +325,9 @@ function Podcasts() {
         <WizardModal
           isOpen={podcastWizardOpen}
           handleClose={() => setPodcastWizardOpen(false)}
-          handleConfirm={(values) => handleConfirm(values, "podcast")}
+          handleConfirm={(values, shouldRecordEpisode) =>
+            handleConfirm(values, "podcast", shouldRecordEpisode)
+          }
         />
       )}
       {episodeWizardOpenID && (

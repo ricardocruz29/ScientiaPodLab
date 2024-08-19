@@ -60,7 +60,7 @@
 
   align-items: center;
   overflow: auto;
-  max-width: 1185px;
+  max-width: calc(100vw - 730px);
   gap: 12px;
   padding-right: 20px;
 }

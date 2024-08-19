@@ -29,8 +29,9 @@ func (uc *PodcastController) GetPodcasts(c *gin.Context) {
 	user := userGin.(models.User)
 
 	var podcasts []models.Podcast
-	// Retrieve podcasts with UserID = userID
-	err := database.DB.Preload("Episodes").Where("user_id = ?", user.ID).Find(&podcasts).Error
+	
+	// Retrieve podcasts with UserID = userID, ordered by creation time (latest first)
+	err := database.DB.Preload("Episodes").Where("user_id = ?", user.ID).Order("created_at desc").Find(&podcasts).Error
 	if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error getting podcasts"})
 			return

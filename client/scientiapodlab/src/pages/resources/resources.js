@@ -150,7 +150,7 @@ function Resources() {
                 filter === "Custom" && styles.filter_active
               }`}
             ></div>
-            <Typography variant="body">Customizado</Typography>
+            <Typography variant="body">Personalizados</Typography>
           </div>
           <div
             className={styles.filter}

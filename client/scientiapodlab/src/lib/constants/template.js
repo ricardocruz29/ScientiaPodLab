@@ -1,7 +1,7 @@
 export const TEMPLATE_TYPE = {
   Intro: { label: "Intro", color: "#FFF1CD" },
   Outro: { label: "Outro", color: "#FFE177" },
-  TTS: { label: "Text-to-Speech", color: "#A8D9AA" },
+  TTS: { label: "Narração (Text-to-Speech)", color: "#A8D9AA" },
   Content: { label: "Conteúdo", color: "#FF9B9B" },
   SoundEffect: { label: "Música", color: "#CDE4FF" },
 };
