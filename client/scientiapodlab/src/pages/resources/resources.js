@@ -325,7 +325,7 @@ function Resources() {
         <section className={styles.resources_section}>
           {is_loading_resources && (
             <>
-              <Typography variant="h6">TTS</Typography>
+              <Typography variant="h6">Narração (Text-to-Speech)</Typography>
               <div className={styles.resources_row}>
                 <Skeleton variant="rectangular" width={200} height={225} />
                 <Skeleton variant="rectangular" width={200} height={225} />

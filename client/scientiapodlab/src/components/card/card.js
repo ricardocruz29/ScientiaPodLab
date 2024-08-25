@@ -52,7 +52,7 @@ function Card({ type, size = "medium", data, onClick, isSelected = false }) {
               Outro: {data.hasOutro ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
-              TTS: {data.hasTTS ? "Sim" : "Não"}
+              Narração (Text-to-Speech): {data.hasTTS ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
               Tipo: {TEMPLATE_GENRES[data.type]?.label}

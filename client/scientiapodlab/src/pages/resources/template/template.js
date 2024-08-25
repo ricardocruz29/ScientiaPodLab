@@ -214,7 +214,7 @@ function Template() {
                 variant="body1"
                 sx={{ color: "#00000080", fontSize: "18px" }}
               >
-                TTS:{" "}
+                Narração (Text-to-Speech):{" "}
                 {data?.segments.some((s) => s.type === "TTS") ? "Sim" : "Não"}
               </Typography>
               <Typography
@@ -303,7 +303,7 @@ function Template() {
                     variant="body1"
                     sx={{ color: "#00000080", fontSize: "18px" }}
                   >
-                    TTS:{" "}
+                    Narração (Text-to-Speech):{" "}
                     {data?.segments.some((s) => s.type === "TTS")
                       ? "Sim"
                       : "Não"}

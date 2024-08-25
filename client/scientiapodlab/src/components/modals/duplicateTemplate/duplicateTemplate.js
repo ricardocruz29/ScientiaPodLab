@@ -47,7 +47,8 @@ function DuplicateTemplateModal({
               Outro: {originalTemplate.hasOutro ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
-              TTS: {originalTemplate.hasTTS ? "Sim" : "Não"}
+              Narração (Text-to-Speech):{" "}
+              {originalTemplate.hasTTS ? "Sim" : "Não"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#00000080" }}>
               Tipo: {TEMPLATE_GENRES[originalTemplate.genre]?.label}

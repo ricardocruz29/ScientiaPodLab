@@ -470,7 +470,7 @@ function EpisodeRecord() {
           {error && (
             <div className={styles.alert}>
               <Alert severity="error">
-                Para podermos gerar o teu áudio, tens de ter todos os segmnetos
+                Para podermos gerar o teu áudio, tens de ter todos os segmentos
                 com um áudio atribuido!
               </Alert>
             </div>
